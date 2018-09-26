@@ -1,0 +1,38 @@
+<yas>
+
+	<scene root="element" axis_length="1" />
+
+	<views default="view1">
+
+		<ortho id="view1" near="0.1" far="500" left="0" right="0" top="0" bottom="0" />
+
+	</views>
+
+	<ambient>
+		<ambient r="1.0" g="1.0" b="1.0" a="1.0" />
+		<background r="1.0" g="1.0" b="1.0" a="1.0" />
+	</ambient>
+
+	<lights>
+		<omni id="light1" enable="1">
+			<location  x="0" y="10" z="0" w="1" />       	   
+	        <ambient r="0.2" g="0.2" b="0.2" a="1.0" />        	 
+	        <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />        
+	        <specular r="1.0" g="1.0" b="1.0" a="1.0" />  
+		</omni >
+	</lights>
+
+	<textures>
+	</textures>
+
+	<materials>
+	</materials>
+
+	<transformations>
+	</transformations>
+
+	<primitives>
+	</primitives>
+
+	<components>
+	</components>
