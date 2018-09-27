@@ -49,7 +49,7 @@ class MySceneGraph {
         this.functionVect = [this.parseScene, this.parseViews, this.parseAmbient, this.parseLights, this.parseTextures, this.parseMaterials, this.parseTransformations, this.parsePrimitives, this.parseComponents];
     }
 
-        /*
+    /*
      * Callback to be executed after successful reading
      */
     onXMLReady() {
@@ -88,78 +88,276 @@ class MySceneGraph {
             nodeNames.push(nodes[i].nodeName);
         }
 
-       
-
         // Processes each node, verifying errors.
 
        for(let index = 0; index < this.tagNames.length; index++){
-           this.processNode(index, nodeNames,nodes);
-       }
+            var error;   
+        
+            if((error = this.processNode(index, nodeNames, nodes)) != null){
+                console.log(error);
+                return;
+            }
+        }
     }
 
     processNode(tagIndex, nodeNames, nodes){
-        
         var error;
         var index;
         if ((index = nodeNames.indexOf(this.tagNames[tagIndex])) == -1)
             return "tag <" + this.tagNames[tagIndex] + "> missing";
         else {
-            if (index != tagIndex + 1)
-                console.log("tag <" + this.tagNames[tagIndex] + "> out of order");
+            if (index != tagIndex)
+                this.onXMLMinorError("tag <" + this.tagNames[tagIndex] + "> out of order");
 
             //Parse block
-            if ((error = this.functionVect[tagIndex](nodes[index])) != null)
+
+            /*
+             *Muda o this da função para o scope da classe e não do vector
+             */
+            this.parseFunction = this.functionVect[tagIndex];
+            if ((error = this.parseFunction(nodes[index])) != null)
                 return error;
         }
 
     }
 
+    
+
     parseScene(sceneNode){
-        console.log("Parse Scene");
+        this.scene_root = this.reader.getString(sceneNode, 'root');
+        this.scene_axis_length = this.reader.getFloat(sceneNode, 'axis_length');
+        this.log("Parsed Scene");
+
+        return null;
     }
 
+    
 
 
     parseViews(viewsNode){
-        console.log("Parse Views");
+
+        this.views_default = this.reader.getString(viewsNode, 'default');
+
+
+        var children = viewsNode.children;
+        var nodeNames = [];
+
+        for (var i = 0; i < children.length; i++)
+            nodeNames.push(children[i].nodeName);
+
+        
+        var indexView = nodeNames.indexOf("ortho");
+
+        if (indexView == -1) {
+            indexView = nodeNames.indexOf("perspective");
+        }
+
+        this.views = [];
+        
+        this.log("Parse Views");
     }
 
 
     parseAmbient(ambientNode){
-        console.log("Parse Ambient");
+        this.log("Parse Ambient");
     }
 
 
     parseLights(lightsNode){
-        console.log("Parse Lights");
+        this.log("Enter lights");
+        var children = lightsNode.children;
+
+        this.lights = [];
+        var numLights = 0;
+
+        var grandChildren = [];
+        var nodeNames = [];
+
+        // Any number of lights.
+        for (var i = 0; i < children.length; i++) {
+
+            if (children[i].nodeName != "omni") {
+                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+                continue;
+            }
+
+            // Get id of the current light.
+            var lightId = this.reader.getString(children[i], 'id');
+            if (lightId == null)
+                return "no ID defined for light";
+
+            // Checks for repeated IDs.
+            if (this.lights[lightId] != null)
+                return "ID must be unique for each light (conflict: ID = " + lightId + ")";
+
+
+            // Light enable/disable
+            var lightEnable = true;
+            
+            var lightEnable = this.reader.getInteger(children[i], 'enable');
+            if (lightEnable == null) {
+                this.onXMLMinorError("enable value missing for ID = " + lightId + "; assuming 'value = 1'");
+            }
+
+            grandChildren = children[i].children;
+            // Specifications for the current light.
+
+            nodeNames = [];
+            for (var j = 0; j < grandChildren.length; j++) {
+                nodeNames.push(grandChildren[j].nodeName);
+            }
+
+            // Gets indices of each element.
+            var locationIndex = nodeNames.indexOf("location");
+            var ambientIndex = nodeNames.indexOf("ambient");
+            var diffuseIndex = nodeNames.indexOf("diffuse");
+            var specularIndex = nodeNames.indexOf("specular");
+
+            
+            // Retrieves the light position.
+            var locationLight = [];
+            if (locationIndex != -1) {
+                // x
+                var x = this.reader.getFloat(grandChildren[locationIndex], 'x');
+                if (!(x != null && !isNaN(x)))
+                    return "unable to parse x-coordinate of the light position for ID = " + lightId;
+                else
+                    locationLight.push(x);
+
+                // y
+                var y = this.reader.getFloat(grandChildren[locationIndex], 'y');
+                if (!(y != null && !isNaN(y)))
+                    return "unable to parse y-coordinate of the light position for ID = " + lightId;
+                else
+                    locationLight.push(y);
+
+                // z
+                var z = this.reader.getFloat(grandChildren[locationIndex], 'z');
+                if (!(z != null && !isNaN(z)))
+                    return "unable to parse z-coordinate of the light position for ID = " + lightId;
+                else
+                    locationLight.push(z);
+
+                // w
+                var w = this.reader.getFloat(grandChildren[locationIndex], 'w');
+                if (!(w != null && !isNaN(w) && w >= 0 && w <= 1))
+                    return "unable to parse x-coordinate of the light position for ID = " + lightId;
+                else
+                    locationLight.push(w);
+            }
+            else
+                return "light position undefined for ID = " + lightId;
+
+            
+            // Retrieves the ambient component.
+            var ambientIllumination = [];
+            if (ambientIndex != -1) {
+                // R
+                var r = this.reader.getFloat(grandChildren[ambientIndex], 'r');
+                if (!(r != null && !isNaN(r) && r >= 0 && r <= 1))
+                    return "unable to parse R component of the ambient illumination for ID = " + lightId;
+                else
+                    ambientIllumination.push(r);
+
+                // G
+                var g = this.reader.getFloat(grandChildren[ambientIndex], 'g');
+                if (!(g != null && !isNaN(g) && g >= 0 && g <= 1))
+                    return "unable to parse G component of the ambient illumination for ID = " + lightId;
+                else
+                    ambientIllumination.push(g);
+
+                // B
+                var b = this.reader.getFloat(grandChildren[ambientIndex], 'b');
+                if (!(b != null && !isNaN(b) && b >= 0 && b <= 1))
+                    return "unable to parse B component of the ambient illumination for ID = " + lightId;
+                else
+                    ambientIllumination.push(b);
+
+                // A
+                var a = this.reader.getFloat(grandChildren[ambientIndex], 'a');
+                if (!(a != null && !isNaN(a) && a >= 0 && a <= 1))
+                    return "unable to parse A component of the ambient illumination for ID = " + lightId;
+                else
+                    ambientIllumination.push(a);
+            }
+            else
+                return "ambient component undefined for ID = " + lightId;
+
+            // TODO: Retrieve the diffuse component
+            var diffuseIllumination = ambientIllumination;
+            // TODO: Retrieve the specular component
+            var specularIllumination = ambientIllumination;
+            // TODO: Store Light global information.
+            //this.lights[lightId] = ...           
+            
+
+            this.lights[lightId] = [[lightEnable], locationLight, ambientIllumination, diffuseIllumination, specularIllumination];
+
+            numLights++;
+        }
+
+        if (numLights == 0)
+            return "at least one light must be defined";
+        else if (numLights > 8)
+            this.onXMLMinorError("too many lights defined; WebGL imposes a limit of 8 lights");
+
+        this.log("Parsed lights");
+        return null;
     }
 
 
     parseTextures(texturesNode){
-        console.log("Parse Textures");
+        this.log("Parse Textures");
     }
 
 
     parseMaterials(materialsNode){
-        console.log("Parse Materials");
+        this.log("Parse Materials");
     }
 
 
     parseTransformations(transformationsNode){
-        console.log("Parse Transformations");
+        this.log("Parse Transformations");
     }
 
 
     parsePrimitives(primitivesNode){
-        console.log("Parse Primitives");
+        this.log("Parse Primitives");
     }
 
 
     parseComponents(componentsNode){
-        console.log("Parse Components");
+        this.log("Parse Components");
     }
 
-        /**
+
+    /**
+     * Callback to be executed on any read error, showing an error on the console.
+     * @param {string} message
+     */
+    onXMLError(message) {
+        console.error("XML Loading Error: " + message);
+        this.loadedOk = false;
+    }
+
+    /**
+     * Callback to be executed on any minor error, showing a warning on the console.
+     * @param {string} message
+     */
+    onXMLMinorError(message) {
+        console.warn("Warning: " + message);
+    }
+
+
+    /**
+     * Callback to be executed on any message.
+     * @param {string} message
+     */
+    log(message) {
+        console.log("   " + message);
+    }
+
+    /**
      * Displays the scene, processing each node, starting in the root node.
      */
     displayScene() {

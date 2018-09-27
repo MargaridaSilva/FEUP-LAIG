@@ -32,7 +32,6 @@ class XMLscene extends CGFscene {
         this.gl.enable(this.gl.DEPTH_TEST);
         this.gl.enable(this.gl.CULL_FACE);
         this.gl.depthFunc(this.gl.LEQUAL);
-
         this.axis = new CGFaxis(this);
     }
 
@@ -46,6 +45,7 @@ class XMLscene extends CGFscene {
      * Initializes the scene lights with the values read from the XML file.
      */
     initLights() {
+
         var i = 0;
         // Lights index.
 
@@ -81,12 +81,11 @@ class XMLscene extends CGFscene {
      * As loading is asynchronous, this may be called already after the application has started the run loop
      */
     onGraphLoaded() {
-        this.camera.near = this.graph.near;
-        this.camera.far = this.graph.far;
+        //this.camera.near = this.graph.near;
+        //this.camera.far = this.graph.far;
 
-        //TODO: Change reference length according to parsed graph
-        //this.axis = new CGFaxis(this, this.graph.referenceLength);
-
+        this.axis = new CGFaxis(this, this.graph.scene_axis_length);
+ 
         // TODO: Change ambient and background details according to parsed graph
 
         this.initLights();
@@ -116,10 +115,10 @@ class XMLscene extends CGFscene {
         this.applyViewMatrix();
 
         this.pushMatrix();
-
+        
         if (this.sceneInited) {
             // Draw axis
-            this.axis.display();
+                this.axis.display();
 
             var i = 0;
             for (var key in this.lightValues) {

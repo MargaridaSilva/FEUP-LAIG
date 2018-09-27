@@ -448,7 +448,7 @@ class MySceneGraphOri {
         return null;
     }
 
-    /*
+    /**
      * Callback to be executed on any read error, showing an error on the console.
      * @param {string} message
      */
