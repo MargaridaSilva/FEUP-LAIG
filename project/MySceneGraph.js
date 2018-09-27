@@ -53,7 +53,7 @@ class MySceneGraph {
      * Callback to be executed after successful reading
      */
     onXMLReady() {
-        log("XML Loading finished.");
+        this.log("XML Loading finished.");
         var rootElement = this.reader.xmlDoc.documentElement;
 
         // Here should go the calls for different functions to parse the various blocks
@@ -94,7 +94,7 @@ class MySceneGraph {
             var error;   
         
             if((error = this.processNode(index, nodeNames, nodes)) != null){
-                log(error);
+                this.log(error);
                 return;
             }
         }
@@ -171,13 +171,13 @@ class MySceneGraph {
         //ambient::ambient
         let ambientIndex = nodeNames.indexOf("ambient");
         if (ambientIndex != 0)
-        log("problem in ambient definition");
+        this.log("problem in ambient definition");
         else this.ambientAmbient = this.parseRGB(children[0]);
 
         //ambient::background
         let backgroundIndex = nodeNames.indexOf("background");
         if (backgroundIndex != 1)
-        log("problem in background definition");
+        this.log("problem in background definition");
         else this.backgroundAmbient = this.parseRGB(children[1]);
 
     }
