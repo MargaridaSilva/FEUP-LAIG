@@ -53,7 +53,7 @@ class MySceneGraph {
      * Callback to be executed after successful reading
      */
     onXMLReady() {
-        console.log("XML Loading finished.");
+        log("XML Loading finished.");
         var rootElement = this.reader.xmlDoc.documentElement;
 
         // Here should go the calls for different functions to parse the various blocks
@@ -94,7 +94,7 @@ class MySceneGraph {
             var error;   
         
             if((error = this.processNode(index, nodeNames, nodes)) != null){
-                console.log(error);
+                log(error);
                 return;
             }
         }
@@ -160,6 +160,26 @@ class MySceneGraph {
 
     parseAmbient(ambientNode){
         this.log("Parse Ambient");
+
+        var children = ambientNode.children;
+
+        var nodeNames = [];
+
+        for (var i = 0; i < children.length; i++)
+            nodeNames.push(children[i].nodeName);
+
+        //ambient::ambient
+        let ambientIndex = nodeNames.indexOf("ambient");
+        if (ambientIndex != 0)
+        log("problem in ambient definition");
+        else this.ambientAmbient = this.parseRGB(children[0]);
+
+        //ambient::background
+        let backgroundIndex = nodeNames.indexOf("background");
+        if (backgroundIndex != 1)
+        log("problem in background definition");
+        else this.backgroundAmbient = this.parseRGB(children[1]);
+
     }
 
 
@@ -330,6 +350,45 @@ class MySceneGraph {
         this.log("Parse Components");
     }
 
+    /**
+     * Parses the RGB components
+     * 
+     */
+    parseRGB(rgbNode){
+        let rgb = [];
+
+        // R
+        var r = this.reader.getFloat(rgbNode, 'r');
+        if (!(r != null && !isNaN(r) && r >= 0 && r <= 1))
+            log("unable to parse R component");
+        else
+            rgb.push(r);
+
+        // G
+        var g = this.reader.getFloat(rgbNode, 'g');
+        if (!(g != null && !isNaN(g) && g >= 0 && g <= 1))
+            log("unable to parse G component");
+        else
+            rgb.push(g);
+
+        // B
+        var b = this.reader.getFloat(rgbNode, 'b');
+        if (!(b != null && !isNaN(b) && b >= 0 && b <= 1))
+            log("unable to parse B component");
+        else
+            rgb.push(b);
+
+        // A
+        var a = this.reader.getFloat(rgbNode, 'a');
+        if (!(a != null && !isNaN(a) && a >= 0 && a <= 1))
+            log("unable to parse A component");
+        else
+            rgb.push(a);
+
+        
+        return rgb;
+
+    }
 
     /**
      * Callback to be executed on any read error, showing an error on the console.
