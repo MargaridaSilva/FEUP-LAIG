@@ -50,12 +50,12 @@ class XMLscene extends CGFscene {
         // Lights index.
 
         // Reads the lights from the scene graph.
-        for (var key in this.graph.lights) {
+        for (var key in this.graph.omniLights) {
             if (i >= 8)
                 break;              // Only eight lights allowed by WebGL.
 
-            if (this.graph.lights.hasOwnProperty(key)) {
-                var light = this.graph.lights[key];
+            if (this.graph.omniLights.hasOwnProperty(key)) {
+                let light = this.graph.omniLights[key];
 
                 //lights are predefined in cgfscene
                 this.lights[i].setPosition(light[1][0], light[1][1], light[1][2], light[1][3]);
@@ -64,6 +64,7 @@ class XMLscene extends CGFscene {
                 this.lights[i].setSpecular(light[4][0], light[4][1], light[4][2], light[4][3]);
 
                 this.lights[i].setVisible(true);
+
                 if (light[0])
                     this.lights[i].enable();
                 else
@@ -91,7 +92,8 @@ class XMLscene extends CGFscene {
         this.initLights();
 
         // Adds lights group.
-        this.interface.addLightsGroup(this.graph.lights);
+        this.interface.addLightsGroup(this.graph.omniLights);
+        //this.interface.addLightsGroup(this.graph.spotLights);
 
         this.sceneInited = true;
     }
