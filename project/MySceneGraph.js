@@ -55,6 +55,8 @@ class MySceneGraph {
 
         this.tagNames = ["scene", "views", "ambient", "lights", "textures", "materials", "transformations", "primitives", "components"];
         this.functionVect = [this.parseScene, this.parseViews, this.parseAmbient, this.parseLights, this.parseTextures, this.parseMaterials, this.parseTransformations, this.parsePrimitives, this.parseComponents];
+    
+        this.values = [];
     }
 
     /*
@@ -134,9 +136,12 @@ class MySceneGraph {
      * @param {XML scene element} sceneNode
      */
     parseScene(sceneNode) {
-        let info = this.parseFields(sceneNode, [["root", "ss", "root"], ["axis_length", "ff", 3]], "scene");
-        this.scene_root = info[0];
-        this.scene_axis_length = info[1];
+        let info = this.parseFields(sceneNode, [ ["root", "ss", undefined], ["axis_length", "ff", 3] ], "scene");
+        
+        this.values.scene = {
+            root: info.root,
+            axis_length: info.axis_length
+        }
         this.log("Parsed Scene");
         return null;
     }
@@ -150,21 +155,17 @@ class MySceneGraph {
         this.views_default = this.reader.getString(viewsNode, 'default');
 
         let children = viewsNode.children;
-        let numViews = 0;
-        this.orthoIds = [];
-        this.perspectiveIds = [];
         this.orthoViews = [];
         this.perspectiveViews = [];
+        this.viewIds = [];
         let error = 0;
 
         for (let i = 0; i < children.length; i++) {
             if (children[i].nodeName == "perspective") {
-                numViews++;
                 if ((error = this.parsePerspective(children[i])) != null)
                     return error;
             }
             else if (children[i].nodeName == "ortho") {
-                numViews++;
                 if ((error = this.parseOrtho(children[i])) != null)
                     return error;
             }
@@ -172,11 +173,12 @@ class MySceneGraph {
         }
 
         //There has to be at least one view
-        if (numViews == 0) {
+        if (this.viewIds.length == 0) {
             return "at least one view must be defined in <views> block";
         }
 
         this.log("Parsed Views");
+        return null;
     }
 
     /**
@@ -187,14 +189,15 @@ class MySceneGraph {
         //ID
         let orthoId = this.reader.getString(orthoNode, 'id');
         if (orthoId == null)
-            return "no ID defined for view";
+            return "no ID defined for view";        
 
-        if (this.orthoIds.indexOf(orthoId) != -1)
+        if (this.viewIds.indexOf(orthoId) != -1)
             return "ID must be unique for each view (conflict: ID = " + orthoId + ")";
 
-        this.orthoIds.push(orthoId);
+        this.viewIds.push(orthoId);
 
         this.orthoViews[orthoId] = this.parseFields(orthoNode, [["near", "ff", 0.5], ["far", "ff", 500], ["left", "ff", 0], ["right", "ff", 0], ["top", "ff", 0], ["bottom", "ff", 0]], "views > ortho id = " + orthoId);
+
     }
 
     /**
@@ -207,10 +210,17 @@ class MySceneGraph {
         if (perspectiveId == null)
             return "no ID defined for light";
 
-        if (this.perspectiveIds.indexOf(perspectiveId) != -1)
-            return "ID must be unique for each light (conflict: ID = " + lightId + ")";
 
-        this.perspectiveIds.push(perspectiveId);
+        for(let key in this.perspectiveViews){
+            if(key == perspectiveId){
+                return "ID must be unique for each light (conflict: ID = " + lightId + ")";
+            }
+        }
+
+        if (this.viewIds.indexOf(perspectiveId) != -1)
+            return "ID must be unique for each view (conflict: ID = " + perspectiveId + ")";
+
+        this.viewIds.push(perspectiveId);
 
         let info = this.parseFields(perspectiveNode, [["near", "ff", 0.5], ["far", "ff", 500], ["angle", "ff", 0]], "views > perspective id = " + perspectiveId);
 
@@ -236,7 +246,13 @@ class MySceneGraph {
             else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in view id=" + perspectiveId + "was ignored");
         }
 
-        this.perspectiveViews[perspectiveId] = [info[0], info[1], info[2], coordsF, coordsT];
+        this.perspectiveViews[perspectiveId]={
+            near: info.near,
+            far: info.far,
+            angle: info.angle,
+            from: coordsF,
+            to: coordsT
+        }
     }
 
     /**
@@ -245,46 +261,57 @@ class MySceneGraph {
      */
 
     parseAmbient(ambientNode) {
-        this.log("Parse Ambient");
 
         let children = ambientNode.children;
 
         let nodeNames = [];
+        let ambient, background;
 
         for (var i = 0; i < children.length; i++)
             nodeNames.push(children[i].nodeName);
 
         //Parse ambient
         let ambientIndex = nodeNames.indexOf("ambient");
-        if (ambientIndex != 0)
+
+        if (ambientIndex != 0){
             this.log("problem in ambient definition");
-        else this.ambient_ambient = this.parseFields(children[0], [["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 1]], "ambient > ambient");
+        }
+        else{
+            ambient = this.parseFields(children[0], [["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 1]], "ambient > ambient");
+        }
 
         //Parse background
         let backgroundIndex = nodeNames.indexOf("background");
-        if (backgroundIndex != 1)
-            this.log("problem in background definition");
-        else this.ambient_backgroundIndex = this.parseFields(children[1], [["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 1]], "ambient > background");
 
+        if (backgroundIndex != 1){
+            this.log("problem in background definition");
+        }
+        else{
+            background = this.parseFields(children[1], [["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 1]], "ambient > background");
+        }
+
+        this.ambient = {
+            ambient: ambient,
+            background: background
+        }
+
+        this.log("Parse Ambient");
+        return null;
     }
 
     parseLights(lightsNode) {
         let children = lightsNode.children;
-        this.omniIds = [];
-        this.spotIds = [];
         this.omniLights = [];
         this.spotLights = [];
-        let numLights = 0;
+        this.lightIds = [];
         let error;
 
         for (let i = 0; i < children.length && i < MAX_NUM_LIGHTS; i++) {
             if (children[i].nodeName == "omni") {
-                numLights++;
                 if ((error = this.parseOmni(children[i])) != null)
                     return error;
             }
             else if (children[i].nodeName == "spot") {
-                numLights++;
                 if ((error = this.parseSpot(children[i])) != null)
                     return error;
             }
@@ -292,10 +319,10 @@ class MySceneGraph {
         }
 
         //There has to be at least one view
-        if (numLights == 0) {
+        if (this.lightIds.length == 0) {
             return "at least one light must be defined in <lights> block";
         }
-        else if (numLights == MAX_NUM_LIGHTS) {
+        else if (this.lightIds.length >= MAX_NUM_LIGHTS) {
             this.onXMLMinorError("too many lights defined; WebGL imposes a limit of 8 lights; Only the first were read");
         }
     }
@@ -307,13 +334,14 @@ class MySceneGraph {
         if (omniId == null)
             return "no ID defined for light";
 
-        if (this.omniIds.indexOf(omniId) != -1)
+        if (this.lightIds.indexOf(omniId) != -1)
             return "ID must be unique for each light (conflict: ID = " + omniId + ")";
 
-        this.omniIds.push(omniId);
+        this.lightIds.push(omniId);
 
         let info = this.parseFields(omniNode, [["enabled", "tt", 0]], "lights > omni id = " + omniId);
-        let enabled = info[0];
+        let enabled = info.enabled;
+
         let children = omniNode.children;
 
         let nodeNames = [];
@@ -366,7 +394,13 @@ class MySceneGraph {
             specular = this.parseFields(children[specularIndex], [["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 0]], "lights > omni id = " + omniId + " > specular");
         }
 
-        this.omniLights[omniId] = [enabled, location, ambient, diffuse, specular];
+        this.omniLights[omniId] = {
+            enabled: enabled,
+            location: location,
+            ambient: ambient,
+            diffuse: diffuse,
+            specular: specular
+        }
     }
 
 
@@ -376,15 +410,16 @@ class MySceneGraph {
         if (spotId == null)
             return "no ID defined for light";
 
-        if (this.spotIds.indexOf(spotId) != -1)
+
+        if (this.viewIds.indexOf(spotId) != -1)
             return "ID must be unique for each light (conflict: ID = " + spotId + ")";
 
-        this.spotIds.push(spotId);
+        this.viewIds.push(spotId);
 
         let info = this.parseFields(spotNode, [["enabled", "tt", true], ["angle", "ff", 0], ["exponent", "ff", 0]], "lights > spot id = " + spotId);
-        let enabled = info[0];
-        let angle = info[1];
-        let exponent = info[2];
+        let enabled = info.enabled;
+        let angle = info.angle;
+        let exponent = info.exponent;
 
         let children = spotNode.children;
 
@@ -450,12 +485,19 @@ class MySceneGraph {
             specular = this.parseFields(children[specularIndex], [["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 0]], "lights > spot id = " + spotId + " > specular");
         }
 
-        this.spotLights[spotId] = [enabled, angle, exponent, location, target, ambient, diffuse, specular];
+        this.spotLights[spotId] = {
+            enabled: enabled,
+            angle: angle,
+            exponent: exponent,
+            location: location,
+            target: target,
+            ambient: ambient,
+            diffuse: diffuse,
+            specular: specular};
     }
 
     parseTextures(texturesNode) {
         let children = texturesNode.children;
-        let numTextures = 0;
         this.textures = [];
         this.textureIds = [];
         let error;
@@ -464,14 +506,12 @@ class MySceneGraph {
             if (children[i].nodeName == "texture") {
                 if ((error = this.parseTexture(children[i])) != null)
                     return error;
-
-                numTextures++;
             }
             else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in <textures> block")
         }
 
         //There has to be at least one texture
-        if (numTextures == 0) {
+        if (this.textureIds.length == 0) {
             return "at least one texture must be defined in <textures> block";
         }
         this.log("Parsed Textures");
@@ -485,19 +525,18 @@ class MySceneGraph {
 
         if (this.textureIds.indexOf(textureId) != -1)
             return "ID must be unique for each texture (conflict: ID = " + textureId + ")";
-
-        this.textureIds.push(textureId);
+        
+            this.textureIds.push(textureId);
     }
+    
     parseMaterials(materialsNode) {
         let children = materialsNode.children;
-        let numMaterials = 0;
         this.materials=[];
         this.materialIds = [];
         let error;
-
+        
         for (let i = 0; i < children.length; i++) {
             if (children[i].nodeName == "material") {
-                numMaterials++;
                 if ((error = this.parseMaterial(children[i])) != null)
                     return error;
             }
@@ -505,7 +544,7 @@ class MySceneGraph {
         }
 
         //There has to be at least one material
-        if (numMaterials == 0) {
+        if (this.materialIds.length == 0) {
             return "at least one material must be defined in <materials> block";
         }
         this.log("Parsed Materials");
@@ -522,6 +561,8 @@ class MySceneGraph {
 
         this.materialIds.push(materialId);
 
+        let info = this.parseFields(materialNode, [["shininess", "ff", 0]], "lights > material id = " + materialId + " > shininess");
+       
         let children = materialNode.children;
 
         let nodeNames = [];
@@ -574,19 +615,23 @@ class MySceneGraph {
             specular = this.parseFields(children[specularIndex], [["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 0]], "lights > material id = " + materialId + " > specular");
         }
 
-        this.materials[materialId] = [emission, ambient, diffuse, specular];
+        this.materials[materialId] = {
+            shininess: info.shininess,
+            emission: emission, 
+            ambient: ambient,
+            diffuse: diffuse,
+            specular: specular
+        };
     }
 
     parseTransformations(transformationsNode) {
         let children = transformationsNode.children;
-        let numTransf = 0;
         let error;
-        this.transformationIds = [];
         this.transformations = [];
+        this.transformationIds = [];
 
         for (let i = 0; i < children.length; i++) {
             if (children[i].nodeName == "transformation") {
-                numTransf++;
                 if ((error = this.parseTransformation(children[i])) != null)
                     return error;
             }
@@ -594,7 +639,7 @@ class MySceneGraph {
         }
 
         //There has to be at least one transformation
-        if (numTransf == 0) {
+        if (this.transformationIds.length == 0) {
             return "at least one transformation must be defined in <transformations> block";
         }
 
@@ -609,8 +654,9 @@ class MySceneGraph {
 
         if (this.transformationIds.indexOf(transformationId) != -1)
             return "ID must be unique for each transformation (conflict: ID = " + transformationId + ")";
-
+            
         this.transformationIds.push(transformationId);
+
         let info;
         let children = transformationNode.children;
         this.scene.loadIdentity();
@@ -665,7 +711,7 @@ class MySceneGraph {
                     this.onXMLMinorError("unable to parse " + especificationArray[i][NAME] + " value from section " + XMLsection + "; assuming " + especificationArray[i][NAME] + " = " + especificationArray[i][DEFAULT_VALUE]);
                     float = especificationArray[i][DEFAULT_VALUE];
                 }
-                result.push(float);
+                result[especificationArray[i][NAME]] = float;
             }
             else if (especificationArray[i][TYPE] == "ss") {
                 let string = this.reader.getString(node, especificationArray[i][NAME]);
@@ -673,7 +719,7 @@ class MySceneGraph {
                     this.onXMLMinorError("unable to parse " + especificationArray[i][NAME] + " value from section " + XMLsection + "; assuming " + especificationArray[i][NAME] + " = " + especificationArray[i][DEFAULT_VALUE]);
                     string = especificationArray[i][DEFAULT_VALUE];
                 }
-                result.push(string);
+                result[especificationArray[i][NAME]] = string;
             }
             else if (especificationArray[i][TYPE] == "tt") {
                 let float = this.reader.getFloat(node, especificationArray[i][NAME]);
@@ -681,7 +727,7 @@ class MySceneGraph {
                     this.onXMLMinorError("unable to parse " + especificationArray[i][NAME] + " value from section " + XMLsection + "; assuming " + especificationArray[i][NAME] + " = " + especificationArray[i][DEFAULT_VALUE]);
                     float = especificationArray[i][DEFAULT_VALUE];
                 }
-                result.push(float);
+                result[especificationArray[i][NAME]] = float;
             }
             else if (especificationArray[i][TYPE] == "cc") {
                 let string = this.reader.getString(node, especificationArray[i][NAME]);
@@ -689,10 +735,11 @@ class MySceneGraph {
                     this.onXMLMinorError("unable to parse " + especificationArray[i][NAME] + " value from section " + XMLsection + "; assuming " + especificationArray[i][NAME] + " = " + especificationArray[i][DEFAULT_VALUE]);
                     string = especificationArray[i][DEFAULT_VALUE];
                 }
-                result.push(string);
+                result[especificationArray[i][NAME]] = string;
             }
 
         }
+
         return result;
     }
 

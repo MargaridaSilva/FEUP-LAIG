@@ -20,8 +20,6 @@ class MyInterface extends CGFinterface {
 
         this.gui = new dat.GUI();
 
-        
-
         // add a group of controls (and open/expand by defult)
 
         return true;
@@ -45,5 +43,20 @@ class MyInterface extends CGFinterface {
                 group.add(this.scene.lightValues, key);
             }
         }
+    }
+
+     /**
+     * Adds a folder containing the IDs of the views passed as parameter.
+     * @param {array} views
+     */
+    addViewsGroup(views) {
+
+        for (var key in views) {
+            if (views.hasOwnProperty(key)) {
+                this.scene.viewValues.push(key);
+            }
+        }
+
+        this.gui.add(this.scene.interfaceValues, 'view', this.scene.viewValues);
     }
 }
