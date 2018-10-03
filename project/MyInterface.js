@@ -57,6 +57,8 @@ class MyInterface extends CGFinterface {
             }
         }
 
+        var change = false;
+
         this.gui.add(this.scene.interfaceValues, 'view', this.scene.viewValues);
     }
 }

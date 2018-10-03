@@ -25,6 +25,8 @@ class XMLscene extends CGFscene {
     init(application) {
         super.init(application);
 
+        this.lights = [];
+        
         this.sceneInited = false;
 
         this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15,15,15), vec3.fromValues(0,0,0));
@@ -38,6 +40,13 @@ class XMLscene extends CGFscene {
         this.gl.enable(this.gl.CULL_FACE);
         this.gl.depthFunc(this.gl.LEQUAL);
         this.axis = new CGFaxis(this);
+
+
+        this.quad = new MyQuad(this, -1, -1, 1, 1, -1, -1, 1, 1);
+        this.triangle = new MyTriangle(this, 1, -1, 2, 0, 0, 2, -1, -1, 2);
+        this.cylinder = new MyCylinder(this, 0, 0, 0, 10, 10, -1, 1, -1, 1);
+        this.sphere = new MySphere(this, 10, 10, -1, 1, -1, 1);
+        this.torus = new MyTorus(this);
     }
 
     /**
@@ -70,8 +79,6 @@ class XMLscene extends CGFscene {
             }
 
         }*/
-
-        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15,15,15), vec3.fromValues(0,0,0));
     }
     /**
      * Initializes the scene lights with the values read from the XML file.
@@ -89,6 +96,7 @@ class XMLscene extends CGFscene {
             if (this.graph.omniLights.hasOwnProperty(key)) {
                 var light = this.graph.omniLights[key];
                 //lights are predefined in cgfscene
+                this.lights[i] = new CGFlight(this, i);
                 this.lights[i].setPosition(light.location.x, light.location.y, light.location.z, light.location.w);
                 this.lights[i].setAmbient(light.ambient.r, light.ambient.g, light.ambient.b, light.ambient.a);
                 this.lights[i].setDiffuse(light.diffuse.r, light.diffuse.g, light.diffuse.b, light.diffuse.a);
@@ -106,6 +114,8 @@ class XMLscene extends CGFscene {
                 i++;
             }
         }
+
+        console.log(this.lights);
     }
 
 
@@ -122,7 +132,7 @@ class XMLscene extends CGFscene {
         this.gl.clearColor(background.r, background.g, background.b, background.a);
         
         var ambient = this.graph.ambient.ambient;
-        this.setAmbient(ambient.r, ambient.g, ambient.b, ambient.a);
+        this.setGlobalAmbientLight(ambient.r, ambient.g, ambient.b, ambient.a);
         
 
         this.interfaceValues = {
@@ -138,12 +148,6 @@ class XMLscene extends CGFscene {
 
         this.sceneInited = true;
     }
-
-    updateLights()
-	{
-		for (var i = 0; i < this.lights.length; i++)
-			this.lights[i].update();
-	}
 
 
     /**
@@ -163,12 +167,15 @@ class XMLscene extends CGFscene {
 
         // Apply transformations corresponding to the camera position relative to the origin
         this.applyViewMatrix();
-
-
-        this.updateLights();
         
         this.pushMatrix();
         
+        // this.quad.display();
+        // this.triangle.display();
+        // this.cylinder.display();
+        // this.sphere.display();
+        this.torus.display();
+
         if (this.sceneInited) {
             // Draw axis
                 this.axis.display();
@@ -189,7 +196,7 @@ class XMLscene extends CGFscene {
                 }
             }
 
-            this.camera = this.cameras[this.interfaceValues.view];
+           //this.camera = this.cameras[this.interfaceValues.view];
 
             // Displays the scene (MySceneGraph function).
             this.graph.displayScene();
