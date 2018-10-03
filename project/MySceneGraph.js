@@ -55,7 +55,7 @@ class MySceneGraph {
 
         this.tagNames = ["scene", "views", "ambient", "lights", "textures", "materials", "transformations", "primitives", "components"];
         this.functionVect = [this.parseScene, this.parseViews, this.parseAmbient, this.parseLights, this.parseTextures, this.parseMaterials, this.parseTransformations, this.parsePrimitives, this.parseComponents];
-    
+
         this.values = [];
     }
 
@@ -136,8 +136,8 @@ class MySceneGraph {
      * @param {XML scene element} sceneNode
      */
     parseScene(sceneNode) {
-        let info = this.parseFields(sceneNode, [ ["root", "ss", undefined], ["axis_length", "ff", 3] ], "scene");
-        
+        let info = this.parseFields(sceneNode, [["root", "ss", undefined], ["axis_length", "ff", 3]], "scene");
+
         this.values.scene = {
             root: info.root,
             axis_length: info.axis_length
@@ -189,13 +189,14 @@ class MySceneGraph {
         //ID
         let orthoId = this.reader.getString(orthoNode, 'id');
         if (orthoId == null)
-            return "no ID defined for view";        
+            return "no ID defined for view";
 
         if (this.viewIds.indexOf(orthoId) != -1)
             return "ID must be unique for each view (conflict: ID = " + orthoId + ")";
 
         this.viewIds.push(orthoId);
 
+        //OTHER INFO
         this.orthoViews[orthoId] = this.parseFields(orthoNode, [["near", "ff", 0.5], ["far", "ff", 500], ["left", "ff", 0], ["right", "ff", 0], ["top", "ff", 0], ["bottom", "ff", 0]], "views > ortho id = " + orthoId);
 
     }
@@ -210,18 +211,12 @@ class MySceneGraph {
         if (perspectiveId == null)
             return "no ID defined for light";
 
-
-        for(let key in this.perspectiveViews){
-            if(key == perspectiveId){
-                return "ID must be unique for each light (conflict: ID = " + lightId + ")";
-            }
-        }
-
         if (this.viewIds.indexOf(perspectiveId) != -1)
             return "ID must be unique for each view (conflict: ID = " + perspectiveId + ")";
 
         this.viewIds.push(perspectiveId);
 
+        //OTHER INFO
         let info = this.parseFields(perspectiveNode, [["near", "ff", 0.5], ["far", "ff", 500], ["angle", "ff", 0]], "views > perspective id = " + perspectiveId);
 
         let children = perspectiveNode.children;
@@ -246,7 +241,7 @@ class MySceneGraph {
             else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in view id=" + perspectiveId + "was ignored");
         }
 
-        this.perspectiveViews[perspectiveId]={
+        this.perspectiveViews[perspectiveId] = {
             near: info.near,
             far: info.far,
             angle: info.angle,
@@ -273,20 +268,20 @@ class MySceneGraph {
         //Parse ambient
         let ambientIndex = nodeNames.indexOf("ambient");
 
-        if (ambientIndex != 0){
+        if (ambientIndex != 0) {
             this.log("problem in ambient definition");
         }
-        else{
+        else {
             ambient = this.parseFields(children[0], [["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 1]], "ambient > ambient");
         }
 
         //Parse background
         let backgroundIndex = nodeNames.indexOf("background");
 
-        if (backgroundIndex != 1){
+        if (backgroundIndex != 1) {
             this.log("problem in background definition");
         }
-        else{
+        else {
             background = this.parseFields(children[1], [["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 1]], "ambient > background");
         }
 
@@ -327,7 +322,6 @@ class MySceneGraph {
         }
     }
 
-    //TO DO
     parseOmni(omniNode) {
         //ID
         let omniId = this.reader.getString(omniNode, 'id');
@@ -339,6 +333,7 @@ class MySceneGraph {
 
         this.lightIds.push(omniId);
 
+        //OTHER INFO
         let info = this.parseFields(omniNode, [["enabled", "tt", 0]], "lights > omni id = " + omniId);
         let enabled = info.enabled;
 
@@ -416,6 +411,7 @@ class MySceneGraph {
 
         this.viewIds.push(spotId);
 
+        //OTHER INFO
         let info = this.parseFields(spotNode, [["enabled", "tt", true], ["angle", "ff", 0], ["exponent", "ff", 0]], "lights > spot id = " + spotId);
         let enabled = info.enabled;
         let angle = info.angle;
@@ -445,7 +441,7 @@ class MySceneGraph {
             location = this.parseFields(children[locationIndex], [["x", "ff", 0], ["y", "ff", 0], ["z", "ff", 0], ["w", "ff", 0]], "lights > spot id = " + spotId + " > location");
         }
 
-        
+
         if (targetIndex == -1) {
             return "light target undefined for ID = " + spotId;
         }
@@ -493,7 +489,8 @@ class MySceneGraph {
             target: target,
             ambient: ambient,
             diffuse: diffuse,
-            specular: specular};
+            specular: specular
+        };
     }
 
     parseTextures(texturesNode) {
@@ -525,16 +522,23 @@ class MySceneGraph {
 
         if (this.textureIds.indexOf(textureId) != -1)
             return "ID must be unique for each texture (conflict: ID = " + textureId + ")";
-        
-            this.textureIds.push(textureId);
+
+        //OTHER INFO
+
+        let file = this.reader.getString(textureNode, 'file');
+        if (file == null)
+            return "no file defined for texture id = " + textureId;
+
+        this.textureIds.push(textureId);
+        this.textures[textureId] = file;
     }
-    
+
     parseMaterials(materialsNode) {
         let children = materialsNode.children;
-        this.materials=[];
+        this.materials = [];
         this.materialIds = [];
         let error;
-        
+
         for (let i = 0; i < children.length; i++) {
             if (children[i].nodeName == "material") {
                 if ((error = this.parseMaterial(children[i])) != null)
@@ -561,8 +565,9 @@ class MySceneGraph {
 
         this.materialIds.push(materialId);
 
+        //OTHER INFO
         let info = this.parseFields(materialNode, [["shininess", "ff", 0]], "lights > material id = " + materialId + " > shininess");
-       
+
         let children = materialNode.children;
 
         let nodeNames = [];
@@ -615,13 +620,6 @@ class MySceneGraph {
             specular = this.parseFields(children[specularIndex], [["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 0]], "lights > material id = " + materialId + " > specular");
         }
 
-        this.materials[materialId] = {
-            shininess: info.shininess,
-            emission: emission, 
-            ambient: ambient,
-            diffuse: diffuse,
-            specular: specular
-        };
     }
 
     parseTransformations(transformationsNode) {
@@ -654,11 +652,13 @@ class MySceneGraph {
 
         if (this.transformationIds.indexOf(transformationId) != -1)
             return "ID must be unique for each transformation (conflict: ID = " + transformationId + ")";
-            
+
         this.transformationIds.push(transformationId);
 
+        //OTHER INFO
         let info;
         let children = transformationNode.children;
+        this.scene.pushMatrix();
         this.scene.loadIdentity();
 
         for (let i = 0; i < children.length; i++) {
@@ -668,17 +668,17 @@ class MySceneGraph {
             }
             else if (children[i].nodeName == "rotate") {
                 info = this.parseFields(children[i], [["axis", "cc", 0], ["angle", "ff", 0]], "tranformations > tranformation id = " + transformationId);
-                let radAngle = (info[1]*Math.PI)/180;
-                switch(info[0]){
+                let radAngle = (info[1] * Math.PI) / 180;
+                switch (info[0]) {
                     case "x":
-                    this.scene.rotate(1, 0, 0, radAngle);
-                    break;
+                        this.scene.rotate(1, 0, 0, radAngle);
+                        break;
                     case "y":
-                    this.scene.rotate(0, 1, 0, radAngle);
-                    break;
+                        this.scene.rotate(0, 1, 0, radAngle);
+                        break;
                     case "z":
-                    this.scene.rotate(0, 0, 1, radAngle);
-                    break;
+                        this.scene.rotate(0, 0, 1, radAngle);
+                        break;
                 }
             }
             else if (children[i].nodeName == "scale") {
@@ -689,12 +689,179 @@ class MySceneGraph {
         }
         let finalMatrix;
         this.scene.getMatrix(finalMatrix);
+        this.scene.popMatrix();
 
         this.transformations[transformationId] = finalMatrix;
     }
 
     parsePrimitives(primitivesNode) {
+        let children = primitivesNode.children;
+        this.rectangles = [];
+        this.triangles = [];
+        this.cylinders = [];
+        this.spheres = [];
+        this.torus = [];
+        this.primitiveIds = [];
+        let error;
+
+        for (let i = 0; i < children.length; i++) {
+            if (children[i].nodeName == "rectangle") {
+                if ((error = this.parseRectangle(children[i])) != null)
+                    return error;
+            }
+            else if (children[i].nodeName == "triangle") {
+                if ((error = this.parseTriangle(children[i])) != null)
+                    return error;
+            }
+            else if (children[i].nodeName == "cylinder") {
+                if ((error = this.parseCylinder(children[i])) != null)
+                    return error;
+            }
+            else if (children[i].nodeName == "sphere") {
+                if ((error = this.parseSphere(children[i])) != null)
+                    return error;
+            }
+            else if (children[i].nodeName == "torus") {
+                if ((error = this.parseTorus(children[i])) != null)
+                    return error;
+            }
+            else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in <primitives> block was ignored")
+        }
+
+        //There has to be at least one primitive
+        if (this.primitiveIds.length == 0) {
+            return "at least one primitive must be defined in <primitives> block";
+        }
+
+
+
         this.log("Parsed Primitives");
+    }
+
+    parseRectangle(rectangleNode) {
+        //ID
+        let primitiveId = this.reader.getString(primitiveNode, 'id');
+        if (primitiveId == null)
+            return "no ID defined for primitive";
+
+        if (this.primitiveIds.indexOf(primitiveId) != -1)
+            return "ID must be unique for each primitive (conflict: ID = " + primitiveId + ")";
+
+        this.primitiveIds.push(primitiveId);
+
+        //INFO
+        let info;
+        info = this.parseFields(rectangleNode, [["x1", "ff", 0], ["x2", "ff", 0], ["x3", "ff", 0], ["x4", "ff", 0]], "primitives > rectangle id = " + primitiveId);
+
+
+        this.rectangles[primitiveId] = {
+            x1: info[0],
+            x2: info[1],
+            x3: info[2],
+            x4: info[3]
+        };
+
+    }
+
+    parseTriangle(triangleNode) {
+        //ID
+        let primitiveId = this.reader.getString(primitiveNode, 'id');
+        if (primitiveId == null)
+            return "no ID defined for primitive";
+
+        if (this.primitiveIds.indexOf(primitiveId) != -1)
+            return "ID must be unique for each primitive (conflict: ID = " + primitiveId + ")";
+
+        this.primitiveIds.push(primitiveId);
+
+        //OTHER INFO
+        let info;
+        info = this.parseFields(triangleNode, [["x1", "ff", 0], ["y1", "ff", 0], ["z1", "ff", 0], ["x2", "ff", 0], ["y2", "ff", 0], ["z2", "ff", 0], ["x3", "ff", 0], ["y3", "ff", 0], ["z3", "ff", 0]], "primitives > triangle id = " + primitiveId);
+
+
+        this.triangles[primitiveId] = {
+            x1: info[0],
+            y1: info[1],
+            z1: info[2],
+            x2: info[3],
+            y2: info[4],
+            z2: info[5],
+            x3: info[6],
+            y3: info[7],
+            z3: info[8],
+        };
+
+    }
+
+    parseCylinder(cylinderNode) {
+        //ID
+        let primitiveId = this.reader.getString(primitiveNode, 'id');
+        if (primitiveId == null)
+            return "no ID defined for primitive";
+
+        if (this.primitiveIds.indexOf(primitiveId) != -1)
+            return "ID must be unique for each primitive (conflict: ID = " + primitiveId + ")";
+
+        this.primitiveIds.push(primitiveId);
+
+        //OTHER INFO
+        let info;
+        info = this.parseFields(cylinderNode, [["base", "ff", 1], ["top", "ff", 1], ["height", "ff", 3], ["slices", "ii", 10], ["stacks", "ii", 10]], "primitives > cylinder id = " + primitiveId);
+
+
+        this.cylinders[primitiveId] = {
+            base: info[0],
+            top: info[1],
+            height: info[2],
+            slices: info[3],
+            stacks: info[4]
+        };
+    }
+
+    parseSphere(sphereNode) {
+        //ID
+        let primitiveId = this.reader.getString(primitiveNode, 'id');
+        if (primitiveId == null)
+            return "no ID defined for primitive";
+
+        if (this.primitiveIds.indexOf(primitiveId) != -1)
+            return "ID must be unique for each primitive (conflict: ID = " + primitiveId + ")";
+
+        this.primitiveIds.push(primitiveId);
+
+        //OTHER INFO
+        let info;
+        info = this.parseFields(sphereNode, [["radius", "ff", 1], ["slices", "ii", 10], ["stacks", "ii", 10]], "primitives > sphere id = " + primitiveId);
+
+
+        this.spheres[primitiveId] = {
+            radius: info[0],
+            slices: info[1],
+            stacks: info[2],
+        };
+    }
+
+    parseTorus(torusNode) {
+        //ID
+        let primitiveId = this.reader.getString(primitiveNode, 'id');
+        if (primitiveId == null)
+            return "no ID defined for primitive";
+
+        if (this.primitiveIds.indexOf(primitiveId) != -1)
+            return "ID must be unique for each primitive (conflict: ID = " + primitiveId + ")";
+
+        this.primitiveIds.push(primitiveId);
+
+        //OTHER INFO
+        let info;
+        info = this.parseFields(torusNode, [["inner", "ff", 1], ["outer", "ff", 2], ["stacks", "ii", 10], ["loops", "ii", 1]], "primitives > torus id = " + primitiveId);
+
+
+        this.toruss[primitiveId] = {
+            radius: info[0],
+            slices: info[1],
+            stacks: info[2],
+        };
     }
 
 
@@ -736,6 +903,14 @@ class MySceneGraph {
                     string = especificationArray[i][DEFAULT_VALUE];
                 }
                 result[especificationArray[i][NAME]] = string;
+            }
+            else if (especificationArray[i][TYPE] == "ii") {
+                let float = this.reader.getFloat(node, especificationArray[i][NAME]);
+                if (float == null || ((float % 1) != 0)) {
+                    this.onXMLMinorError("unable to parse " + especificationArray[i][NAME] + " value from section " + XMLsection + "; assuming " + especificationArray[i][NAME] + " = " + especificationArray[i][DEFAULT_VALUE]);
+                    float = especificationArray[i][DEFAULT_VALUE];
+                }
+                result[especificationArray[i][NAME]] = float;
             }
 
         }
