@@ -703,6 +703,7 @@ class MySceneGraph {
     }
 
     parsePrimitives(primitivesNode) {
+
         let children = primitivesNode.children;
         this.primitiveIds = [];
         let error;
@@ -723,6 +724,7 @@ class MySceneGraph {
             }
             else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in <primitives> block was ignored");
         }
+
     }
     parsePrimitive(primitiveNode, primitiveId) {
         let children = primitiveNode.children;
@@ -740,7 +742,7 @@ class MySceneGraph {
                     return error;
             }
             else if (children[i].nodeName == "triangle") {
-                if ((error = this.parseTriangle(children[i], primitiveId )) != null)
+                if ((error = this.parseTriangle(children[i], primitiveId)) != null)
                     return error;
             }
             else if (children[i].nodeName == "cylinder") {
@@ -852,27 +854,37 @@ class MySceneGraph {
 
 
     parseComponents(componentsNode) {
+
         let children = componentsNode.children;
         this.components = [];
         this.componentIds = [];
         let error;
+        this.childComponentIds = [];
 
         for (let i = 0; i < children.length; i++) {
             if (children[i].nodeName == "component") {
                 if ((error = this.parseComponent(children[i])) != null)
                     return error;
             }
-            else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in <components> block")
+            else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in <components> block");
         }
 
         //There has to be at least one component
         if (this.componentIds.length == 0) {
             return "at least one component must be defined in <components> block";
         }
+
+        for (let i = 0; i < this.childComponentIds.length; i++) {
+            if (this.componentIds.indexOf(this.childComponentIds[i]) == -1)
+                return "unreferenced component child with ID = " + this.childComponentIds[i];
+        }
+
         this.log("Parsed Components");
+
     }
 
     parseComponent(componentNode) {
+        let error = null;
         //ID
         let componentId = this.reader.getString(componentNode, 'id');
         if (componentId == null)
@@ -894,7 +906,13 @@ class MySceneGraph {
         let materialIndex = nodeNames.indexOf("materials");
         let textureIndex = nodeNames.indexOf("texture");
         let childrenIndex = nodeNames.indexOf("children");
-        let emission, ambient, diffuse, specular;
+
+        this.components[componentId] = {
+            tranformation: null,
+            materials: [],
+            texture: null,
+            children: []
+        }
 
         //Transformation
         if (transfIndex == -1) {
@@ -904,6 +922,9 @@ class MySceneGraph {
             if (transfIndex != 0) {
                 this.onXMLMinorError("component transformation out of order for ID =" + componentId);
             }
+            error = this.parseComponentTransf(children[transfIndex], componentId);
+            if (error != null)
+                return (error);
         }
 
         //Material
@@ -914,6 +935,9 @@ class MySceneGraph {
             if (materialIndex != 1) {
                 this.onXMLMinorError("component materials out of order for ID =" + componentId);
             }
+            error = this.parseComponentMaterials(children[materialIndex], componentId);
+            if (error != null)
+                return (error);
         }
 
         //Texture
@@ -924,9 +948,12 @@ class MySceneGraph {
             if (textureIndex != 2) {
                 this.onXMLMinorError("component texture out of order for ID =" + componentId);
             }
+            error = this.parseComponentTexture(children[textureIndex], componentId);
+            if (error != null)
+                return (error);
         }
 
-        //Texture
+        //Children
         if (childrenIndex == -1) {
             return "component children undefined for ID = " + componentId;
         }
@@ -934,28 +961,30 @@ class MySceneGraph {
             if (childrenIndex != 3) {
                 this.onXMLMinorError("component children out of order for ID =" + componentId);
             }
+            error = this.parseComponentChildren(children[childrenIndex], componentId);
+            if (error != null)
+                return (error);
         }
-        /*
-                this.components[componentId] = {
-                    transformation: //uma matriz
-                        materials:  //uma lista
-                    texture: //um id
-                        children: //uma lista
-                };
-        */
+
+        this.componentIds.push(componentId);
+
     }
 
     parseComponentTransf(compTransfNode, id) {
-        let children = componentNode.children;
+        let children = compTransfNode.children;
         let reference = null;
+        this.scene.pushMatrix();
+        this.scene.loadIdentity();
+        let info;
+
         for (let i = 0; i < children.length; i++) {
             if (children[i].nodeName == "transformationref") {
                 //ID
-                let transfId = this.reader.getString(compTransfNode, 'id');
+                let transfId = this.reader.getString(children[i], 'id');
                 if (transfId == null)
                     return "no ID defined for transformationref in component id = " + id;
 
-                if (this.transformationIds.indexOf(id) == -1)
+                if (this.transformationIds.indexOf(transfId) == -1)
                     return "transformationref ID not found for in component id = " + id;
 
                 if (reference == null)
@@ -965,22 +994,126 @@ class MySceneGraph {
                 }
                 this.components[id].tranformation = transfId;
             }
-            else if (children[i].nodeName == "translate") {
+            else if (children[i].nodeName == "translate" || children[i].nodeName == "rotate" || children[i].nodeName == "scale") {
+                if (reference == true) {
+                    this.onXMLMinorError("there cannot be a referenced tranformation alon with explicit transformations in component definition; only the reference definition will be considered");
+                    return null;
+                }
                 if (reference == null)
                     reference = false;
+
+                if (children[i].nodeName == "translate") {
+                    info = this.parseFields(children[i], [["x", "ff", 0], ["y", "ff", 0], ["z", "ff", 0]], "components > component id = " + id);
+                    this.scene.translate(info[0], info[1], info[2]);
+
+                } else if (children[i].nodeName == "rotate") {
+                    info = this.parseFields(children[i], [["axis", "cc", 0], ["angle", "ff", 0]], "components > component id = " + id);
+                    let radAngle = (info[1] * Math.PI) / 180;
+                    switch (info[0]) {
+                        case "x":
+                            this.scene.rotate(1, 0, 0, radAngle);
+                            break;
+                        case "y":
+                            this.scene.rotate(0, 1, 0, radAngle);
+                            break;
+                        case "z":
+                            this.scene.rotate(0, 0, 1, radAngle);
+                            break;
+                    }
+
+                } else if (children[i].nodeName == "scale") {
+                    info = this.parseFields(children[i], [["x", "ff", 1], ["y", "ff", 1], ["z", "ff", 1]], "tranformations > tranformation id = " + transformationId);
+                    this.scene.scale(info[0], info[1], info[2]);
+                }
+
             }
-            else if (children[i].nodeName == "rotate") {
-                if (reference == null)
-                    reference = false;
+            else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in tranformations of component id = " + id + " was ignored");
+
+            let matrix = this.scene.getMatrix();
+            this.scene.popMatrix();
+            if (!reference) {
+                this.components[id].tranformation = matrix;
             }
-            else if (children[i].nodeName == "scale") {
-                if (reference == null)
-                    reference = false;
-            }
-            else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in tranformations of component id = " + id + " was ignored")
+        }
+        //There has to be at least one transformation
+        if (children.length == 0) {
+            return "at least one transformation (either referenced or explicit) must be defined in component id = " + id;
         }
     }
 
+    parseComponentMaterials(compMaterialsNode, id) {
+        let children = compMaterialsNode.children;
+        for (let i = 0; i < children.length; i++) {
+            if (children[i].nodeName == "material") {
+                //ID
+                let materialId = this.reader.getString(children[i], 'id');
+                if (materialId == null)
+                    return "no ID defined for material in component id = " + id;
+
+                if (this.materialIds.indexOf(materialId) == -1)
+                    return "material ID not found for in component id = " + id;
+                this.components[id].materials.push(materialId);
+            }
+            else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in materials of component id = " + id + " was ignored");
+        }
+        //There has to be at least one material
+        if (children.length == 0) {
+            return "at least one material must be defined in component id = " + id;
+        }
+    }
+
+    parseComponentTexture(compTextureNode, id) {
+        //ID
+        let textureId = this.reader.getString(compTextureNode, 'id');
+        if (textureId == null)
+            return "no ID defined for texture in component id = " + id;
+
+        if (this.textureIds.indexOf(textureId) == -1)
+            return "texture ID not found for in component id = " + id;
+        this.components[id].texture = textureId;
+
+        let info = this.parseFields(compTextureNode, [["length_s", "ff", 1.0], ["length_t", "ff", 1.0]], "components > component id = " + id + " > texture");
+        this.components[id].texture = {
+            length_s: info.length_s,
+            length_t: info.length_t
+        }
+    }
+
+    parseComponentChildren(compChildrenNode, id) {
+
+        let children = compChildrenNode.children;
+
+        for (let i = 0; i < children.length; i++) {
+            if (children[i].nodeName == "componentref") {
+                //ID
+                let componentId = this.reader.getString(children[i], 'id');
+                if (componentId == null)
+                    return "no ID defined for component child in component id = " + id;
+
+                if (componentId == id)
+                    return "child component id must not be equal to parent component id = " + id;
+
+                this.childComponentIds.push(componentId);
+            }
+            else if (children[i].nodeName == "primitiveref") {
+                //ID
+                let primitiveId = this.reader.getString(children[i], 'id');
+                console.log(primitiveId);
+                if (primitiveId == null)
+                    return "no ID defined for primitive child in component id = " + id;
+
+                if (this.primitiveIds.indexOf(primitiveId) == -1)
+                    return "primitive child ID not found for in component id = " + id;
+                this.components[id].children.push(primitiveId);
+            }
+            else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in children of component id = " + id);
+        }
+
+        if (children.length == 0)
+            return "at least one child must be defined in children of component id = " + id
+
+
+    }
     parseFields(node, especificationArray, XMLsection) {
         let result = [];
         for (let i = 0; i < especificationArray.length; i++) {
@@ -1064,5 +1197,3 @@ class MySceneGraph {
         //TODO: Render loop starting at root of graph
     }
 }
-
-x   

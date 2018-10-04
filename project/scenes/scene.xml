@@ -40,7 +40,7 @@
 		</material>
 	</materials>
 	<transformations>
-		<transformation id="tranformation1">
+		<transformation id="transformation1">
 			<translate x="0" y="0" z="0" />
 		</transformation>
 	</transformations>
@@ -65,8 +65,8 @@
 	<components>
 		<component id="component1">
 			<transformation>
-				<tranformationref id="transformation1">
-				</tranformationref>
+				<transformationref id="transformation1">
+				</transformationref>
 			</transformation>
 			<materials>
 				<material id="material1" />
