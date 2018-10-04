@@ -169,7 +169,7 @@ class MySceneGraph {
                 if ((error = this.parseOrtho(children[i])) != null)
                     return error;
             }
-            else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in <views> block was ignored")
+            else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in <views> block was ignored");
         }
 
         //There has to be at least one view
@@ -619,6 +619,14 @@ class MySceneGraph {
             }
             specular = this.parseFields(children[specularIndex], [["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 0]], "lights > material id = " + materialId + " > specular");
         }
+        this.materials[materialId] = [emission, ambient, diffuse, specular];
+        this.materials[materialId] = {
+            shininess: info.shininess,
+            emission: emission,
+            ambient: ambient,
+            diffuse: diffuse,
+            specular: specular
+        };
 
     }
 
@@ -696,33 +704,55 @@ class MySceneGraph {
 
     parsePrimitives(primitivesNode) {
         let children = primitivesNode.children;
+        this.primitiveIds = [];
+        let error;
+        for (let i = 0; i < children.length; i++) {
+            if (children[i].nodeName == "primitive") {
+                //ID
+                let primitiveId = this.reader.getString(children[i], 'id');
+                if (primitiveId == null)
+                    return "no ID defined for primitive";
+
+                if (this.primitiveIds.indexOf(primitiveId) != -1)
+                    return "ID must be unique for each primitive (conflict: ID = " + primitiveId + ")";
+
+                this.primitiveIds.push(primitiveId);
+
+                if ((error = this.parsePrimitive(children[i], primitiveId)) != null)
+                    return error;
+            }
+            else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in <primitives> block was ignored");
+        }
+    }
+    parsePrimitive(primitiveNode, primitiveId) {
+        let children = primitiveNode.children;
         this.rectangles = [];
         this.triangles = [];
         this.cylinders = [];
         this.spheres = [];
-        this.torus = [];
-        this.primitiveIds = [];
+        this.toruss = [];
+
         let error;
 
         for (let i = 0; i < children.length; i++) {
             if (children[i].nodeName == "rectangle") {
-                if ((error = this.parseRectangle(children[i])) != null)
+                if ((error = this.parseRectangle(children[i], primitiveId)) != null)
                     return error;
             }
             else if (children[i].nodeName == "triangle") {
-                if ((error = this.parseTriangle(children[i])) != null)
+                if ((error = this.parseTriangle(children[i], primitiveId )) != null)
                     return error;
             }
             else if (children[i].nodeName == "cylinder") {
-                if ((error = this.parseCylinder(children[i])) != null)
+                if ((error = this.parseCylinder(children[i], primitiveId)) != null)
                     return error;
             }
             else if (children[i].nodeName == "sphere") {
-                if ((error = this.parseSphere(children[i])) != null)
+                if ((error = this.parseSphere(children[i], primitiveId)) != null)
                     return error;
             }
             else if (children[i].nodeName == "torus") {
-                if ((error = this.parseTorus(children[i])) != null)
+                if ((error = this.parseTorus(children[i], primitiveId)) != null)
                     return error;
             }
             else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in <primitives> block was ignored")
@@ -738,20 +768,11 @@ class MySceneGraph {
         this.log("Parsed Primitives");
     }
 
-    parseRectangle(rectangleNode) {
-        //ID
-        let primitiveId = this.reader.getString(primitiveNode, 'id');
-        if (primitiveId == null)
-            return "no ID defined for primitive";
-
-        if (this.primitiveIds.indexOf(primitiveId) != -1)
-            return "ID must be unique for each primitive (conflict: ID = " + primitiveId + ")";
-
-        this.primitiveIds.push(primitiveId);
+    parseRectangle(rectangleNode, primitiveId) {
 
         //INFO
         let info;
-        info = this.parseFields(rectangleNode, [["x1", "ff", 0], ["x2", "ff", 0], ["x3", "ff", 0], ["x4", "ff", 0]], "primitives > rectangle id = " + primitiveId);
+        info = this.parseFields(rectangleNode, [["x1", "ff", 0], ["y1", "ff", 0], ["x2", "ff", 0], ["y2", "ff", 0]], "primitives > rectangle id = " + primitiveId);
 
 
         this.rectangles[primitiveId] = {
@@ -763,18 +784,9 @@ class MySceneGraph {
 
     }
 
-    parseTriangle(triangleNode) {
-        //ID
-        let primitiveId = this.reader.getString(primitiveNode, 'id');
-        if (primitiveId == null)
-            return "no ID defined for primitive";
+    parseTriangle(triangleNode, primitiveId) {
 
-        if (this.primitiveIds.indexOf(primitiveId) != -1)
-            return "ID must be unique for each primitive (conflict: ID = " + primitiveId + ")";
-
-        this.primitiveIds.push(primitiveId);
-
-        //OTHER INFO
+        //INFO
         let info;
         info = this.parseFields(triangleNode, [["x1", "ff", 0], ["y1", "ff", 0], ["z1", "ff", 0], ["x2", "ff", 0], ["y2", "ff", 0], ["z2", "ff", 0], ["x3", "ff", 0], ["y3", "ff", 0], ["z3", "ff", 0]], "primitives > triangle id = " + primitiveId);
 
@@ -793,18 +805,9 @@ class MySceneGraph {
 
     }
 
-    parseCylinder(cylinderNode) {
-        //ID
-        let primitiveId = this.reader.getString(primitiveNode, 'id');
-        if (primitiveId == null)
-            return "no ID defined for primitive";
+    parseCylinder(cylinderNode, primitiveId) {
 
-        if (this.primitiveIds.indexOf(primitiveId) != -1)
-            return "ID must be unique for each primitive (conflict: ID = " + primitiveId + ")";
-
-        this.primitiveIds.push(primitiveId);
-
-        //OTHER INFO
+        //INFO
         let info;
         info = this.parseFields(cylinderNode, [["base", "ff", 1], ["top", "ff", 1], ["height", "ff", 3], ["slices", "ii", 10], ["stacks", "ii", 10]], "primitives > cylinder id = " + primitiveId);
 
@@ -818,18 +821,9 @@ class MySceneGraph {
         };
     }
 
-    parseSphere(sphereNode) {
-        //ID
-        let primitiveId = this.reader.getString(primitiveNode, 'id');
-        if (primitiveId == null)
-            return "no ID defined for primitive";
+    parseSphere(sphereNode, primitiveId) {
 
-        if (this.primitiveIds.indexOf(primitiveId) != -1)
-            return "ID must be unique for each primitive (conflict: ID = " + primitiveId + ")";
-
-        this.primitiveIds.push(primitiveId);
-
-        //OTHER INFO
+        //INFO
         let info;
         info = this.parseFields(sphereNode, [["radius", "ff", 1], ["slices", "ii", 10], ["stacks", "ii", 10]], "primitives > sphere id = " + primitiveId);
 
@@ -841,32 +835,150 @@ class MySceneGraph {
         };
     }
 
-    parseTorus(torusNode) {
-        //ID
-        let primitiveId = this.reader.getString(primitiveNode, 'id');
-        if (primitiveId == null)
-            return "no ID defined for primitive";
+    parseTorus(torusNode, primitiveId) {
 
-        if (this.primitiveIds.indexOf(primitiveId) != -1)
-            return "ID must be unique for each primitive (conflict: ID = " + primitiveId + ")";
-
-        this.primitiveIds.push(primitiveId);
-
-        //OTHER INFO
+        //INFO
         let info;
-        info = this.parseFields(torusNode, [["inner", "ff", 1], ["outer", "ff", 2], ["stacks", "ii", 10], ["loops", "ii", 1]], "primitives > torus id = " + primitiveId);
+        info = this.parseFields(torusNode, [["inner", "ff", 1], ["outer", "ff", 2], ["slices", "ii", 10], ["loops", "ii", 1]], "primitives > torus id = " + primitiveId);
 
 
         this.toruss[primitiveId] = {
-            radius: info[0],
-            slices: info[1],
-            stacks: info[2],
+            inner: info[0],
+            outer: info[1],
+            slices: info[2],
+            stacks: info[3],
         };
     }
 
 
     parseComponents(componentsNode) {
+        let children = componentsNode.children;
+        this.components = [];
+        this.componentIds = [];
+        let error;
+
+        for (let i = 0; i < children.length; i++) {
+            if (children[i].nodeName == "component") {
+                if ((error = this.parseComponent(children[i])) != null)
+                    return error;
+            }
+            else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in <components> block")
+        }
+
+        //There has to be at least one component
+        if (this.componentIds.length == 0) {
+            return "at least one component must be defined in <components> block";
+        }
         this.log("Parsed Components");
+    }
+
+    parseComponent(componentNode) {
+        //ID
+        let componentId = this.reader.getString(componentNode, 'id');
+        if (componentId == null)
+            return "no ID defined for component";
+
+        if (this.componentIds.indexOf(componentId) != -1)
+            return "ID must be unique for each component (conflict: ID = " + componentId + ")";
+
+        this.componentIds.push(componentId);
+
+        //OHTER INFO
+        let children = componentNode.children;
+        let nodeNames = [];
+        for (var j = 0; j < children.length; j++) {
+            nodeNames.push(children[j].nodeName);
+        }
+
+        let transfIndex = nodeNames.indexOf("transformation");
+        let materialIndex = nodeNames.indexOf("materials");
+        let textureIndex = nodeNames.indexOf("texture");
+        let childrenIndex = nodeNames.indexOf("children");
+        let emission, ambient, diffuse, specular;
+
+        //Transformation
+        if (transfIndex == -1) {
+            return "component transformation undefined for ID = " + componentId;
+        }
+        else {
+            if (transfIndex != 0) {
+                this.onXMLMinorError("component transformation out of order for ID =" + componentId);
+            }
+        }
+
+        //Material
+        if (materialIndex == -1) {
+            return "component materials undefined for ID = " + componentId;
+        }
+        else {
+            if (materialIndex != 1) {
+                this.onXMLMinorError("component materials out of order for ID =" + componentId);
+            }
+        }
+
+        //Texture
+        if (textureIndex == -1) {
+            return "component texture undefined for ID = " + componentId;
+        }
+        else {
+            if (textureIndex != 2) {
+                this.onXMLMinorError("component texture out of order for ID =" + componentId);
+            }
+        }
+
+        //Texture
+        if (childrenIndex == -1) {
+            return "component children undefined for ID = " + componentId;
+        }
+        else {
+            if (childrenIndex != 3) {
+                this.onXMLMinorError("component children out of order for ID =" + componentId);
+            }
+        }
+        /*
+                this.components[componentId] = {
+                    transformation: //uma matriz
+                        materials:  //uma lista
+                    texture: //um id
+                        children: //uma lista
+                };
+        */
+    }
+
+    parseComponentTransf(compTransfNode, id) {
+        let children = componentNode.children;
+        let reference = null;
+        for (let i = 0; i < children.length; i++) {
+            if (children[i].nodeName == "transformationref") {
+                //ID
+                let transfId = this.reader.getString(compTransfNode, 'id');
+                if (transfId == null)
+                    return "no ID defined for transformationref in component id = " + id;
+
+                if (this.transformationIds.indexOf(id) == -1)
+                    return "transformationref ID not found for in component id = " + id;
+
+                if (reference == null)
+                    reference = true;
+                else if (reference == false) {
+                    this.onXMLMinorError("there cannot be a referenced tranformation alon with explicit transformations in component definition; only the reference definition will be considered");
+                }
+                this.components[id].tranformation = transfId;
+            }
+            else if (children[i].nodeName == "translate") {
+                if (reference == null)
+                    reference = false;
+            }
+            else if (children[i].nodeName == "rotate") {
+                if (reference == null)
+                    reference = false;
+            }
+            else if (children[i].nodeName == "scale") {
+                if (reference == null)
+                    reference = false;
+            }
+            else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in tranformations of component id = " + id + " was ignored")
+        }
     }
 
     parseFields(node, especificationArray, XMLsection) {

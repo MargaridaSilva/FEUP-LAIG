@@ -1,85 +1,80 @@
 <yas>
-<scene root="start" axis_length="5"/>
-
-<views default="view1">
-
-	<perspective id= "view1" near ="0.1" far = "500" angle="0.4">
-		<from x = "15" y = "15" z = "15" />
-		<to x = "0" y = "0" z = "0" />
-	</perspective>
-
-	<perspective id= "view2" near ="0.1" far = "500" angle="0.4">
-		<from x = "15" y = "15" z = "25" />
-		<to x = "0" y = "0" z = "0" />
-	</perspective>
-</views>
-
-<ambient>
-	<ambient r="0" g="0" b="0" a ="1"/>
-	<background r="0" g="0" b="0" a="1"/>
-</ambient>
-
-<lights>
-	<omni id="light1" enabled="1">
-		<location x="0" y="5" z="0" w="1"/>
-		<ambient r="0" g="0" b="0" a="1"/>
-		<diffuse r="1" g="1" b="1" a="1"/>
-		<specular r="1" g="1" b="1" a="1"/>
-	</omni>
-
-	<omni id="light2" enabled="1">
-		<location x="3" y="3" z="3" w="1"/>
-		<ambient r="0" g="0" b="0" a="1"/>
-		<diffuse r="1" g="1" b="1" a="1"/>
-		<specular r="1" g="1" b="1" a="1"/>
-	</omni>
-</lights>
-
-<textures>
-	<texture id="bank" file="bank.jpg"/>
-</textures>
-
-<materials>
-	<material id="material1" shininess="0.5">
-		<emission r="0" g="0" b="0" a="0"/>
-		<ambient r="0" g="0" b="0" a="0"/>
-		<diffuse r="0" g="0" b="0" a="0"/>
-		<specular r="0" g="0" b="0" a="0"/>
-	</material>
-</materials>
-
-<transformations>
-	<transformation id="tranformation1">
-		<translate x="0" y="0" z="0"/>
-	</transformation>
-</transformations>
-
-<primitives>
-	<primitive id="rectangle1">
-		<rectangle x1="0" y1="0" x2="0" y2="0" />
-	</primitive>
-	
-	<primitive id="triangle1">
-		<triangle 	x1="0" y1="0" z1="0"
-					x2="0" y2="0" z2="0"
-					x3="0" y3="0" z3="0" />
-	</primitive>
-
-	<primitive id="cylinder1">
-		<cylinder base="0" top="0" height="0" slices="0" stacks="0" />
-	</primitive>
-
-	<primitive id="sphere1">
-		<sphere radius="0" slices="0" stacks="0" />
-	</primitive>
-	
-	<perspective>
-		<torus inner="2" outer="3" slices="100" loops="500">
-	</primitive>
-</primitives>
-
-<components>
-</components>
-
-
+	<scene root="start" axis_length="5" />
+	<views default="view1">
+		<perspective id="view1" near="0.1" far="500" angle="0.4">
+			<from x="15" y="15" z="15" />
+			<to x="0" y="0" z="0" />
+		</perspective>
+		<perspective id="view2" near="0.1" far="500" angle="0.4">
+			<from x="15" y="15" z="25" />
+			<to x="0" y="0" z="0" />
+		</perspective>
+	</views>
+	<ambient>
+		<ambient r="0" g="0" b="0" a="1" />
+		<background r="0" g="0" b="0" a="1" />
+	</ambient>
+	<lights>
+		<omni id="light1" enabled="1">
+			<location x="0" y="5" z="0" w="1" />
+			<ambient r="0" g="0" b="0" a="1" />
+			<diffuse r="1" g="1" b="1" a="1" />
+			<specular r="1" g="1" b="1" a="1" />
+		</omni>
+		<omni id="light2" enabled="1">
+			<location x="3" y="3" z="3" w="1" />
+			<ambient r="0" g="0" b="0" a="1" />
+			<diffuse r="1" g="1" b="1" a="1" />
+			<specular r="1" g="1" b="1" a="1" />
+		</omni>
+	</lights>
+	<textures>
+		<texture id="bank" file="bank.jpg" />
+	</textures>
+	<materials>
+		<material id="material1" shininess="0.5">
+			<emission r="0" g="0" b="0" a="0" />
+			<ambient r="0" g="0" b="0" a="0" />
+			<diffuse r="0" g="0" b="0" a="0" />
+			<specular r="0" g="0" b="0" a="0" />
+		</material>
+	</materials>
+	<transformations>
+		<transformation id="tranformation1">
+			<translate x="0" y="0" z="0" />
+		</transformation>
+	</transformations>
+	<primitives>
+		<primitive id="rectangle1">
+			<rectangle x1="0" y1="0" x2="0" y2="0" />
+		</primitive>
+		<primitive id="triangle1">
+			<triangle x1="0" y1="0" z1="0" x2="0" y2="0" z2="0" x3="0" y3="0" z3="0" />
+		</primitive>
+		<primitive id="cylinder1">
+			<cylinder base="0" top="0" height="0" slices="0" stacks="0" />
+		</primitive>
+		<primitive id="sphere1">
+			<sphere radius="0" slices="0" stacks="0" />
+		</primitive>
+		<primitive id="torus1">
+			<torus inner="2" outer="3" slices="100" loops="500">
+			</torus>
+		</primitive>
+	</primitives>
+	<components>
+		<component id="component1">
+			<transformation>
+				<tranformationref id="transformation1">
+				</tranformationref>
+			</transformation>
+			<materials>
+				<material id="material1" />
+			</materials>
+			<texture id="bank" length_s="1.0" length_t="1.0" />
+			<children>
+				<primitiveref id="torus1"/>
+			</children>
+		</component>
+	</components>
 </yas>
