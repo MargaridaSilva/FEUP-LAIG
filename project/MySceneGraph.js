@@ -671,13 +671,13 @@ class MySceneGraph {
 
         for (let i = 0; i < children.length; i++) {
             if (children[i].nodeName == "translate") {
-                info = this.parseFields(children[i], [["x", "ff", 0], ["y", "ff", 0], ["z", "ff", 0]], "tranformations > tranformation id = " + transformationId);
-                this.scene.translate(info[0], info[1], info[2]);
+                info = this.parseFields(children[i], [["x", "ff", 0], ["y", "ff", 0], ["z", "ff", 0]], "transformations > transformation id = " + transformationId);
+                this.scene.translate(info.x, info.y, info.z);
             }
             else if (children[i].nodeName == "rotate") {
-                info = this.parseFields(children[i], [["axis", "cc", 0], ["angle", "ff", 0]], "tranformations > tranformation id = " + transformationId);
-                let radAngle = (info[1] * Math.PI) / 180;
-                switch (info[0]) {
+                info = this.parseFields(children[i], [["axis", "cc", 0], ["angle", "ff", 0]], "transformations > transformation id = " + transformationId);
+                let radAngle = (info.angle * Math.PI) / 180;
+                switch (info.axis) {
                     case "x":
                         this.scene.rotate(1, 0, 0, radAngle);
                         break;
@@ -690,13 +690,12 @@ class MySceneGraph {
                 }
             }
             else if (children[i].nodeName == "scale") {
-                info = this.parseFields(children[i], [["x", "ff", 1], ["y", "ff", 1], ["z", "ff", 1]], "tranformations > tranformation id = " + transformationId);
-                this.scene.scale(info[0], info[1], info[2]);
+                info = this.parseFields(children[i], [["x", "ff", 1], ["y", "ff", 1], ["z", "ff", 1]], "transformations > transformation id = " + transformationId);
+                this.scene.scale(info.x, info.y, info.z);
             }
             else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in transformation id = " + transformationId);
         }
-        let finalMatrix;
-        this.scene.getMatrix(finalMatrix);
+        let finalMatrix = this.scene.getMatrix();
         this.scene.popMatrix();
 
         this.transformations[transformationId] = finalMatrix;
@@ -728,11 +727,7 @@ class MySceneGraph {
     }
     parsePrimitive(primitiveNode, primitiveId) {
         let children = primitiveNode.children;
-        this.rectangles = [];
-        this.triangles = [];
-        this.cylinders = [];
-        this.spheres = [];
-        this.toruss = [];
+        this.primitives = [];
 
         let error;
 
@@ -765,8 +760,6 @@ class MySceneGraph {
             return "at least one primitive must be defined in <primitives> block";
         }
 
-
-
         this.log("Parsed Primitives");
     }
 
@@ -776,14 +769,7 @@ class MySceneGraph {
         let info;
         info = this.parseFields(rectangleNode, [["x1", "ff", 0], ["y1", "ff", 0], ["x2", "ff", 0], ["y2", "ff", 0]], "primitives > rectangle id = " + primitiveId);
 
-
-        this.rectangles[primitiveId] = {
-            x1: info[0],
-            x2: info[1],
-            x3: info[2],
-            x4: info[3]
-        };
-
+        this.primitives[primitiveId] = new MyQuad(this.scene, info.x1, info.y1, info.x2, info.y2);
     }
 
     parseTriangle(triangleNode, primitiveId) {
@@ -792,19 +778,7 @@ class MySceneGraph {
         let info;
         info = this.parseFields(triangleNode, [["x1", "ff", 0], ["y1", "ff", 0], ["z1", "ff", 0], ["x2", "ff", 0], ["y2", "ff", 0], ["z2", "ff", 0], ["x3", "ff", 0], ["y3", "ff", 0], ["z3", "ff", 0]], "primitives > triangle id = " + primitiveId);
 
-
-        this.triangles[primitiveId] = {
-            x1: info[0],
-            y1: info[1],
-            z1: info[2],
-            x2: info[3],
-            y2: info[4],
-            z2: info[5],
-            x3: info[6],
-            y3: info[7],
-            z3: info[8],
-        };
-
+        this.primitives[primitiveId] = new MyTriangle(this.scene, info.x1, info.y1, info.z1, info.x2, info.y2, info.z2, info.x3, info.y3, info.z3);
     }
 
     parseCylinder(cylinderNode, primitiveId) {
@@ -813,14 +787,7 @@ class MySceneGraph {
         let info;
         info = this.parseFields(cylinderNode, [["base", "ff", 1], ["top", "ff", 1], ["height", "ff", 3], ["slices", "ii", 10], ["stacks", "ii", 10]], "primitives > cylinder id = " + primitiveId);
 
-
-        this.cylinders[primitiveId] = {
-            base: info[0],
-            top: info[1],
-            height: info[2],
-            slices: info[3],
-            stacks: info[4]
-        };
+        this.primitives[primitiveId] = new MyCylinder(this.scene, info.base, info.top, info.height, info.slices, info.stacks);
     }
 
     parseSphere(sphereNode, primitiveId) {
@@ -829,12 +796,7 @@ class MySceneGraph {
         let info;
         info = this.parseFields(sphereNode, [["radius", "ff", 1], ["slices", "ii", 10], ["stacks", "ii", 10]], "primitives > sphere id = " + primitiveId);
 
-
-        this.spheres[primitiveId] = {
-            radius: info[0],
-            slices: info[1],
-            stacks: info[2],
-        };
+        this.primitives[primitiveId] = new MySphere(this.scene, info.slices, info.stacks);
     }
 
     parseTorus(torusNode, primitiveId) {
@@ -843,13 +805,7 @@ class MySceneGraph {
         let info;
         info = this.parseFields(torusNode, [["inner", "ff", 1], ["outer", "ff", 2], ["slices", "ii", 10], ["loops", "ii", 1]], "primitives > torus id = " + primitiveId);
 
-
-        this.toruss[primitiveId] = {
-            inner: info[0],
-            outer: info[1],
-            slices: info[2],
-            stacks: info[3],
-        };
+        this.primitives[primitiveId] = new MyTorus(this.scene, info.inner, info.outer, info.slices, info.loops);
     }
 
 
@@ -878,7 +834,6 @@ class MySceneGraph {
             if (this.componentIds.indexOf(this.childComponentIds[i]) == -1)
                 return "unreferenced component child with ID = " + this.childComponentIds[i];
         }
-
         this.log("Parsed Components");
 
     }
@@ -908,7 +863,7 @@ class MySceneGraph {
         let childrenIndex = nodeNames.indexOf("children");
 
         this.components[componentId] = {
-            tranformation: null,
+            transformation: null,
             materials: [],
             texture: null,
             children: []
@@ -990,13 +945,13 @@ class MySceneGraph {
                 if (reference == null)
                     reference = true;
                 else if (reference == false) {
-                    this.onXMLMinorError("there cannot be a referenced tranformation alon with explicit transformations in component definition; only the reference definition will be considered");
+                    this.onXMLMinorError("there cannot be a referenced transformation alon with explicit transformations in component definition; only the reference definition will be considered");
                 }
-                this.components[id].tranformation = transfId;
+                this.components[id].transformation = transfId;
             }
             else if (children[i].nodeName == "translate" || children[i].nodeName == "rotate" || children[i].nodeName == "scale") {
                 if (reference == true) {
-                    this.onXMLMinorError("there cannot be a referenced tranformation alon with explicit transformations in component definition; only the reference definition will be considered");
+                    this.onXMLMinorError("there cannot be a referenced transformation alon with explicit transformations in component definition; only the reference definition will be considered");
                     return null;
                 }
                 if (reference == null)
@@ -1004,12 +959,12 @@ class MySceneGraph {
 
                 if (children[i].nodeName == "translate") {
                     info = this.parseFields(children[i], [["x", "ff", 0], ["y", "ff", 0], ["z", "ff", 0]], "components > component id = " + id);
-                    this.scene.translate(info[0], info[1], info[2]);
+                    this.scene.translate(info.x, info.y, info.z);
 
                 } else if (children[i].nodeName == "rotate") {
                     info = this.parseFields(children[i], [["axis", "cc", 0], ["angle", "ff", 0]], "components > component id = " + id);
-                    let radAngle = (info[1] * Math.PI) / 180;
-                    switch (info[0]) {
+                    let radAngle = (info.angle * Math.PI) / 180;
+                    switch (info.axis) {
                         case "x":
                             this.scene.rotate(1, 0, 0, radAngle);
                             break;
@@ -1022,17 +977,17 @@ class MySceneGraph {
                     }
 
                 } else if (children[i].nodeName == "scale") {
-                    info = this.parseFields(children[i], [["x", "ff", 1], ["y", "ff", 1], ["z", "ff", 1]], "tranformations > tranformation id = " + transformationId);
-                    this.scene.scale(info[0], info[1], info[2]);
+                    info = this.parseFields(children[i], [["x", "ff", 1], ["y", "ff", 1], ["z", "ff", 1]], "transformations > transformation id = " + transformationId);
+                    this.scene.scale(info.x, info.y, info.z);
                 }
 
             }
-            else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in tranformations of component id = " + id + " was ignored");
+            else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in transformations of component id = " + id + " was ignored");
 
             let matrix = this.scene.getMatrix();
             this.scene.popMatrix();
             if (!reference) {
-                this.components[id].tranformation = matrix;
+                this.components[id].transformation = matrix;
             }
         }
         //There has to be at least one transformation
@@ -1098,7 +1053,6 @@ class MySceneGraph {
             else if (children[i].nodeName == "primitiveref") {
                 //ID
                 let primitiveId = this.reader.getString(children[i], 'id');
-                console.log(primitiveId);
                 if (primitiveId == null)
                     return "no ID defined for primitive child in component id = " + id;
 
@@ -1195,5 +1149,30 @@ class MySceneGraph {
     displayScene() {
         // entry point for graph rendering
         //TODO: Render loop starting at root of graph
+        
+        this.displayRecursive(this.values.scene.root);
+
+    }
+
+
+    displayRecursive(idNode){
+
+        let node = this.components[idNode];
+
+        this.scene.multMatrix(this.transformations[node.transformation]);
+
+        for (let i = 0; i < node.children.length; i++) {
+
+            if(this.primitives[node.children[i]] == undefined){
+                this.scene.pushMatrix();
+                this.displayRecursive(node.children[i]);
+                this.scene.popMatrix();    
+            }
+            else{
+                this.primitives[node.children[i]].display();
+            }
+
+        }
+
     }
 }

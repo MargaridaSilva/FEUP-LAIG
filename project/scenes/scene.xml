@@ -1,5 +1,5 @@
 <yas>
-	<scene root="start" axis_length="5" />
+	<scene root="component1" axis_length="5" />
 	<views default="view1">
 		<perspective id="view1" near="0.1" far="500" angle="0.4">
 			<from x="15" y="15" z="15" />
@@ -41,7 +41,7 @@
 	</materials>
 	<transformations>
 		<transformation id="transformation1">
-			<translate x="0" y="0" z="0" />
+			<translate x="0" y="2" z="0" />
 		</transformation>
 	</transformations>
 	<primitives>

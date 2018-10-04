@@ -40,13 +40,6 @@ class XMLscene extends CGFscene {
         this.gl.enable(this.gl.CULL_FACE);
         this.gl.depthFunc(this.gl.LEQUAL);
         this.axis = new CGFaxis(this);
-
-
-        this.quad = new MyQuad(this, -1, -1, 1, 1, -1, -1, 1, 1);
-        this.triangle = new MyTriangle(this, 1, -1, 2, 0, 0, 2, -1, -1, 2);
-        this.cylinder = new MyCylinder(this, 0, 0, 0, 10, 10, -1, 1, -1, 1);
-        this.sphere = new MySphere(this, 10, 10, -1, 1, -1, 1);
-        this.torus = new MyTorus(this);
     }
 
     /**
@@ -126,14 +119,13 @@ class XMLscene extends CGFscene {
        
         this.axis = new CGFaxis(this, this.graph.values.scene.axis_length);
 
-        // TODO: Change ambient and background details according to parsed graph
-
         var background = this.graph.ambient.background;
         this.gl.clearColor(background.r, background.g, background.b, background.a);
         
         var ambient = this.graph.ambient.ambient;
         this.setGlobalAmbientLight(ambient.r, ambient.g, ambient.b, ambient.a);
         
+        //this.sceneGraph = new SceneGraph(this.graph.values.scene.root, this.graph.components);
 
         this.interfaceValues = {
             view: this.graph.views_default
@@ -146,6 +138,7 @@ class XMLscene extends CGFscene {
         this.interface.addLightsGroup(this.graph.omniLights);
         this.interface.addViewsGroup(this.graph.perspectiveViews);
 
+        
         this.sceneInited = true;
     }
 
@@ -169,12 +162,6 @@ class XMLscene extends CGFscene {
         this.applyViewMatrix();
         
         this.pushMatrix();
-        
-        // this.quad.display();
-        // this.triangle.display();
-        // this.cylinder.display();
-        // this.sphere.display();
-        this.torus.display();
 
         if (this.sceneInited) {
             // Draw axis
@@ -200,6 +187,8 @@ class XMLscene extends CGFscene {
 
             // Displays the scene (MySceneGraph function).
             this.graph.displayScene();
+
+            //this.sceneGraph.display();
         }
         else {
             // Draw axis
