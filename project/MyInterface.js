@@ -39,7 +39,7 @@ class MyInterface extends CGFinterface {
 
         for (var key in lights) {
             if (lights.hasOwnProperty(key)) {
-                this.scene.lightValues[key] = Boolean(lights[key][0]);
+                this.scene.lightValues[key] = Boolean(lights[key].enabled);
                 group.add(this.scene.lightValues, key);
             }
         }

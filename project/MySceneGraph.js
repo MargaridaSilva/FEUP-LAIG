@@ -705,6 +705,8 @@ class MySceneGraph {
 
         let children = primitivesNode.children;
         this.primitiveIds = [];
+        this.primitives = [];
+
         let error;
         for (let i = 0; i < children.length; i++) {
             if (children[i].nodeName == "primitive") {
@@ -724,10 +726,11 @@ class MySceneGraph {
             else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in <primitives> block was ignored");
         }
 
+        this.log("Parsed Primitives");
     }
+
     parsePrimitive(primitiveNode, primitiveId) {
         let children = primitiveNode.children;
-        this.primitives = [];
 
         let error;
 
@@ -759,8 +762,6 @@ class MySceneGraph {
         if (this.primitiveIds.length == 0) {
             return "at least one primitive must be defined in <primitives> block";
         }
-
-        this.log("Parsed Primitives");
     }
 
     parseRectangle(rectangleNode, primitiveId) {
@@ -1159,7 +1160,8 @@ class MySceneGraph {
 
         let node = this.components[idNode];
 
-        this.scene.multMatrix(this.transformations[node.transformation]);
+        if(this.components[idNode] != undefined)
+            this.scene.multMatrix(this.transformations[node.transformation]);
 
         for (let i = 0; i < node.children.length; i++) {
 

@@ -1,5 +1,5 @@
 <yas>
-	<scene root="component1" axis_length="5" />
+	<scene root="wall" axis_length="5" />
 	<views default="view1">
 		<perspective id="view1" near="0.1" far="500" angle="0.4">
 			<from x="15" y="15" z="15" />
@@ -40,32 +40,33 @@
 		</material>
 	</materials>
 	<transformations>
-		<transformation id="transformation1">
-			<translate x="0" y="2" z="0" />
+		<transformation id="wall_scale">
+			<translate x="0" y="2.5" z="0" />
+			<scale x="10" y="5" z="10" /> 
 		</transformation>
 	</transformations>
 	<primitives>
-		<primitive id="rectangle1">
-			<rectangle x1="0" y1="0" x2="0" y2="0" />
+		<primitive id="rectangle">
+			<rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
 		</primitive>
-		<primitive id="triangle1">
+		<primitive id="triangle">
 			<triangle x1="0" y1="0" z1="0" x2="0" y2="0" z2="0" x3="0" y3="0" z3="0" />
 		</primitive>
-		<primitive id="cylinder1">
+		<primitive id="cylinder">
 			<cylinder base="0" top="0" height="0" slices="0" stacks="0" />
 		</primitive>
-		<primitive id="sphere1">
+		<primitive id="sphere">
 			<sphere radius="0" slices="0" stacks="0" />
 		</primitive>
-		<primitive id="torus1">
+		<primitive id="torus">
 			<torus inner="2" outer="3" slices="100" loops="500">
 			</torus>
 		</primitive>
 	</primitives>
 	<components>
-		<component id="component1">
+		<component id="wall">
 			<transformation>
-				<transformationref id="transformation1">
+				<transformationref id="wall_scale">
 				</transformationref>
 			</transformation>
 			<materials>
@@ -73,7 +74,7 @@
 			</materials>
 			<texture id="bank" length_s="1.0" length_t="1.0" />
 			<children>
-				<primitiveref id="torus1"/>
+				<primitiveref id="rectangle"/>
 			</children>
 		</component>
 	</components>
