@@ -679,13 +679,13 @@ class MySceneGraph {
                 let radAngle = (info.angle * Math.PI) / 180;
                 switch (info.axis) {
                     case "x":
-                        this.scene.rotate(1, 0, 0, radAngle);
+                        this.scene.rotate(radAngle, 1, 0, 0);
                         break;
                     case "y":
-                        this.scene.rotate(0, 1, 0, radAngle);
+                        this.scene.rotate(radAngle, 0, 1, 0);
                         break;
                     case "z":
-                        this.scene.rotate(0, 0, 1, radAngle);
+                        this.scene.rotate(radAngle, 0, 0, 1);
                         break;
                 }
             }
@@ -835,6 +835,8 @@ class MySceneGraph {
             if (this.componentIds.indexOf(this.childComponentIds[i]) == -1)
                 return "unreferenced component child with ID = " + this.childComponentIds[i];
         }
+
+        console.log(this.components);
         this.log("Parsed Components");
 
     }
@@ -870,6 +872,7 @@ class MySceneGraph {
             children: []
         }
 
+        
         //Transformation
         if (transfIndex == -1) {
             return "component transformation undefined for ID = " + componentId;
@@ -967,13 +970,13 @@ class MySceneGraph {
                     let radAngle = (info.angle * Math.PI) / 180;
                     switch (info.axis) {
                         case "x":
-                            this.scene.rotate(1, 0, 0, radAngle);
+                            this.scene.rotate(radAngle, 1, 0, 0);
                             break;
                         case "y":
-                            this.scene.rotate(0, 1, 0, radAngle);
+                            this.scene.rotate(radAngle, 0, 1, 0);
                             break;
                         case "z":
-                            this.scene.rotate(0, 0, 1, radAngle);
+                            this.scene.rotate(radAngle, 0, 0, 1);
                             break;
                     }
 
@@ -985,12 +988,14 @@ class MySceneGraph {
             }
             else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in transformations of component id = " + id + " was ignored");
 
-            let matrix = this.scene.getMatrix();
-            this.scene.popMatrix();
-            if (!reference) {
-                this.components[id].transformation = matrix;
-            }
         }
+
+        let matrix = this.scene.getMatrix();
+        this.scene.popMatrix();
+        if (!reference) {
+            this.components[id].transformation = matrix;
+        }
+
         //There has to be at least one transformation
         if (children.length == 0) {
             return "at least one transformation (either referenced or explicit) must be defined in component id = " + id;
@@ -1049,7 +1054,8 @@ class MySceneGraph {
                 if (componentId == id)
                     return "child component id must not be equal to parent component id = " + id;
 
-                this.childComponentIds.push(componentId);
+                //this.childComponentIds.push(componentId);
+                this.components[id].children.push(componentId);
             }
             else if (children[i].nodeName == "primitiveref") {
                 //ID
@@ -1150,7 +1156,6 @@ class MySceneGraph {
     displayScene() {
         // entry point for graph rendering
         //TODO: Render loop starting at root of graph
-        
         this.displayRecursive(this.values.scene.root);
 
     }
@@ -1160,8 +1165,9 @@ class MySceneGraph {
 
         let node = this.components[idNode];
 
-        if(this.components[idNode] != undefined)
-            this.scene.multMatrix(this.transformations[node.transformation]);
+        //console.log(node.transformation);
+
+        this.scene.multMatrix(node.transformation);
 
         for (let i = 0; i < node.children.length; i++) {
 

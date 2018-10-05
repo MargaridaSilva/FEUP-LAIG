@@ -1,5 +1,5 @@
 <yas>
-	<scene root="wall" axis_length="5" />
+	<scene root="cube" axis_length="5" />
 	<views default="view1">
 		<perspective id="view1" near="0.1" far="500" angle="0.4">
 			<from x="15" y="15" z="15" />
@@ -27,6 +27,12 @@
 			<diffuse r="1" g="1" b="1" a="1" />
 			<specular r="1" g="1" b="1" a="1" />
 		</omni>
+		<omni id="light3" enabled="1">
+			<location x="-3" y="3" z="-3" w="1" />
+			<ambient r="0" g="0" b="0" a="1" />
+			<diffuse r="1" g="1" b="1" a="1" />
+			<specular r="1" g="1" b="1" a="1" />
+		</omni>
 	</lights>
 	<textures>
 		<texture id="bank" file="bank.jpg" />
@@ -40,9 +46,8 @@
 		</material>
 	</materials>
 	<transformations>
-		<transformation id="wall_scale">
-			<translate x="0" y="2.5" z="0" />
-			<scale x="10" y="5" z="10" /> 
+		<transformation id="test">
+			<translate x="0" y="0" z="0" />
 		</transformation>
 	</transformations>
 	<primitives>
@@ -64,18 +69,139 @@
 		</primitive>
 	</primitives>
 	<components>
-		<component id="wall">
-			<transformation>
-				<transformationref id="wall_scale">
-				</transformationref>
-			</transformation>
+		<!-- Cube -->
+    <component id="cube">
+
+		<transformation>
+			<translate x="0" y="0" z="0" />
+		</transformation>
+
+		<materials>
+			<material id="material1" />
+		</materials>
+
+		<texture id="bank" length_s="1.0" length_t="1.0" />
+
+      <children>
+        <componentref id="faceCube1"/>
+        <componentref id="faceCube2"/>
+        <componentref id="faceCube3"/>
+        <componentref id="faceCube4"/>
+        <componentref id="faceCube5"/>
+        <componentref id="faceCube6"/>
+      </children>
+
+    </component>
+
+    <component id="faceCube1">
+
+		<transformation>
+			<translate x="0" y="0" z="0.5"/>
+		</transformation>
+      
+	  	<materials>
+			<material id="material1" />
+		</materials>
+
+		<texture id="bank" length_s="1.0" length_t="1.0" />
+
+	  <children>
+        <primitiveref id="rectangle" />
+      </children>
+
+    </component>
+
+    <component id="faceCube2">
+
+	<transformation>
+		<translate x="0" y="0" z="-0.5"/>
+		<rotate axis="y" angle="-180"/>
+	</transformation>
+		<materials>
+			<material id="material1" />
+		</materials>
+
+		<texture id="bank" length_s="1.0" length_t="1.0" />
+
+      <children>
+        <primitiveref id="rectangle"/>
+      </children>
+
+    </component>
+
+    <component id="faceCube3">
+
+	<transformation>
+		<translate x="0.5" y="0" z="0"/>
+		<rotate axis="y" angle="90"/>
+	</transformation>
+      
 			<materials>
-				<material id="material1" />
-			</materials>
-			<texture id="bank" length_s="1.0" length_t="1.0" />
-			<children>
-				<primitiveref id="rectangle"/>
-			</children>
-		</component>
+			<material id="material1" />
+		</materials>
+
+		<texture id="bank" length_s="1.0" length_t="1.0" />
+
+      <children>
+        <primitiveref id="rectangle" />
+      </children>
+
+    </component>
+
+    <component id="faceCube4">
+
+	<transformation>
+		<translate x="-0.5" y="0" z="0"/>
+		<rotate axis="y" angle="-90"/>
+	</transformation>	  
+
+		<materials>
+			<material id="material1" />
+		</materials>
+
+		<texture id="bank" length_s="1.0" length_t="1.0" />
+
+      <children>
+        <primitiveref id="rectangle" />
+      </children>
+
+    </component>
+
+    <component id="faceCube5">
+	<transformation>
+		<translate x="0" y="0.5" z="0"/>
+		<rotate axis="x" angle="-90"/>
+	</transformation>
+
+		<materials>
+			<material id="material1" />
+		</materials>
+
+		<texture id="bank" length_s="1.0" length_t="1.0" />
+
+      <children>
+        <primitiveref id="rectangle" />
+      </children>
+
+    </component>
+
+    <component id="faceCube6">
+
+	<transformation>
+		<translate x="0" y="-0.5" z="0"/>
+		<rotate axis="x" angle="90"/>
+	</transformation>
+
+		<materials>
+			<material id="material1" />
+		</materials>
+
+		<texture id="bank" length_s="1.0" length_t="1.0" />
+
+      <children>
+        <primitiveref id="rectangle" />
+      </children>
+
+    </component>
 	</components>
 </yas>
