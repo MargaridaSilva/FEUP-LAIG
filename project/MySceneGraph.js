@@ -981,7 +981,7 @@ class MySceneGraph {
                     }
 
                 } else if (children[i].nodeName == "scale") {
-                    info = this.parseFields(children[i], [["x", "ff", 1], ["y", "ff", 1], ["z", "ff", 1]], "transformations > transformation id = " + transformationId);
+                    info = this.parseFields(children[i], [["x", "ff", 1], ["y", "ff", 1], ["z", "ff", 1]], "components > component id = " + id);
                     this.scene.scale(info.x, info.y, info.z);
                 }
 
@@ -1164,8 +1164,6 @@ class MySceneGraph {
     displayRecursive(idNode){
 
         let node = this.components[idNode];
-
-        //console.log(node.transformation);
 
         this.scene.multMatrix(node.transformation);
 
