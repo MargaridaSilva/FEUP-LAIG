@@ -29,7 +29,7 @@ class XMLscene extends CGFscene {
         
         this.sceneInited = false;
 
-        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15,15,15), vec3.fromValues(0,0,0));
+        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(100,150,150), vec3.fromValues(0,0,0));
 
         this.enableTextures(true);
 
