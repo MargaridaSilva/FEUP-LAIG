@@ -2,7 +2,7 @@
 	<scene root="scene" axis_length="5" />
 	<views default="view1">
 		<perspective id="view1" near="0.1" far="500" angle="0.4">
-			<from x="15" y="15" z="15" />
+			<from x="7" y="0" z="15" />
 			<to x="0" y="0" z="0" />
 		</perspective>
 		<perspective id="view2" near="0.1" far="500" angle="0.4">
@@ -42,7 +42,7 @@
 	</lights>
 	<textures>
 		<texture id="bank" file="bank.jpg" />
-		<texture id="tableWood" file="wood.jpg"/>
+		<texture id="tableWood" file="woodDark.jpg"/>
 		<texture id="floor" file = "wood.jpg"/>
 		<texture id = "leaves" file = "leaves.jpg"/>
 	</textures>
@@ -251,7 +251,7 @@
 			<materials>
 				<material id="white" />
 			</materials>
-			<texture id="bank" length_s="1.0" length_t="1.0" />
+			<texture id="leaves" length_s="1.0" length_t="1.0" />
 			<children>
 				<primitiveref id="cone"/>
 			</children>
@@ -399,7 +399,7 @@
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="leaves" length_s="1.0" length_t="1.0" />
+			<texture id="tableWood" length_s="1.0" length_t="1.0" />
 			<children>
 				<componentref id="table1"/>
 				<componentref id="table2"/>
@@ -530,7 +530,7 @@
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="tableWood" length_s="1.0" length_t="1.0" />
+			<texture id="inherit" length_s="1.0" length_t="1.0" />
 			<children>
 				<componentref id="cube"/>
 			</children>
@@ -744,7 +744,7 @@
 			</materials>
 			<texture id="bank" length_s="1.0" length_t="1.0" />
 			<children>
-				<componentref id="cylinder"/>
+				<primitiveref id="cylinder"/>
 			</children>
 		</component>
 
@@ -759,7 +759,7 @@
 			</materials>
 			<texture id="bank" length_s="1.0" length_t="1.0" />
 			<children>
-				<componentref id="cylinder"/>
+				<primitiveref id="cylinder"/>
 			</children>
 		</component>
 
@@ -774,7 +774,7 @@
 			</materials>
 			<texture id="bank" length_s="1.0" length_t="1.0" />
 			<children>
-				<componentref id="cylinder"/>
+				<primitiveref id="cylinder"/>
 			</children>
 		</component>
 
@@ -789,7 +789,7 @@
 			</materials>
 			<texture id="bank" length_s="1.0" length_t="1.0" />
 			<children>
-				<componentref id="cylinder"/>
+				<primitiveref id="cylinder"/>
 			</children>
 		</component>
 

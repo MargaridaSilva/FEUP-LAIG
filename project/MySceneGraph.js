@@ -511,6 +511,7 @@ class MySceneGraph {
         if (this.textureIds.length == 0) {
             return "at least one texture must be defined in <textures> block";
         }
+
         this.log("Parsed Textures");
     }
 
@@ -1172,12 +1173,10 @@ class MySceneGraph {
 
 
     displayRecursive(idNode) {
-
+        
         let node = this.components[idNode];
         this.scene.multMatrix(node.transformation);
         let materialAndTexture = this.adaptTextureAndMaterial(idNode);
-        if (idNode == "tables")
-        console.log(materialAndTexture[1]);
 
         for (let i = 0; i < node.children.length; i++) {
 
@@ -1210,34 +1209,31 @@ class MySceneGraph {
         let material, texture;
 
         if (materialId == "inherit") {
-            material = this.materialStack.pop();
-            this.materialStack.push(material);
+            materialId = this.materialStack.pop();
+            this.materialStack.push(materialId);
         }
-        else material = this.materials[materialId];
+        
+        material = this.materials[materialId];
 
 
         if (textureId == "inherit") {
-            let texture = this.textureStack.pop();
-            if (texture == null)
+            textureId = this.textureStack.pop();
+            if (textureId == "none")
                 material.apply();
-            else
-                texture.apply();
-            this.textureStack.push(texture);
-
+            else 
+                this.textures[textureId].apply();
+            this.textureStack.push(textureId);
         }
         else if (textureId == "none") {
             material.apply();
-            texture = null;
         }
-        else {
+        else { 
             texture = this.textures[textureId];
-            if (idNode == "room_back")
-                console.log(texture);
             texture.setTextureWrap(s, t);
-            texture.apply();
-
+            texture.apply(); 
         }
-        return [material, texture];
+
+        return [materialId, textureId];
     }
 
 }
