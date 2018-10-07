@@ -1001,9 +1001,9 @@ class MySceneGraph {
         }
 
         //There has to be at least one transformation
-        if (children.length == 0) {
-            return "at least one transformation (either referenced or explicit) must be defined in component id = " + id;
-        }
+        // if (children.length == 0) {
+        //     return "at least one transformation (either referenced or explicit) must be defined in component id = " + id;
+        // }
     }
 
     parseComponentMaterials(compMaterialsNode, id) {
@@ -1175,8 +1175,12 @@ class MySceneGraph {
     displayRecursive(idNode) {
         
         let node = this.components[idNode];
-        this.scene.multMatrix(node.transformation);
-        let materialAndTexture = this.adaptTextureAndMaterial(idNode);
+
+
+        if(node.transformation != undefined)
+            this.scene.multMatrix(node.transformation);
+        
+            let materialAndTexture = this.adaptTextureAndMaterial(idNode);
 
         for (let i = 0; i < node.children.length; i++) {
 

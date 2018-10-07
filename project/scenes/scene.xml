@@ -690,7 +690,7 @@
 			</materials>
 			<texture id="inherit" length_s="1.0" length_t="1.0" />
 			<children>
-				<componentref id="cylinder"/>
+				<primitiveref id="cylinder"/>
 			</children>
 		</component>
 		<component id="candle3">
@@ -704,7 +704,7 @@
 			</materials>
 			<texture id="inherit" length_s="1.0" length_t="1.0" />
 			<children>
-				<componentref id="cylinder"/>
+				<primitiveref id="cylinder"/>
 			</children>
 		</component>
 		<component id="candle4">
@@ -718,7 +718,7 @@
 			</materials>
 			<texture id="inherit" length_s="1.0" length_t="1.0" />
 			<children>
-				<componentref id="cylinder"/>
+				<primitiveref id="cylinder"/>
 			</children>
 		</component>
 		<!-- Cube -->

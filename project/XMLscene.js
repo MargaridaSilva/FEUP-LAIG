@@ -107,8 +107,6 @@ class XMLscene extends CGFscene {
                 i++;
             }
         }
-
-        console.log(this.lights);
     }
 
 
