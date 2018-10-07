@@ -59,6 +59,7 @@
 		<texture id="ravenclawFlag" file="scenes/images/ravenclawFlag.jpg" />
 		<texture id="gryffindorFlag" file="scenes/images/gryffindorFlag.jpg" />
 		<texture id="slytherinFlag" file="scenes/images/slytherinFlag.jpg" />
+		<texture id="door" file="scenes/images/door.jpg" />
 	</textures>
 	<materials>
 		<material id="white" shininess="0.5">
@@ -128,7 +129,7 @@
 				<componentref id="smallTrees" />
 				<componentref id="wreath_left" />
 				<componentref id="wreath_right" />
-				<componentref id="candles" />
+				<componentref id="candle_cols" />
 				<componentref id="head_table" />
 			</children>
 		</component>
@@ -168,7 +169,7 @@
 			<materials>
 				<material id="marroon" />
 			</materials>
-			<texture id="none" length_s="1.0" length_t="1.0" />
+			<texture id="door" length_s="1.0" length_t="1.0" />
 			<children>
 				<primitiveref id="rectangle" />
 			</children>
@@ -213,7 +214,7 @@
 		</component>
 		<component id="smallTrees">
 			<transformation>
-				<translate x="0" y="0" z="-38" />
+				<translate x="0" y="0" z="-60" />
 				<scale x="4" y="4" z="4" />
 			</transformation>
 			<materials>
@@ -475,7 +476,7 @@
 		</component>
 		<component id="head_table">
 			<transformation>
-				<translate x="0" y="1.2" z="-63" />
+				<translate x="0" y="1.2" z="-85" />
 				<rotate axis="y" angle="90" />
 			</transformation>
 			<materials>
@@ -488,7 +489,7 @@
 		</component>
 		<component id="tables">
 			<transformation>
-				<translate x="0" y="0" z="-15" />
+				<translate x="0" y="0" z="-25" />
 			</transformation>
 			<materials>
 				<material id="inherit" />
@@ -728,7 +729,7 @@
 		</component>
 		<component id="elevation">
 			<transformation>
-				<translate x="0" y="0" z="-60" />
+				<translate x="0" y="0" z="-90" />
 			</transformation>
 			<materials>
 				<material id="marroon" />
@@ -791,9 +792,112 @@
 				<componentref id="cube" />
 			</children>
 		</component>
-		<component id="candles">
+
+		<component id="candle_cols">
 			<transformation>
-				<translate x="0" y="30" z="0" />
+				<translate x="0" y="30" z="-30" />
+			</transformation>
+			<materials>
+				<material id="candle" />
+			</materials>
+			<texture id="none" length_s="1.0" length_t="1.0" />
+			<children>
+				<componentref id="candle_col1" />
+				<componentref id="candle_col2" />
+				<componentref id="candle_col3" />
+				<componentref id="candle_col4" />
+				<componentref id="candle_col5" />
+				<componentref id="candle_col6" />
+			</children>
+		</component>
+
+		<component id="candle_col1">
+			<transformation>
+				<translate x="0" y="0" z="0" />
+			</transformation>
+			<materials>
+				<material id="candle" />
+			</materials>
+			<texture id="none" length_s="1.0" length_t="1.0" />
+			<children>
+				<componentref id="candle_left" />
+				<componentref id="candle_right" />
+			</children>
+		</component>
+
+		<component id="candle_col2">
+			<transformation>
+				<translate x="0" y="0" z="20" />
+			</transformation>
+			<materials>
+				<material id="candle" />
+			</materials>
+			<texture id="none" length_s="1.0" length_t="1.0" />
+			<children>
+				<componentref id="candle_left" />
+				<componentref id="candle_right" />
+			</children>
+		</component>
+
+		<component id="candle_col3">
+			<transformation>
+				<translate x="0" y="0" z="40" />
+			</transformation>
+			<materials>
+				<material id="candle" />
+			</materials>
+			<texture id="none" length_s="1.0" length_t="1.0" />
+			<children>
+				<componentref id="candle_left" />
+				<componentref id="candle_right" />
+			</children>
+		</component>
+
+		<component id="candle_col4">
+			<transformation>
+				<translate x="0" y="0" z="60" />
+			</transformation>
+			<materials>
+				<material id="candle" />
+			</materials>
+			<texture id="none" length_s="1.0" length_t="1.0" />
+			<children>
+				<componentref id="candle_left" />
+				<componentref id="candle_right" />
+			</children>
+		</component>
+
+		<component id="candle_col5">
+			<transformation>
+				<translate x="0" y="0" z="80" />
+			</transformation>
+			<materials>
+				<material id="candle" />
+			</materials>
+			<texture id="none" length_s="1.0" length_t="1.0" />
+			<children>
+				<componentref id="candle_left" />
+				<componentref id="candle_right" />
+			</children>
+		</component>
+
+		<component id="candle_col6">
+			<transformation>
+				<translate x="0" y="0" z="100" />
+			</transformation>
+			<materials>
+				<material id="candle" />
+			</materials>
+			<texture id="none" length_s="1.0" length_t="1.0" />
+			<children>
+				<componentref id="candle_left" />
+				<componentref id="candle_right" />
+			</children>
+		</component>
+
+		<component id="candle_left">
+			<transformation>
+				<translate x="-5" y="0" z="0" />
 			</transformation>
 			<materials>
 				<material id="candle" />
@@ -804,11 +908,31 @@
 				<componentref id="candle2" />
 				<componentref id="candle3" />
 				<componentref id="candle4" />
+				<componentref id="candle5" />
 			</children>
 		</component>
+
+
+		<component id="candle_right">
+			<transformation>
+				<translate x="5" y="0" z="0" />
+			</transformation>
+			<materials>
+				<material id="candle" />
+			</materials>
+			<texture id="none" length_s="1.0" length_t="1.0" />
+			<children>
+				<componentref id="candle1" />
+				<componentref id="candle2" />
+				<componentref id="candle3" />
+				<componentref id="candle4" />
+				<componentref id="candle5" />
+			</children>
+		</component>
+
 		<component id="candle1">
 			<transformation>
-				<translate x="-2" y="0.5" z="-2" />
+				<translate x="-10" y="1" z="0" />
 			</transformation>
 			<materials>
 				<material id="inherit" />
@@ -820,7 +944,7 @@
 		</component>
 		<component id="candle2">
 			<transformation>
-				<translate x="-2" y="-0.2" z="2" />
+				<translate x="-5" y="-1" z="0" />
 			</transformation>
 			<materials>
 				<material id="inherit" />
@@ -832,7 +956,7 @@
 		</component>
 		<component id="candle3">
 			<transformation>
-				<translate x="2" y="0.2" z="-2" />
+				<translate x="0" y="1" z="0" />
 			</transformation>
 			<materials>
 				<material id="inherit" />
@@ -844,7 +968,20 @@
 		</component>
 		<component id="candle4">
 			<transformation>
-				<translate x="2" y="-0.5" z="2" />
+				<translate x="5" y="-1" z="0" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" length_s="1.0" length_t="1.0" />
+			<children>
+				<componentref id="candle" />
+			</children>
+		</component>
+
+		<component id="candle5">
+			<transformation>
+				<translate x="10" y="0" z="0" />
 			</transformation>
 			<materials>
 				<material id="inherit" />
