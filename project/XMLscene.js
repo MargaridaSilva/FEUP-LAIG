@@ -181,7 +181,12 @@ class XMLscene extends CGFscene {
                 }
             }
 
-           //this.camera = this.cameras[this.interfaceValues.view];
+
+            // if(this.interfaceValues.view != this.currentView){
+            //     console.log("Enter");
+            //     this.camera = this.cameras[this.interfaceValues.view];
+            //     this.currentView = this.interfaceValues.view;
+            // }
 
             // Displays the scene (MySceneGraph function).
             this.graph.displayScene();
