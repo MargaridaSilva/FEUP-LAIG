@@ -801,7 +801,7 @@ class MySceneGraph {
         let info;
         info = this.parseFields(sphereNode, [["radius", "ff", 1], ["slices", "ii", 10], ["stacks", "ii", 10]], "primitives > sphere id = " + primitiveId);
 
-        this.primitives[primitiveId] = new MySphere(this.scene, info.slices, info.stacks);
+        this.primitives[primitiveId] = new MySphere(this.scene, info.radius, info.slices, info.stacks);
     }
 
     parseTorus(torusNode, primitiveId) {

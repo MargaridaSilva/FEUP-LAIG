@@ -2,10 +2,10 @@
  * MyHalfSphere
  * @constructor
  */
-class MySphere extends CGFobject
-{
-    constructor(scene, slices, stacks, minS, maxS, minT, maxT){
+class MySphere extends CGFobject {
+    constructor(scene, radius, slices, stacks, minS = 0, maxS = 1, minT = 0, maxT = 1) {
         super(scene);
+        this.radius = radius;
         this.slices = slices;
         this.stacks = stacks;
 
@@ -22,68 +22,69 @@ class MySphere extends CGFobject
 
 	setT(maxT){
 		this.maxT = maxT;
-	}
+    }
+    
+    initBuffers() {
 
-    initBuffers()
-    {
-        var stepS = (this.maxS-this.minS)/this.slices;
-        var stepT = (this.maxT-this.minT)/this.slices;
 
-        var texS = 0;
-        var texIncS = 1/this.slices;
-        var texIncT = 1/this.stacks;
-        var prevTexT = 0;
-        var nextTexT = 0;
+	var index = 0;
+	var grid = [];
 
-        var alpha = 360/this.slices;
+        for (let iy = 0; iy <= this.stacks; iy++) {
 
-        alpha = (alpha * Math.PI)/180;
+            var verticesRow = [];
 
-        var radiusTop = 1;
-        var botRad = 1;
+            let v = iy / this.stacks;
+            let phi = v * Math.PI;
 
-        var stackHeight = 1/this.stacks;
+            for (let ix = 0; ix <= this.slices; ix++) {
 
-        var sumAlpha = 0;
-        var sumHeight = 0;
+                let u = ix / this.slices;
+                let teta = u * 2 * Math.PI;
 
-        for (var j = 0; j < this.stacks; j++) {
 
-            nextTexT += texIncT;
+                // vertex
 
-            for (var i = j*this.slices*4; i < (j+1)*this.slices*4; i += 4) {
+                let vertexX = - this.radius * Math.cos(teta) * Math.sin(phi);
+                let vertexY = this.radius * Math.cos(phi);
+                let vertexZ = this.radius * Math.sin(teta) * Math.sin(phi);
 
-                radiusTop = Math.sqrt(1-(((j+1)*stackHeight)*((j+1)*stackHeight)));
+                
+                this.vertices.push(vertexX, vertexY, vertexZ);
 
-                this.vertices.push(botRad*Math.cos(sumAlpha),botRad*Math.sin(sumAlpha), sumHeight);
-                this.normals.push(botRad*Math.cos(sumAlpha), botRad*Math.sin(sumAlpha), 0);
-                this.texCoords.push(texS, prevTexT);
+                // normal
+                let norm = Math.sqrt(vertexX * vertexX + vertexY * vertexY + vertexZ * vertexZ);
+                this.normals.push(vertexX / norm, vertexY / norm, vertexZ / norm);
 
-                this.vertices.push(radiusTop*Math.cos(sumAlpha), radiusTop*Math.sin(sumAlpha), sumHeight+stackHeight);
-                this.normals.push(radiusTop*Math.cos(sumAlpha), radiusTop*Math.sin(sumAlpha), 0);
-                this.texCoords.push(texS, nextTexT);
+                console.log(this.normals);
 
-                sumAlpha += alpha;
-                texS += texIncS;
 
-                this.vertices.push(botRad*Math.cos(sumAlpha), botRad*Math.sin(sumAlpha), sumHeight);
-                this.normals.push(botRad*Math.cos(sumAlpha),botRad*Math.sin(sumAlpha), 0);
-                this.texCoords.push(texS, prevTexT);
 
-                this.vertices.push(radiusTop*Math.cos(sumAlpha), radiusTop*Math.sin(sumAlpha), sumHeight+stackHeight);
-                this.normals.push(radiusTop*Math.cos(sumAlpha), radiusTop*Math.sin(sumAlpha), 0);
-                this.texCoords.push(texS, nextTexT);
-
-                this.indices.push(i + 2,i + 1,i,i + 1,i + 2,i + 3);
+                // texCoords
+                this.texCoords.push(u, 1 - v);
+                
+                verticesRow.push( index ++ );
 
             }
-            
-            sumAlpha = 0;
-            botRad = radiusTop;
-            sumHeight += stackHeight;
-            texS = 0;
-            prevTexT = nextTexT;
+    
+            grid.push( verticesRow );
+        }
 
+
+        for (let iy = 0; iy < this.stacks; iy++) {
+
+            for (let ix = 0; ix < this.slices; ix++) {
+
+                // indices
+                var a = iy * (this.slices + 1) + ix + 1;
+                var b = iy * (this.slices + 1) + ix;
+                var c = (iy + 1) * (this.slices + 1) + ix;
+                var d = (iy + 1) * (this.slices + 1) + (ix + 1);
+
+                if ( iy != 0) this.indices.push( a, b, d );
+                if ( iy != this.stacks - 1) this.indices.push( b, c, d );
+
+            }
         }
 
         this.primitiveType = this.scene.gl.TRIANGLES;
