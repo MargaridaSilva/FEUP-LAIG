@@ -8,6 +8,9 @@
 		<perspective id="door" near="0.1" far="500" angle="0.4">
 			<from x="0" y="100" z="-150" />
 			<to x="0" y="0" z="90" />
+		<perspective id="hufflepuff" near="0.1" far="500" angle="0.4">
+			<from x="-80" y="20" z="35" />
+			<to x="20" y="20" z="35" />
 		</perspective>
 		<perspective id="flags" near="0.1" far="500" angle="0.4">
 			<from x="-20" y="30" z="-100" />
