@@ -42,6 +42,14 @@ class MyCylinder extends CGFobject {
     this.initGLBuffers();
   };
 
+  setS(maxS){
+		this.maxS = maxS;
+	}
+
+	setT(maxT){
+		this.maxT = maxT;
+	}
+
 
   fillVertices() {
 

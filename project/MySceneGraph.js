@@ -1229,7 +1229,7 @@ class MySceneGraph {
         }
         else { 
             texture = this.textures[textureId];
-            texture.setTextureWrap(s, t);
+            texture.setTextureWrap('CLAMP_TP_EDGE', 'CLAMP_TP_EDGE');
             texture.apply(); 
         }
 

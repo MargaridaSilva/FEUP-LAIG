@@ -16,6 +16,13 @@ class MySphere extends CGFobject
 
         this.initBuffers();
     }
+    setS(maxS){
+		this.maxS = maxS;
+	}
+
+	setT(maxT){
+		this.maxT = maxT;
+	}
 
     initBuffers()
     {

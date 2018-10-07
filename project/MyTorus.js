@@ -25,6 +25,14 @@ class MyTorus extends CGFobject
         this.initBuffers();
 	};
 
+    setS(maxS){
+		this.maxS = maxS;
+	}
+
+	setT(maxT){
+		this.maxT = maxT;
+	}
+
 	initBuffers()
 	{   
         var center = {x: 0, y:0, z:0};

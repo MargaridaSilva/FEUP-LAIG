@@ -25,6 +25,14 @@ class MyTriangle extends CGFobject
         this.initBuffers();
 	};
 
+    setS(maxS){
+		this.maxS = maxS;
+	}
+
+	setT(maxT){
+		this.maxT = maxT;
+	}
+
 	initBuffers()
 	{
 		this.vertices = [
