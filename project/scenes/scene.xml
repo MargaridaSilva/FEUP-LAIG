@@ -96,7 +96,7 @@
 		</material>
 	</materials>
 	<transformations>
-		<transformation id="test">
+		<transformation id="base">
 			<translate x="0" y="0" z="0" />
 		</transformation>
 	</transformations>
@@ -124,7 +124,7 @@
 	<components>
 		<component id="scene">
 			<transformation>
-				<translate x="0" y="0" z="0" />
+				<transformationref id="base" />
 			</transformation>
 			<materials>
 				<material id="white" />
