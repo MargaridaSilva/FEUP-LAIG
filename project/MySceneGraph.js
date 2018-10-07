@@ -955,7 +955,7 @@ class MySceneGraph {
                 else if (reference == false) {
                     this.onXMLMinorError("there cannot be a referenced transformation alon with explicit transformations in component definition; only the reference definition will be considered");
                 }
-                this.components[id].transformation = transfId;
+                this.components[id].transformation = this.transformationIds[transfId];
             }
             else if (children[i].nodeName == "translate" || children[i].nodeName == "rotate" || children[i].nodeName == "scale") {
                 if (reference == true) {
