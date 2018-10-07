@@ -2,7 +2,7 @@
 	<scene root="scene" axis_length="5" />
 	<views default="view1">
 		<perspective id="view1" near="0.1" far="500" angle="0.4">
-			<from x="15" y="15" z="15" />
+			<from x="100" y="150" z="150" />
 			<to x="0" y="0" z="0" />
 		</perspective>
 		<perspective id="view2" near="0.1" far="500" angle="0.4">
@@ -46,9 +46,9 @@
 		<texture id="floor" file="floor1.jpg" />
 		<texture id="leaves" file="leaves.jpg" />
 		<texture id="arrow" file="arrow.jpg" />
-		<texture id="smallXmasTree" file="xmasTree.jpg" />
-		<texture id="wreathRight" file="wreathRight.jpg" />
-		<texture id="wreathLeft" file="wreathLeft.jpg" />
+		<texture id="smallXmasTree" file="smallTree.jpg" />
+		<texture id="rightWreath" file="rightWreath.jpg" />
+		<texture id="leftWreath" file="leftWreath.jpg" />
 		<texture id="treeTrunk" file="trunk-image.jpg" />
 		<texture id="elevation" file="woodDark.jpg"/>
 		<texture id="wall" file="wall5.jpg"/>
@@ -311,7 +311,7 @@
 			<materials>
 				<material id="white" />
 			</materials>
-			<texture id="wreathLeft" length_s="1.0" length_t="1.0" />
+			<texture id="leftWreath" length_s="1.0" length_t="1.0" />
 			<children>
 				<componentref id="wreath1" />
 				<componentref id="wreath2" />
@@ -325,7 +325,7 @@
 			<materials>
 				<material id="white" />
 			</materials>
-			<texture id="wreathRight" length_s="1.0" length_t="1.0" />
+			<texture id="rightWreath" length_s="1.0" length_t="1.0" />
 			<children>
 				<componentref id="wreath1" />
 				<componentref id="wreath2" />
