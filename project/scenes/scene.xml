@@ -41,17 +41,17 @@
 		</omni>
 	</lights>
 	<textures>
-		<texture id="tableWood" file="wood1.jpg" />
-		<texture id="floor" file="floor1.jpg" />
-		<texture id="smallXmasTree" file="smallTree.jpg" />
-		<texture id="rightWreath" file="rightWreath.jpg" />
-		<texture id="leftWreath" file="leftWreath.jpg" />
-		<texture id="treeTrunk" file="trunk-image.jpg" />
-		<texture id="elevation" file="table10.jpg" />
-		<texture id="hufflepuffFlag" file="hufflepuffFlag.jpg" />
-		<texture id="ravenclawFlag" file="ravenclawFlag.jpg" />
-		<texture id="gryffindorFlag" file="gryffindorFlag.jpg" />
-		<texture id="slytherinFlag" file="slytherinFlag.jpg" />
+		<texture id="tableWood" file="scenes/images/wood1.jpg" />
+		<texture id="floor" file="scenes/images/floor1.jpg" />
+		<texture id="smallXmasTree" file="scenes/images/smallTree.jpg" />
+		<texture id="rightWreath" file="scenes/images/rightWreath.jpg" />
+		<texture id="leftWreath" file="scenes/images/leftWreath.jpg" />
+		<texture id="treeTrunk" file="scenes/images/trunk-image.jpg" />
+		<texture id="elevation" file="scenes/images/table10.jpg" />
+		<texture id="hufflepuffFlag" file="scenes/images/hufflepuffFlag.jpg" />
+		<texture id="ravenclawFlag" file="scenes/images/ravenclawFlag.jpg" />
+		<texture id="gryffindorFlag" file="scenes/images/gryffindorFlag.jpg" />
+		<texture id="slytherinFlag" file="scenes/images/slytherinFlag.jpg" />
 	</textures>
 	<materials>
 		<material id="white" shininess="0.5">
@@ -288,9 +288,9 @@
 				<translate x="0" y="0" z="0" />
 			</transformation>
 			<materials>
-				<material id="white" />
+				<material id="light" />
 			</materials>
-			<texture id="light" length_s="1.0" length_t="1.0" />
+			<texture id="none" length_s="1.0" length_t="1.0" />
 			<children>
 				<componentref id="triangle1" />
 				<componentref id="triangle2" />

@@ -532,7 +532,7 @@ class MySceneGraph {
 
         this.textureIds.push(textureId);
         this.textures[textureId] = new CGFappearance(this.scene);
-        this.textures[textureId].loadTexture("scenes/images/" + file);
+        this.textures[textureId].loadTexture(file);
     }
 
     parseMaterials(materialsNode) {

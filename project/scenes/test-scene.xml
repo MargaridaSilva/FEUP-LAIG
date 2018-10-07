@@ -65,11 +65,11 @@
   </lights>
 
   <textures>
-    <texture id="water" file="scenes/images/water.png" />
+    <texture id="water" file="scenes/images/textura_agua.png" />
     <texture id="rug" file="scenes/images/rug.jpg" />
-    <texture id="darkWood" file="scenes/images/darkWood.jpg" />
-    <texture id="van_gogh" file="scenes/images/portrait2.png" />
-    <texture id="monet" file="scenes/images/portrait1.png" />
+    <texture id="darkWood" file="scenes/images/wood.jpg" />
+    <texture id="van_gogh" file="scenes/images/van_gogh.png" />
+    <texture id="monet" file="scenes/images/monet.png" />
   </textures>
 
   <materials>
