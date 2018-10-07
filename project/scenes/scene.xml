@@ -2,7 +2,7 @@
 	<scene root="scene" axis_length="5" />
 	<views default="view1">
 		<perspective id="view1" near="0.1" far="500" angle="0.4">
-			<from x="15" y="15" z="15" />
+			<from x="100" y="150" z="150" />
 			<to x="0" y="0" z="0" />
 		</perspective>
 		<perspective id="view2" near="0.1" far="500" angle="0.4">
@@ -12,7 +12,7 @@
 	</views>
 	<ambient>
 		<ambient r="0" g="0" b="0" a="1" />
-		<background r="0" g="0" b="0" a="1" />
+		<background r="0.05" g="0.05" b="0.1" a="1" />
 	</ambient>
 	<lights>
 		<omni id="light1" enabled="1">
@@ -46,12 +46,16 @@
 		<texture id="floor" file="floor1.jpg" />
 		<texture id="leaves" file="leaves.jpg" />
 		<texture id="arrow" file="arrow.jpg" />
-		<texture id="smallXmasTree" file="xmasTree.jpg" />
-		<texture id="wreathRight" file="wreathRight.jpg" />
-		<texture id="wreathLeft" file="wreathLeft.jpg" />
+		<texture id="smallXmasTree" file="smallTree.jpg" />
+		<texture id="rightWreath" file="rightWreath.jpg" />
+		<texture id="leftWreath" file="leftWreath.jpg" />
 		<texture id="treeTrunk" file="trunk-image.jpg" />
-		<texture id="elevation" file="woodDark.jpg"/>
-		<texture id="wall" file="wall5.jpg"/>
+		<texture id="elevation" file="table10.jpg" />
+		<texture id="wall" file="wall5.jpg" />
+		<texture id="hufflepuffFlag" file="hufflepuffFlag.jpg" />
+		<texture id="ravenclawFlag" file="ravenclawFlag.jpg" />
+		<texture id="gryffindorFlag" file="gryffindorFlag.jpg" />
+		<texture id="slytherinFlag" file="slytherinFlag.jpg" />
 	</textures>
 	<materials>
 		<material id="white" shininess="0.5">
@@ -66,7 +70,6 @@
 			<diffuse r="20" g="10" b="10" a="1" />
 			<specular r="20" g="10" b="10" a="1" />
 		</material>
-
 		<material id="candle" shininess="0">
 			<emission r="0" g="0" b="0" a="0" />
 			<ambient r="0" g="0" b="0" a="0" />
@@ -93,10 +96,10 @@
 			<cylinder base="1" top="0" height="1" slices="100" stacks="10" />
 		</primitive>
 		<primitive id="sphere">
-			<sphere radius="0" slices="0" stacks="0" />
+			<sphere radius="5" slices="100" stacks="100" />
 		</primitive>
 		<primitive id="torus">
-			<torus inner="0.6" outer="1" slices="100" loops="100">
+			<torus inner="1" outer="2" slices="100" loops="100">
 			</torus>
 		</primitive>
 	</primitives>
@@ -113,8 +116,7 @@
 				<componentref id="room" />
 				<componentref id="tables" />
 				<componentref id="elevation" />
-				<componentref id="tree1" />
-				<componentref id="tree2" />
+				<componentref id="smallTrees" />
 				<componentref id="wreath_left" />
 				<componentref id="wreath_right" />
 				<componentref id="candles" />
@@ -123,7 +125,7 @@
 		</component>
 		<component id="room">
 			<transformation>
-				<scale x="40" y="30" z="80" />
+				<scale x="40" y="30" z="180" />
 			</transformation>
 			<materials>
 				<material id="inherit" />
@@ -200,32 +202,47 @@
 				<primitiveref id="rectangle" />
 			</children>
 		</component>
-		<component id="tree1">
+
+		<component id="smallTrees">
 			<transformation>
-				<translate x="-15" y="0" z="-20" />
+				<translate x="0" y="0" z="-38" />
 				<scale x="4" y="4" z="4" />
 			</transformation>
 			<materials>
 				<material id="white" />
 			</materials>
 			<texture id="smallXmasTree" length_s="1.0" length_t="1.0" />
+			<children>
+				<componentref id="tree1" />
+				<componentref id="tree2" />
+			</children>
+		</component>
+
+		<component id="tree1">
+			<transformation>
+				<translate x="-3.5" y="0" z="0" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" length_s="1.0" length_t="1.0" />
 			<children>
 				<componentref id="tree" />
 			</children>
 		</component>
 		<component id="tree2">
 			<transformation>
-				<translate x="15" y="0" z="-20" />
-				<scale x="4" y="4" z="4" />
+				<translate x="3.5" y="0" z="0" />
 			</transformation>
 			<materials>
-				<material id="white" />
+				<material id="inherit" />
 			</materials>
-			<texture id="smallXmasTree" length_s="1.0" length_t="1.0" />
+			<texture id="inherit" length_s="1.0" length_t="1.0" />
 			<children>
 				<componentref id="tree" />
 			</children>
 		</component>
+
 		<component id="tree">
 			<transformation>
 				<translate x="0" y="0" z="0" />
@@ -311,11 +328,13 @@
 			<materials>
 				<material id="white" />
 			</materials>
-			<texture id="wreathLeft" length_s="1.0" length_t="1.0" />
+			<texture id="leftWreath" length_s="1.0" length_t="1.0" />
 			<children>
 				<componentref id="wreath1" />
 				<componentref id="wreath2" />
 				<componentref id="wreath3" />
+				<componentref id="ravenclawFlag" />
+				<componentref id="gryffindorFlag" />
 			</children>
 		</component>
 		<component id="wreath_right">
@@ -325,16 +344,19 @@
 			<materials>
 				<material id="white" />
 			</materials>
-			<texture id="wreathRight" length_s="1.0" length_t="1.0" />
+			<texture id="rightWreath" length_s="1.0" length_t="1.0" />
 			<children>
 				<componentref id="wreath1" />
 				<componentref id="wreath2" />
 				<componentref id="wreath3" />
+				<componentref id="hufflepuffFlag" />
+				<componentref id="slytherinFlag" />
+
 			</children>
 		</component>
 		<component id="wreath1">
 			<transformation>
-				<translate x="0" y="15" z="-20" />
+				<translate x="0" y="20" z="0" />
 				<rotate axis="y" angle="90" />
 				<scale x="3" y="3" z="3" />
 			</transformation>
@@ -348,7 +370,7 @@
 		</component>
 		<component id="wreath2">
 			<transformation>
-				<translate x="0" y="15" z="0" />
+				<translate x="0" y="20" z="35" />
 				<rotate axis="y" angle="90" />
 				<scale x="3" y="3" z="3" />
 			</transformation>
@@ -362,7 +384,7 @@
 		</component>
 		<component id="wreath3">
 			<transformation>
-				<translate x="0" y="15" z="20" />
+				<translate x="0" y="20" z="70" />
 				<rotate axis="y" angle="90" />
 				<scale x="3" y="3" z="3" />
 			</transformation>
@@ -374,11 +396,82 @@
 				<primitiveref id="torus" />
 			</children>
 		</component>
-
+		<component id="hufflepuffFlag">
+			<transformation>
+				<!-- at wreath -->
+				<translate x="0" y="20" z="35" />
+				<rotate axis="y" angle="-90" />
+				<scale x="3" y="3" z="3" />
+				<!-- relative to wreath -->
+				<scale x="2.5" y="4" z="1" />
+				<translate x="0" y="-0.7" z="0" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="hufflepuffFlag" length_s="1.0" length_t="1.0" />
+			<children>
+				<primitiveref id="rectangle" />
+			</children>
+		</component>
+		<component id="ravenclawFlag">
+			<transformation>
+				<!-- at wreath -->
+				<translate x="0" y="20" z="35" />
+				<rotate axis="y" angle="90" />
+				<scale x="3" y="3" z="3" />
+				<!-- relative to wreath -->
+				<scale x="2.5" y="4" z="1" />
+				<translate x="0" y="-0.7" z="0" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="ravenclawFlag" length_s="1.0" length_t="1.0" />
+			<children>
+				<primitiveref id="rectangle" />
+			</children>
+		</component>
+		<component id="gryffindorFlag">
+			<transformation>
+				<!-- at wreath -->
+				<translate x="0" y="20" z="70" />
+				<rotate axis="y" angle="90" />
+				<scale x="3" y="3" z="3" />
+				<!-- relative to wreath -->
+				<scale x="2.5" y="4" z="1" />
+				<translate x="0" y="-0.7" z="0" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="gryffindorFlag" length_s="1.0" length_t="1.0" />
+			<children>
+				<primitiveref id="rectangle" />
+			</children>
+		</component>
+		<component id="slytherinFlag">
+			<transformation>
+				<!-- at wreath -->
+				<translate x="0" y="20" z="70" />
+				<rotate axis="y" angle="-90" />
+				<scale x="3" y="3" z="3" />
+				<!-- relative to wreath -->
+				<scale x="2.5" y="4" z="1" />
+				<translate x="0" y="-0.7" z="0" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="slytherinFlag" length_s="1.0" length_t="1.0" />
+			<children>
+				<primitiveref id="rectangle" />
+			</children>
+		</component>
 
 		<component id="head_table">
 			<transformation>
-				<translate x="0" y="1.2" z="-33"/>
+				<translate x="0" y="1.2" z="-63" />
 				<rotate axis="y" angle="90" />
 			</transformation>
 			<materials>
@@ -386,29 +479,97 @@
 			</materials>
 			<texture id="inherit" length_s="1.0" length_t="1.0" />
 			<children>
-				<componentref id="table"/>
+				<componentref id="table" />
 			</children>
 		</component>
-
-
 		<component id="tables">
 			<transformation>
-				<translate x="0" y="0" z="10" />
+				<translate x="0" y="0" z="-15" />
 			</transformation>
 			<materials>
 				<material id="inherit" />
 			</materials>
 			<texture id="tableWood" length_s="1" length_t="1" />
 			<children>
+				<componentref id="row1"/>
+				<componentref id="row2"/>
+				<componentref id="row3"/>
+				<componentref id="row4"/>
+			</children>
+		</component>
+
+		<component id="row">
+			<transformation>
+				<translate x="0" y="0" z="0" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" length_s="1.0" length_t="1.0" />
+			<children>
 				<componentref id="table1" />
 				<componentref id="table2" />
 				<componentref id="table3" />
-				<componentref id="table4" />
 			</children>
 		</component>
-		<component id="table1">
+
+		<component id="row1">
 			<transformation>
 				<translate x="-15" y="0" z="0" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" length_s="1.0" length_t="1.0" />
+			<children>
+				<componentref id = "row"/>
+			</children>
+		</component>
+
+		<component id="row2">
+			<transformation>
+				<translate x="-7" y="0" z="0" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" length_s="1.0" length_t="1.0" />
+			<children>
+				<componentref id = "row"/>
+			</children>
+		</component>
+
+		<component id="row3">
+			<transformation>
+				<translate x="7" y="0" z="0" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" length_s="1.0" length_t="1.0" />
+			<children>
+				<componentref id = "row"/>
+			</children>
+		</component>
+
+		<component id="row4">
+			<transformation>
+				<translate x="15" y="0" z="0" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" length_s="1.0" length_t="1.0" />
+			<children>
+				<componentref id = "row"/>
+			</children>
+		</component>
+
+
+
+		<component id="table1">
+			<transformation>
+				<translate x="0" y="0" z="0" />
 			</transformation>
 			<materials>
 				<material id="inherit" />
@@ -420,7 +581,7 @@
 		</component>
 		<component id="table2">
 			<transformation>
-				<translate x="-7" y="0" z="0" />
+				<translate x="0" y="0" z="40" />
 			</transformation>
 			<materials>
 				<material id="inherit" />
@@ -432,7 +593,7 @@
 		</component>
 		<component id="table3">
 			<transformation>
-				<translate x="7" y="0" z="0" />
+				<translate x="0" y="0" z="80" />
 			</transformation>
 			<materials>
 				<material id="inherit" />
@@ -442,18 +603,7 @@
 				<componentref id="table" />
 			</children>
 		</component>
-		<component id="table4">
-			<transformation>
-				<translate x="15" y="0" z="0" />
-			</transformation>
-			<materials>
-				<material id="inherit" />
-			</materials>
-			<texture id="inherit" length_s="1.0" length_t="1.0" />
-			<children>
-				<componentref id="table" />
-			</children>
-		</component>
+
 		<component id="table">
 			<transformation>
 				<translate x="0" y="1" z="0" />
@@ -583,20 +733,18 @@
 		</component>
 		<component id="elevation">
 			<transformation>
-				<translate x="0" y="0" z="-40" />
+				<translate x="0" y="0" z="-60" />
 			</transformation>
 			<materials>
 				<material id="marroon" />
 			</materials>
 			<texture id="elevation" length_s="1.0" length_t="1.0" />
 			<children>
-				<componentref id="elevation_step1"/>
-				<componentref id="elevation_step2"/>
-				<componentref id="elevation_step3"/>
+				<componentref id="elevation_step1" />
+				<componentref id="elevation_step2" />
+				<componentref id="elevation_step3" />
 			</children>
 		</component>
-
-
 		<component id="elevation_step1">
 			<transformation>
 				<translate x="0" y="0" z="0" />
@@ -625,7 +773,7 @@
 		<component id="elevation_step3">
 			<transformation>
 				<translate x="0" y="1.2" z="0" />
-				<scale x="1" y="1" z="0.8"/>
+				<scale x="1" y="1" z="0.8" />
 			</transformation>
 			<materials>
 				<material id="inherit" />
@@ -645,11 +793,9 @@
 			</materials>
 			<texture id="inherit" length_s="1.0" length_t="1.0" />
 			<children>
-				<componentref id="cube"/>
+				<componentref id="cube" />
 			</children>
 		</component>
-
-
 		<component id="candles">
 			<transformation>
 				<translate x="0" y="30" z="0" />
@@ -676,7 +822,7 @@
 			</materials>
 			<texture id="inherit" length_s="1.0" length_t="1.0" />
 			<children>
-				<primitiveref id="cylinder"/>
+				<primitiveref id="cylinder" />
 			</children>
 		</component>
 		<component id="candle2">
@@ -690,7 +836,7 @@
 			</materials>
 			<texture id="inherit" length_s="1.0" length_t="1.0" />
 			<children>
-				<primitiveref id="cylinder"/>
+				<primitiveref id="cylinder" />
 			</children>
 		</component>
 		<component id="candle3">
@@ -704,7 +850,7 @@
 			</materials>
 			<texture id="inherit" length_s="1.0" length_t="1.0" />
 			<children>
-				<primitiveref id="cylinder"/>
+				<primitiveref id="cylinder" />
 			</children>
 		</component>
 		<component id="candle4">
@@ -718,7 +864,7 @@
 			</materials>
 			<texture id="inherit" length_s="1.0" length_t="1.0" />
 			<children>
-				<primitiveref id="cylinder"/>
+				<primitiveref id="cylinder" />
 			</children>
 		</component>
 		<!-- Cube -->
