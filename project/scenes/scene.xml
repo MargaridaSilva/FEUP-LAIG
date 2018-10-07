@@ -2,7 +2,7 @@
 	<scene root="scene" axis_length="5" />
 	<views default="view1">
 		<perspective id="view1" near="0.1" far="500" angle="0.4">
-			<from x="7" y="0" z="15" />
+			<from x="15" y="15" z="15" />
 			<to x="0" y="0" z="0" />
 		</perspective>
 		<perspective id="view2" near="0.1" far="500" angle="0.4">
@@ -118,6 +118,7 @@
 				<componentref id="wreath_left" />
 				<componentref id="wreath_right" />
 				<componentref id="candles" />
+				<componentref id="head_table" />
 			</children>
 		</component>
 		<component id="room">
@@ -338,7 +339,7 @@
 				<scale x="3" y="3" z="3" />
 			</transformation>
 			<materials>
-				<material id="white" />
+				<material id="inherit" />
 			</materials>
 			<texture id="inherit" length_s="1.0" length_t="1.0" />
 			<children>
@@ -352,7 +353,7 @@
 				<scale x="3" y="3" z="3" />
 			</transformation>
 			<materials>
-				<material id="white" />
+				<material id="inherit" />
 			</materials>
 			<texture id="inherit" length_s="1.0" length_t="1.0" />
 			<children>
@@ -366,13 +367,30 @@
 				<scale x="3" y="3" z="3" />
 			</transformation>
 			<materials>
-				<material id="white" />
+				<material id="inherit" />
 			</materials>
 			<texture id="inherit" length_s="1.0" length_t="1.0" />
 			<children>
 				<primitiveref id="torus" />
 			</children>
 		</component>
+
+
+		<component id="head_table">
+			<transformation>
+				<translate x="0" y="1.2" z="-33"/>
+				<rotate axis="y" angle="90" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" length_s="1.0" length_t="1.0" />
+			<children>
+				<componentref id="table"/>
+			</children>
+		</component>
+
+
 		<component id="tables">
 			<transformation>
 				<translate x="0" y="0" z="10" />
@@ -572,28 +590,16 @@
 			</materials>
 			<texture id="elevation" length_s="1.0" length_t="1.0" />
 			<children>
-				<componentref id="elevation_back" />
-				<componentref id="elevation_step1" />
-				<componentref id="elevation_step2" />
-				<componentref id="elevation_step3" />
+				<componentref id="elevation_step1"/>
+				<componentref id="elevation_step2"/>
+				<componentref id="elevation_step3"/>
 			</children>
 		</component>
-		<component id="elevation_back">
-			<transformation>
-				<translate x="0" y="0.6" z="2" />
-				<scale x="40" y="1.2" z="4" />
-			</transformation>
-			<materials>
-				<material id="inherit" />
-			</materials>
-			<texture id="inherit" length_s="1.0" length_t="1.0" />
-			<children>
-				<componentref id="cube" />
-			</children>
-		</component>
+
+
 		<component id="elevation_step1">
 			<transformation>
-				<translate x="0" y="0.1" z="4" />
+				<translate x="0" y="0" z="0" />
 			</transformation>
 			<materials>
 				<material id="inherit" />
@@ -605,8 +611,8 @@
 		</component>
 		<component id="elevation_step2">
 			<transformation>
-				<translate x="0" y="0.3" z="4" />
-				<scale x="0.9" y="1" z="0.9" />
+				<translate x="0" y="0.6" z="0" />
+				<scale x="1" y="1" z="0.9" />
 			</transformation>
 			<materials>
 				<material id="inherit" />
@@ -618,8 +624,8 @@
 		</component>
 		<component id="elevation_step3">
 			<transformation>
-				<translate x="0" y="0.5" z="4" />
-				<scale x="0.8" y="1" z="0.8" />
+				<translate x="0" y="1.2" z="0" />
+				<scale x="1" y="1" z="0.8"/>
 			</transformation>
 			<materials>
 				<material id="inherit" />
@@ -631,42 +637,19 @@
 		</component>
 		<component id="elevation_step">
 			<transformation>
-				<translate x="0" y="0" z="2" />
+				<translate x="0" y="0.3" z="8" />
+				<scale x="40" y="0.6" z="16" />
 			</transformation>
 			<materials>
 				<material id="inherit" />
 			</materials>
 			<texture id="inherit" length_s="1.0" length_t="1.0" />
 			<children>
-				<componentref id="elevation_p1" />
-				<componentref id="elevation_p2" />
+				<componentref id="cube"/>
 			</children>
 		</component>
-		<component id="elevation_p1">
-			<transformation>
-				<scale x="40" y="0.2" z="4" />
-			</transformation>
-			<materials>
-				<material id="inherit" />
-			</materials>
-			<texture id="inherit" length_s="1.0" length_t="1.0" />
-			<children>
-				<componentref id="cube" />
-			</children>
-		</component>
-		<component id="elevation_p2">
-			<transformation>
-				<translate x="0" y="0" z="4" />
-				<scale x="10" y="0.2" z="4" />
-			</transformation>
-			<materials>
-				<material id="inherit" />
-			</materials>
-			<texture id="inherit" length_s="1.0" length_t="1.0" />
-			<children>
-				<componentref id="cube" />
-			</children>
-		</component>
+
+
 		<component id="candles">
 			<transformation>
 				<translate x="0" y="30" z="0" />
@@ -693,7 +676,7 @@
 			</materials>
 			<texture id="inherit" length_s="1.0" length_t="1.0" />
 			<children>
-				<primitiveref id="cylinder" />
+				<primitiveref id="cylinder"/>
 			</children>
 		</component>
 		<component id="candle2">
@@ -707,7 +690,7 @@
 			</materials>
 			<texture id="inherit" length_s="1.0" length_t="1.0" />
 			<children>
-				<primitiveref id="cylinder" />
+				<componentref id="cylinder"/>
 			</children>
 		</component>
 		<component id="candle3">
@@ -721,7 +704,7 @@
 			</materials>
 			<texture id="inherit" length_s="1.0" length_t="1.0" />
 			<children>
-				<primitiveref id="cylinder" />
+				<componentref id="cylinder"/>
 			</children>
 		</component>
 		<component id="candle4">
@@ -735,7 +718,7 @@
 			</materials>
 			<texture id="inherit" length_s="1.0" length_t="1.0" />
 			<children>
-				<primitiveref id="cylinder" />
+				<componentref id="cylinder"/>
 			</children>
 		</component>
 		<!-- Cube -->
