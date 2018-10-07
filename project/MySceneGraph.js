@@ -623,10 +623,10 @@ class MySceneGraph {
         }
 
         let material = new CGFappearance(this.scene);
-        material.setEmission(emission.r / 255, emission.g / 255, emission.b / 255, emission.a / 255);
-        material.setAmbient(ambient.r / 255, ambient.g / 255, ambient.b / 255, ambient.a / 255);
-        material.setDiffuse(diffuse.r / 255, diffuse.g / 255, diffuse.b / 255, diffuse.a / 255);
-        material.setSpecular(specular.r / 255, specular.g / 255, specular.b / 255, specular.a / 255);
+        material.setEmission(emission.r, emission.g, emission.b, emission.a);
+        material.setAmbient(ambient.r, ambient.g, ambient.b, ambient.a);
+        material.setDiffuse(diffuse.r, diffuse.g, diffuse.b, diffuse.a);
+        material.setSpecular(specular.r, specular.g, specular.b, specular.a);
         material.setShininess(info.shininess);
 
 
