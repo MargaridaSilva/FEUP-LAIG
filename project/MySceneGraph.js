@@ -197,7 +197,39 @@ class MySceneGraph {
         this.viewIds.push(orthoId);
 
         //OTHER INFO
-        this.orthoViews[orthoId] = this.parseFields(orthoNode, [["near", "ff", 0.5], ["far", "ff", 500], ["left", "ff", 0], ["right", "ff", 0], ["top", "ff", 0], ["bottom", "ff", 0]], "views > ortho id = " + orthoId);
+        let info = this.parseFields(orthoNode, [["near", "ff", 0.5], ["far", "ff", 500], ["left", "ff", 0], ["right", "ff", 0], ["top", "ff", 0], ["bottom", "ff", 0]], "views > ortho id = " + orthoId);
+
+        let children = orthoNode.children;
+        let processFrom, processTo = false;
+        let coordsF, coordsT;
+
+        for (let i = 0; i < children.length; i++) {
+            if (children[i].nodeName == "from") {
+                if (!processFrom) {
+                    coordsF = this.parseFields(children[i], [["x", "ff", 0], ["y", "ff", 0], ["z", "ff", 0]], "views > ortho id = " + orthoId + " > from");
+                    processFrom = true;
+                }
+                else this.onXMLMinorError("more than one <from> definitions in view id=" + orthoId + " ; only the first was considered");
+            }
+            else if (children[i].nodeName == "to") {
+                if (!processTo) {
+                    coordsT = this.parseFields(children[i], [["x", "ff", 0], ["y", "ff", 0], ["z", "ff", 0]], "views > ortho id = " + orthoId + " > to");
+                    processTo = true;
+                }
+                else this.onXMLMinorError("more than one <to> definitions in view id=" + orthoId + " ; only the first was considered");
+            }
+            else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in view id=" + orthoId + "was ignored");
+        }
+        this.orthoViews[orthoId] = {
+            near: info.near,
+            far: info.far,
+            left: info.left,
+            right: info.right,
+            top: info.top,
+            bottom: info.bottom,
+            from: coordsF,
+            to: coordsT
+        }
 
     }
 

@@ -8,6 +8,7 @@
 		<perspective id="door" near="0.1" far="500" angle="0.4">
 			<from x="0" y="100" z="-150" />
 			<to x="0" y="0" z="90" />
+		</perspective>
 		<perspective id="hufflepuff" near="0.1" far="500" angle="0.4">
 			<from x="-80" y="20" z="35" />
 			<to x="20" y="20" z="35" />
@@ -20,6 +21,11 @@
 			<from x="0" y="10" z="100" />
 			<to x="0" y="10" z="-80" />
 		</perspective>
+		<ortho id="exp" near="0.1" far="500" right="0" left="0" top="0" bottom="0">
+			<from x="0" y="10" z="100" />
+			<to x="0" y="10" z="-80" />
+		</ortho>
+
 	</views>
 	<ambient>
 		<ambient r="0" g="0" b="0" a="1" />
