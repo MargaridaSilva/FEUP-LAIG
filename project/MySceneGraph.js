@@ -564,7 +564,7 @@ class MySceneGraph {
 
         this.textureIds.push(textureId);
         this.textures[textureId] = new CGFappearance(this.scene);
-        this.textures[textureId].loadTexture(file);
+        this.textures[textureId].loadTexture( file);
     }
 
     parseMaterials(materialsNode) {
@@ -943,7 +943,7 @@ class MySceneGraph {
             if (textureIndex != 2) {
                 this.onXMLMinorError("component texture out of order for ID =" + componentId);
             }
-            error = this.parseComponentTextures(children[textureIndex], componentId);
+            error = this.parseComponentTexture(children[textureIndex], componentId);
             if (error != null)
                 return (error);
         }
@@ -1059,31 +1059,24 @@ class MySceneGraph {
         }
     }
 
-    parseComponentTextures(compTexturesNode, id) {
-        let children = compTexturesNode.children;
-        for (let i = 0; i < children.length; i++) {
-            if (children[i].nodeName == "texture") {
-                //ID
-                let textureId = this.reader.getString(compTextureNode, 'id');
-                if (textureId == null)
-                    return "no ID defined for texture in component id = " + id;
+    parseComponentTexture(compTextureNode, id) {
+        //ID
+        let textureId = this.reader.getString(compTextureNode, 'id');
+        if (textureId == null)
+            return "no ID defined for texture in component id = " + id;
 
-                if (this.textureIds.indexOf(textureId) == -1 && textureId != "none" && textureId != "inherit")
-                    return "texture ID not found for in component id = " + id;
+        if (this.textureIds.indexOf(textureId) == -1 && textureId != "none" && textureId != "inherit")
+            return "texture ID not found for in component id = " + id;
 
-                let info = this.parseFields(compTextureNode, [["length_s", "ff", 1.0], ["length_t", "ff", 1.0]], "components > component id = " + id + " > texture");
+        this.components[id].texture = textureId;
 
-                this.components[id].textures[textureId] = {
-                    length_s: info.length_s,
-                    length_t: info.length_t
-                };
-            }
-            else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in textures of component id = " + id + " was ignored");
-        }
-        //There has to be at least one texture
-        if (children.length == 0) {
-            return "at least one texture must be defined in component id = " + id;
-        }
+        let info = this.parseFields(compTextureNode, [["length_s", "ff", 1.0], ["length_t", "ff", 1.0]], "components > component id = " + id + " > texture");
+
+        this.components[id].texture = {
+            id: textureId,
+            length_s: info.length_s,
+            length_t: info.length_t
+        };
     }
 
     parseComponentChildren(compChildrenNode, id) {
@@ -1206,50 +1199,20 @@ class MySceneGraph {
         //TODO: Render loop starting at root of graph
         this.materialStack = [];
         this.textureStack = [];
-        this.sAndTStack = [];
-        this.default = 0;
+        this.displayRecursive(this.values.scene.root);
 
-        let root = this.values.scene.root;
-        let rootMaterials = root.materials;
-        let rootTextures = root.textures;
-        let textureId;
-        console.log(rootTextures);
-        let textureIndex = this.default % Object.keys(rootTextures).length;
-        let materialIndex = this.default % Object.keys(rootMaterials).length;
-
-        //default
-        textureId = rootTextures[textureIndex];
-        //there has to be a texture
-        if (rootTextures[textureIndex] == "inherit" || rootTextures[textureIndex] == "none") {
-            textureId = "warning";
-            //to do: warning
-        }
-
-        textures[textureId].apply();
-        this.textureStack.push(this.textures[textureIndex]);
-
-        //default
-        materialId = rootMaterials[textureIndex];
-        if (rootMaterials[materialIndex] == "inherit") {
-            materialId = "white";
-            //to do: warning
-        }
-
-        this.materialStack.push(this.materials[materialId]);
-
-
-        //this.displayRecursive(this.values.scene.root);
     }
 
 
     displayRecursive(idNode) {
-
+        
         let node = this.components[idNode];
 
-        if (node.transformation != undefined)
-            this.scene.multMatrix(node.transformation);
 
-        let materialAndTexture = this.adaptTextureAndMaterial(idNode);
+        if(node.transformation != undefined)
+            this.scene.multMatrix(node.transformation);
+        
+            let materialAndTexture = this.adaptTextureAndMaterial(idNode);
 
         for (let i = 0; i < node.children.length; i++) {
 
@@ -1275,65 +1238,38 @@ class MySceneGraph {
     adaptTextureAndMaterial(idNode) {
         //TO DO: be able to switch material
 
-        let texture, material;
-
-
-        /*
-        let textureIds = this.components[idNode].textures;
-        let materialIds = this.components[idNode].materials;
-        let materialList, textureList;
+        let textureId = this.components[idNode].texture.id;
+        let s = this.components[idNode].texture.length_s;
+        let t = this.components[idNode].texture.length_t;
+        let materialId = this.components[idNode].materials[0];
         let material, texture;
-        let s, t;
 
-        if (materialIds[0] == "inherit"){
-            materialList = this.materialStack.pop();
-            this.materialStack.push(materialList);
+        if (materialId == "inherit") {
+            materialId = this.materialStack.pop();
+            this.materialStack.push(materialId);
         }
-        else materialList = idNode.materials;
+        
+        material = this.materials[materialId];
 
-        material = this.materials[materialList[this.default]];
 
-        if (textureIds[0] == "inherit"){
-            textureList = this.materialStack.pop();
-            if (textureIds[0] == "none")
+        if (textureId == "inherit") {
+            textureId = this.textureStack.pop();
+            if (textureId == "none")
                 material.apply();
-            this.materialStack.push(materialList);
+            else 
+                this.textures[textureId].apply();
+            this.textureStack.push(textureId);
         }
-        else if (textureIds[0] == "none"){
+        else if (textureId == "none") {
             material.apply();
         }
-        else {
-            textureList = 
-            
+        else { 
+            texture = this.textures[textureId];
+            texture.setTextureWrap('CLAMP_TP_EDGE', 'CLAMP_TP_EDGE');
+            texture.apply(); 
         }
 
-            if (textureId == "inherit") {
-                textureId = this.textureStack.pop();
-                if (textureId == "none")
-                    material.apply();
-                else {
-                    this.textures[textureId].apply();
-                    let sAndT = this.sAndTStack.pop();
-                    s = sAndT[0];
-                    t = sAndT[1];
-                }
-                this.textureStack.push(textureId);
-            }
-            else if (textureId == "none") {
-                material.apply();
-            }
-            else {
-                s = this.components[idNode].texture.length_s;
-                t = this.components[idNode].texture.length_t;
-                texture = this.textures[textureId];
-                //texture.setTextureWrap('CLAMP_TP_EDGE', 'CLAMP_TP_EDGE');
-                texture.apply();
-            }
-    
-        
+        return [materialId, textureId];
+    }
 
-        return [materialId, textureId, s, t];
-    
-    }*/
-};
-};
+}

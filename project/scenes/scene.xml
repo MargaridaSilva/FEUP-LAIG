@@ -77,7 +77,6 @@
 		<texture id="gryffindorFlag" file="scenes/images/gryffindorFlag.jpg" />
 		<texture id="slytherinFlag" file="scenes/images/slytherinFlag.jpg" />
 		<texture id="door" file="scenes/images/door.jpg" />
-		<texture id="warning" file="scenes/images/warning.jpg"/>
 	</textures>
 	<materials>
 		<material id="white" shininess="0.5">
@@ -139,9 +138,7 @@
 			<materials>
 				<material id="white" />
 			</materials>
-			<textures>
 			<texture id="tableWood" length_s="1.0" length_t="1.0" />
-			</textures>
 			<children>
 				<componentref id="room" />
 				<componentref id="tables" />

@@ -18,26 +18,17 @@ class MyQuad extends CGFobject
         this.bottomLeftX = bottomLeftX;
         this.bottomLeftY = bottomLeftY;
         this.topRightX = topRightX;
-		this.topRightY = topRightY;
-		
-		this.dimS= 1;
-		this.dimT= 1;
-
+        this.topRightY = topRightY;
 
 		this.initBuffers();
 	};
 
-	updateTexCoords(lengthS, lengthT){
-		this.maxS = this.dimS/lengthS;
-		this.maxT = this.dimT/lengthT;
+	setS(maxS){
+		this.maxS = maxS;
+	}
 
-		this.texCoords = [
-			this.minS, this.maxT,
-			this.maxS, this.maxT,
-			this.minS, this.minT,
-			this.maxS, this.minT
-		];
-		this.updateTexCoordsGLBuffers();
+	setT(maxT){
+		this.maxT = maxT;
 	}
 
 	initBuffers()
@@ -62,7 +53,12 @@ class MyQuad extends CGFobject
 				0, 0, 1
 			];
 
-			this.updateTexCoords(this.maxS, this.maxT);
+			this.texCoords = [
+				this.minS, this.maxT,
+				this.maxS, this.maxT,
+				this.minS, this.minT,
+				this.maxS, this.minT
+			];
 
 		this.primitiveType=this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
