@@ -209,11 +209,13 @@ class XMLscene extends CGFscene {
              if(this.interfaceValues.view != this.currentView){
                  console.log("Enter");
                  this.camera = this.cameras[this.interfaceValues.view];
-                 this.interface.setActiveCamera(this.camera);
                  this.currentView = this.interfaceValues.view;
              }
 
+            // Displays the scene (MySceneGraph function).
             this.graph.displayScene();
+
+            //this.sceneGraph.display();
         }
         else {
             // Draw axis
