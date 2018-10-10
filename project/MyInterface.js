@@ -56,9 +56,7 @@ class MyInterface extends CGFinterface {
                 this.scene.viewValues.push(key);
             }
         }
-
-        var change = false;
-
+        
         this.gui.add(this.scene.interfaceValues, 'view', this.scene.viewValues);
     }
 }
