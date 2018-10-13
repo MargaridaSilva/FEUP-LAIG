@@ -19,6 +19,7 @@ class MyInterface extends CGFinterface {
         //  http://workshop.chromeexperiments.com/examples/gui
 
         this.gui = new dat.GUI();
+        this.initKeys();
 
         // add a group of controls (and open/expand by defult)
 
@@ -45,10 +46,10 @@ class MyInterface extends CGFinterface {
         }
     }
 
-     /**
-     * Adds a folder containing the IDs of the views passed as parameter.
-     * @param {array} views
-     */
+    /**
+    * Adds a folder containing the IDs of the views passed as parameter.
+    * @param {array} views
+    */
     addViewsGroup(views) {
 
         for (var key in views) {
@@ -60,5 +61,22 @@ class MyInterface extends CGFinterface {
         var change = false;
 
         this.gui.add(this.scene.interfaceValues, 'view', this.scene.viewValues);
+    }
+
+    /**
+	 * initKeys
+	 */
+    initKeys() {
+        this.processKeyboard = function () { };
+        this.activeKeys = {};
+    }
+
+    processKeyDown(event) {
+        this.activeKeys[event.code] = true;
+        this.scene.handleInput(event.code);
+    };
+    
+    isKeyPressed(keyCode) {
+        return this.activeKeys[keyCode] || false;
     }
 }

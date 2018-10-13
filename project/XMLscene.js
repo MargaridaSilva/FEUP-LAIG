@@ -26,15 +26,15 @@ class XMLscene extends CGFscene {
         super.init(application);
 
         this.lights = [];
-        
+
         this.sceneInited = false;
 
-        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(100,150,150), vec3.fromValues(0,0,0));
+        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(100, 150, 150), vec3.fromValues(0, 0, 0));
 
         this.enableTextures(true);
 
 
-        this.gl.clearColor(0.0, 0.0, 0.0, 1.0);        
+        this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
         this.gl.clearDepth(100.0);
         this.gl.enable(this.gl.DEPTH_TEST);
         this.gl.enable(this.gl.CULL_FACE);
@@ -49,9 +49,9 @@ class XMLscene extends CGFscene {
 
         var i = 0;
 
-        for(var key in this.graph.perspectiveViews){
+        for (var key in this.graph.perspectiveViews) {
 
-            if(this.graph.perspectiveViews.hasOwnProperty(key)){
+            if (this.graph.perspectiveViews.hasOwnProperty(key)) {
                 var view = this.graph.perspectiveViews[key];
                 var position = vec3.fromValues(view.from.x, view.from.y, view.from.z);
                 var target = vec3.fromValues(view.to.x, view.to.y, view.to.z);
@@ -77,7 +77,7 @@ class XMLscene extends CGFscene {
      * Initializes the scene lights with the values read from the XML file.
      */
     initLights() {
-        
+
         var i = 0;
         // Lights index.
 
@@ -96,7 +96,7 @@ class XMLscene extends CGFscene {
                 this.lights[i].setSpecular(light.specular.r, light.specular.g, light.specular.b, light.specular.a);
 
                 this.lights[i].setVisible(true);
-                
+
                 if (light.enabled)
                     this.lights[i].enable();
                 else
@@ -120,7 +120,7 @@ class XMLscene extends CGFscene {
                 this.lights[i].setSpotExponent(light.exponent);
 
                 this.lights[i].setVisible(true);
-                
+
                 if (light.enabled)
                     this.lights[i].enable();
                 else
@@ -133,20 +133,24 @@ class XMLscene extends CGFscene {
         }
     }
 
+    handleInput(code) {
+        if (code == "KeyS")
+            this.graph.displayIndex++;
+    }
 
     /* Handler called when the graph is finally loaded. 
      * As loading is asynchronous, this may be called already after the application has started the run loop
      */
     onGraphLoaded() {
-       
+
         this.axis = new CGFaxis(this, this.graph.values.scene.axis_length);
 
         var background = this.graph.ambient.background;
         this.gl.clearColor(background.r, background.g, background.b, background.a);
-        
+
         var ambient = this.graph.ambient.ambient;
         this.setGlobalAmbientLight(ambient.r, ambient.g, ambient.b, ambient.a);
-        
+
         //this.sceneGraph = new SceneGraph(this.graph.values.scene.root, this.graph.components);
 
         this.interfaceValues = {
@@ -160,7 +164,7 @@ class XMLscene extends CGFscene {
         this.interface.addLightsGroup(this.graph.omniLights);
         this.interface.addViewsGroup(this.graph.perspectiveViews);
 
-        
+
         this.sceneInited = true;
     }
 
@@ -182,12 +186,12 @@ class XMLscene extends CGFscene {
 
         // Apply transformations corresponding to the camera position relative to the origin
         this.applyViewMatrix();
-        
+
         this.pushMatrix();
 
         if (this.sceneInited) {
             // Draw axis
-                this.axis.display();
+            this.axis.display();
 
             var i = 0;
             for (var key in this.lightValues) {
@@ -206,12 +210,12 @@ class XMLscene extends CGFscene {
             }
 
 
-             if(this.interfaceValues.view != this.currentView){
-                 console.log("Enter");
-                 this.camera = this.cameras[this.interfaceValues.view];
-                 this.interface.setActiveCamera(this.camera);
-                 this.currentView = this.interfaceValues.view;
-             }
+            if (this.interfaceValues.view != this.currentView) {
+                console.log("Enter");
+                this.camera = this.cameras[this.interfaceValues.view];
+                this.interface.setActiveCamera(this.camera);
+                this.currentView = this.interfaceValues.view;
+            }
 
             this.graph.displayScene();
         }

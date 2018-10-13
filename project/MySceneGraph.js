@@ -57,6 +57,8 @@ class MySceneGraph {
         this.functionVect = [this.parseScene, this.parseViews, this.parseAmbient, this.parseLights, this.parseTextures, this.parseMaterials, this.parseTransformations, this.parsePrimitives, this.parseComponents];
 
         this.values = [];
+
+        this.displayIndex = 0;
     }
 
     /*
@@ -564,7 +566,7 @@ class MySceneGraph {
 
         this.textureIds.push(textureId);
         this.textures[textureId] = new CGFappearance(this.scene);
-        this.textures[textureId].loadTexture( file);
+        this.textures[textureId].loadTexture(file);
     }
 
     parseMaterials(materialsNode) {
@@ -1199,20 +1201,25 @@ class MySceneGraph {
         //TODO: Render loop starting at root of graph
         this.materialStack = [];
         this.textureStack = [];
+
         this.displayRecursive(this.values.scene.root);
 
     }
 
 
     displayRecursive(idNode) {
-        
+/*
+        if (this.scene.interface.isKeyPressed("KeyS")) {
+            this.displayIndex++;
+        }
+*/
         let node = this.components[idNode];
 
 
-        if(node.transformation != undefined)
+        if (node.transformation != undefined)
             this.scene.multMatrix(node.transformation);
-        
-            let materialAndTexture = this.adaptTextureAndMaterial(idNode);
+
+        let materialAndTexture = this.adaptTextureAndMaterial(idNode);
 
         for (let i = 0; i < node.children.length; i++) {
 
@@ -1236,19 +1243,21 @@ class MySceneGraph {
     }
 
     adaptTextureAndMaterial(idNode) {
-        //TO DO: be able to switch material
 
         let textureId = this.components[idNode].texture.id;
         let s = this.components[idNode].texture.length_s;
         let t = this.components[idNode].texture.length_t;
-        let materialId = this.components[idNode].materials[0];
+        let nMaterials = Object.keys(this.components[idNode].materials).length;
+        if (nMaterials > 1)
+            console.log(this.displayIndex);
+        let materialId = this.components[idNode].materials[this.displayIndex % nMaterials];
         let material, texture;
 
         if (materialId == "inherit") {
             materialId = this.materialStack.pop();
             this.materialStack.push(materialId);
         }
-        
+
         material = this.materials[materialId];
 
 
@@ -1256,17 +1265,17 @@ class MySceneGraph {
             textureId = this.textureStack.pop();
             if (textureId == "none")
                 material.apply();
-            else 
+            else
                 this.textures[textureId].apply();
             this.textureStack.push(textureId);
         }
         else if (textureId == "none") {
             material.apply();
         }
-        else { 
+        else {
             texture = this.textures[textureId];
             texture.setTextureWrap('CLAMP_TP_EDGE', 'CLAMP_TP_EDGE');
-            texture.apply(); 
+            texture.apply();
         }
 
         return [materialId, textureId];

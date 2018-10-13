@@ -197,6 +197,7 @@
 			</transformation>
 			<materials>
 				<material id="marroon" />
+				<material id="white"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0" />
 			<children>
@@ -210,6 +211,7 @@
 			</transformation>
 			<materials>
 				<material id="marroon" />
+				<material id="white"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0" />
 			<children>
@@ -223,6 +225,7 @@
 			</transformation>
 			<materials>
 				<material id="marroon" />
+				<material id="white"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0" />
 			<children>
