@@ -134,7 +134,7 @@ class XMLscene extends CGFscene {
     }
 
     handleInput(code) {
-        if (code == "KeyS")
+        //if (code == "KeyS")
             this.graph.displayIndex++;
     }
 
@@ -211,7 +211,6 @@ class XMLscene extends CGFscene {
 
 
             if (this.interfaceValues.view != this.currentView) {
-                console.log("Enter");
                 this.camera = this.cameras[this.interfaceValues.view];
                 this.interface.setActiveCamera(this.camera);
                 this.currentView = this.interfaceValues.view;

@@ -874,6 +874,19 @@ class MySceneGraph {
                 return "unreferenced component child with ID = " + this.childComponentIds[i];
         }
 
+        let rootMaterials = this.components[this.values.scene.root].materials;
+        let rootTexture = this.components[this.values.scene.root].texture.id;
+        let nMaterials = Object.keys(rootMaterials).length;
+
+        if (rootTexture == "none" || rootTexture == "inherit") {
+            this.onXMLMinorError("the root component should have a defined texture, instead of being " + rootTexture + "; warning texture was applied");
+            this.components[this.values.scene.root].texture.id = "warning";
+        }
+        if (rootMaterials[this.displayIndex % nMaterials] == "inherit") {
+            this.onXMLMinorError("the root component should have a defined material, instead of being inherit; white material was assumed");
+            this.components[this.values.scene.root].materials[this.displayIndex % nMaterials] = "white";
+        }
+
         this.log("Parsed Components");
 
     }
@@ -1201,18 +1214,16 @@ class MySceneGraph {
         //TODO: Render loop starting at root of graph
         this.materialStack = [];
         this.textureStack = [];
-
         this.displayRecursive(this.values.scene.root);
-
     }
 
 
     displayRecursive(idNode) {
-/*
-        if (this.scene.interface.isKeyPressed("KeyS")) {
-            this.displayIndex++;
-        }
-*/
+        /*
+                if (this.scene.interface.isKeyPressed("KeyS")) {
+                    this.displayIndex++;
+                }
+        */
         let node = this.components[idNode];
 
 
@@ -1248,8 +1259,6 @@ class MySceneGraph {
         let s = this.components[idNode].texture.length_s;
         let t = this.components[idNode].texture.length_t;
         let nMaterials = Object.keys(this.components[idNode].materials).length;
-        if (nMaterials > 1)
-            console.log(this.displayIndex);
         let materialId = this.components[idNode].materials[this.displayIndex % nMaterials];
         let material, texture;
 
@@ -1259,7 +1268,6 @@ class MySceneGraph {
         }
 
         material = this.materials[materialId];
-
 
         if (textureId == "inherit") {
             textureId = this.textureStack.pop();
