@@ -138,7 +138,7 @@ class MySceneGraph {
      * @param {XML scene element} sceneNode
      */
     parseScene(sceneNode) {
-        let info = this.parseFields(sceneNode, [["root", "ss", undefined], ["axis_length", "ff", 3]], "scene");
+        let info = this.parseFields(sceneNode, ["single", ["root", "ss", undefined], ["axis_length", "ff", 3]], "scene");
 
         this.values.scene = {
             root: info.root,
@@ -199,7 +199,7 @@ class MySceneGraph {
         this.viewIds.push(orthoId);
 
         //OTHER INFO
-        let info = this.parseFields(orthoNode, [["near", "ff", 0.5], ["far", "ff", 500], ["left", "ff", 0], ["right", "ff", 0], ["top", "ff", 0], ["bottom", "ff", 0]], "views > ortho id = " + orthoId);
+        let info = this.parseFields(orthoNode, ["single", ["near", "ff", 0.5], ["far", "ff", 500], ["left", "ff", 0], ["right", "ff", 0], ["top", "ff", 0], ["bottom", "ff", 0]], "views > ortho id = " + orthoId);
 
         let children = orthoNode.children;
         let processFrom, processTo = false;
@@ -208,14 +208,14 @@ class MySceneGraph {
         for (let i = 0; i < children.length; i++) {
             if (children[i].nodeName == "from") {
                 if (!processFrom) {
-                    coordsF = this.parseFields(children[i], [["x", "ff", 0], ["y", "ff", 0], ["z", "ff", 0]], "views > ortho id = " + orthoId + " > from");
+                    coordsF = this.parseFields(children[i], ["all", ["x", "ff", 0], ["y", "ff", 0], ["z", "ff", 0]], "views > ortho id = " + orthoId + " > from");
                     processFrom = true;
                 }
                 else this.onXMLMinorError("more than one <from> definitions in view id=" + orthoId + " ; only the first was considered");
             }
             else if (children[i].nodeName == "to") {
                 if (!processTo) {
-                    coordsT = this.parseFields(children[i], [["x", "ff", 0], ["y", "ff", 0], ["z", "ff", 0]], "views > ortho id = " + orthoId + " > to");
+                    coordsT = this.parseFields(children[i], ["all",["x", "ff", 0], ["y", "ff", 0], ["z", "ff", 0]], "views > ortho id = " + orthoId + " > to");
                     processTo = true;
                 }
                 else this.onXMLMinorError("more than one <to> definitions in view id=" + orthoId + " ; only the first was considered");
@@ -251,7 +251,7 @@ class MySceneGraph {
         this.viewIds.push(perspectiveId);
 
         //OTHER INFO
-        let info = this.parseFields(perspectiveNode, [["near", "ff", 0.5], ["far", "ff", 500], ["angle", "ff", 0]], "views > perspective id = " + perspectiveId);
+        let info = this.parseFields(perspectiveNode, ["single", ["near", "ff", 0.5], ["far", "ff", 500], ["angle", "ff", 0]], "views > perspective id = " + perspectiveId);
 
         let children = perspectiveNode.children;
         let processFrom, processTo = false;
@@ -260,14 +260,14 @@ class MySceneGraph {
         for (let i = 0; i < children.length; i++) {
             if (children[i].nodeName == "from") {
                 if (!processFrom) {
-                    coordsF = this.parseFields(children[i], [["x", "ff", 0], ["y", "ff", 0], ["z", "ff", 0]], "views > perspective id = " + perspectiveId + " > from");
+                    coordsF = this.parseFields(children[i], ["all", ["x", "ff", 150], ["y", "ff", 150], ["z", "ff", 150]], "views > perspective id = " + perspectiveId + " > from");
                     processFrom = true;
                 }
                 else this.onXMLMinorError("more than one <from> definitions in view id=" + perspectiveId + " ; only the first was considered");
             }
             else if (children[i].nodeName == "to") {
                 if (!processTo) {
-                    coordsT = this.parseFields(children[i], [["x", "ff", 0], ["y", "ff", 0], ["z", "ff", 0]], "views > perspective id = " + perspectiveId + " > to");
+                    coordsT = this.parseFields(children[i], ["all", ["x", "ff", 0], ["y", "ff", 0], ["z", "ff", 0]], "views > perspective id = " + perspectiveId + " > to");
                     processTo = true;
                 }
                 else this.onXMLMinorError("more than one <to> definitions in view id=" + perspectiveId + " ; only the first was considered");
@@ -306,7 +306,7 @@ class MySceneGraph {
             this.log("problem in ambient definition");
         }
         else {
-            ambient = this.parseFields(children[0], [["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 1]], "ambient > ambient");
+            ambient = this.parseFields(children[0], ["single", ["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 1]], "ambient > ambient");
         }
 
         //Parse background
@@ -316,7 +316,7 @@ class MySceneGraph {
             this.log("problem in background definition");
         }
         else {
-            background = this.parseFields(children[1], [["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 1]], "ambient > background");
+            background = this.parseFields(children[1], ["single", ["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 1]], "ambient > background");
         }
 
         this.ambient = {
@@ -368,7 +368,7 @@ class MySceneGraph {
         this.lightIds.push(omniId);
 
         //OTHER INFO
-        let info = this.parseFields(omniNode, [["enabled", "tt", 0]], "lights > omni id = " + omniId);
+        let info = this.parseFields(omniNode, ["single", ["enabled", "tt", 0]], "lights > omni id = " + omniId);
         let enabled = info.enabled;
 
         let children = omniNode.children;
@@ -391,7 +391,7 @@ class MySceneGraph {
             if (locationIndex != 0) {
                 this.onXMLMinorError("light location out of order for ID =" + omniId);
             }
-            location = this.parseFields(children[locationIndex], [["x", "ff", 0], ["y", "ff", 0], ["z", "ff", 0], ["w", "ff", 0]], "lights > omni id = " + omniId + " > location");
+            location = this.parseFields(children[locationIndex], ["all", ["x", "ff", 0], ["y", "ff", 0], ["z", "ff", 0], ["w", "ff", 0]], "lights > omni id = " + omniId + " > location");
         }
 
         if (ambientIndex == -1) {
@@ -401,7 +401,7 @@ class MySceneGraph {
             if (ambientIndex != 1) {
                 this.onXMLMinorError("light ambient out of order for ID =" + omniId);
             }
-            ambient = this.parseFields(children[ambientIndex], [["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 0]], "lights > omni id = " + omniId + " > ambient");
+            ambient = this.parseFields(children[ambientIndex], ["single",["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 0]], "lights > omni id = " + omniId + " > ambient");
         }
 
         if (diffuseIndex == -1) {
@@ -411,7 +411,7 @@ class MySceneGraph {
             if (diffuseIndex != 2) {
                 this.onXMLMinorError("light diffuse out of order for ID =" + omniId);
             }
-            diffuse = this.parseFields(children[diffuseIndex], [["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 0]], "lights > omni id = " + omniId + " > diffuse");
+            diffuse = this.parseFields(children[diffuseIndex], ["single",["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 0]], "lights > omni id = " + omniId + " > diffuse");
         }
         if (specularIndex == -1) {
             return "light specular undefined for ID = " + omniId;
@@ -420,7 +420,7 @@ class MySceneGraph {
             if (specularIndex != 3) {
                 this.onXMLMinorError("light specular out of order for ID =" + omniId);
             }
-            specular = this.parseFields(children[specularIndex], [["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 0]], "lights > omni id = " + omniId + " > specular");
+            specular = this.parseFields(children[specularIndex], ["single",["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 0]], "lights > omni id = " + omniId + " > specular");
         }
 
         this.omniLights[omniId] = {
@@ -446,7 +446,7 @@ class MySceneGraph {
         this.viewIds.push(spotId);
 
         //OTHER INFO
-        let info = this.parseFields(spotNode, [["enabled", "tt", true], ["angle", "ff", 0], ["exponent", "ff", 0]], "lights > spot id = " + spotId);
+        let info = this.parseFields(spotNode, ["single", ["enabled", "tt", true], ["angle", "ff", 0], ["exponent", "ff", 0]], "lights > spot id = " + spotId);
         let enabled = info.enabled;
         let angle = info.angle;
         let exponent = info.exponent;
@@ -472,7 +472,7 @@ class MySceneGraph {
             if (locationIndex != 0) {
                 this.onXMLMinorError("light location out of order for ID =" + spotID);
             }
-            location = this.parseFields(children[locationIndex], [["x", "ff", 0], ["y", "ff", 0], ["z", "ff", 0], ["w", "ff", 0]], "lights > spot id = " + spotId + " > location");
+            location = this.parseFields(children[locationIndex], ["all", ["x", "ff", 0], ["y", "ff", 0], ["z", "ff", 0], ["w", "ff", 0]], "lights > spot id = " + spotId + " > location");
         }
 
 
@@ -483,7 +483,7 @@ class MySceneGraph {
             if (targetIndex != 1) {
                 this.onXMLMinorError("light target out of order for ID =" + spotID);
             }
-            target = this.parseFields(children[targetIndex], [["x", "ff", 0], ["y", "ff", 0], ["z", "ff", 0]], "lights > spot id = " + spotId + " > target");
+            target = this.parseFields(children[targetIndex], ["all", ["x", "ff", 5], ["y", "ff", 5], ["z", "ff", 5]], "lights > spot id = " + spotId + " > target");
         }
 
         if (ambientIndex == -1) {
@@ -493,7 +493,7 @@ class MySceneGraph {
             if (ambientIndex != 2) {
                 this.onXMLMinorError("light ambient out of order for ID =" + spotID);
             }
-            ambient = this.parseFields(children[ambientIndex], [["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 0]], "lights > spot id = " + spotId + " > ambient");
+            ambient = this.parseFields(children[ambientIndex], ["single", ["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 0]], "lights > spot id = " + spotId + " > ambient");
         }
 
         if (diffuseIndex == -1) {
@@ -503,7 +503,7 @@ class MySceneGraph {
             if (diffuseIndex != 3) {
                 this.onXMLMinorError("light diffuse out of order for ID =" + spotID);
             }
-            diffuse = this.parseFields(children[diffuseIndex], [["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 0]], "lights > spot id = " + spotId + " > diffuse");
+            diffuse = this.parseFields(children[diffuseIndex], ["single", ["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 0]], "lights > spot id = " + spotId + " > diffuse");
         }
         if (specularIndex == -1) {
             return "light specular undefined for ID = " + spotId;
@@ -512,7 +512,7 @@ class MySceneGraph {
             if (specularIndex != 4) {
                 this.onXMLMinorError("light specular out of order for ID =" + spotID);
             }
-            specular = this.parseFields(children[specularIndex], [["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 0]], "lights > spot id = " + spotId + " > specular");
+            specular = this.parseFields(children[specularIndex], ["single", ["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 0]], "lights > spot id = " + spotId + " > specular");
         }
 
         this.spotLights[spotId] = {
@@ -602,7 +602,7 @@ class MySceneGraph {
         this.materialIds.push(materialId);
 
         //OTHER INFO
-        let info = this.parseFields(materialNode, [["shininess", "ff", 0]], "lights > material id = " + materialId + " > shininess");
+        let info = this.parseFields(materialNode, ["single", ["shininess", "ff", 0]], "lights > material id = " + materialId + " > shininess");
 
         let children = materialNode.children;
 
@@ -624,7 +624,7 @@ class MySceneGraph {
             if (emissionIndex != 0) {
                 this.onXMLMinorError("material emission out of order for ID =" + materialId);
             }
-            emission = this.parseFields(children[emissionIndex], [["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 0]], "lights > material id = " + materialId + " > emission");
+            emission = this.parseFields(children[emissionIndex], ["single", ["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 0]], "lights > material id = " + materialId + " > emission");
         }
 
         if (ambientIndex == -1) {
@@ -634,7 +634,7 @@ class MySceneGraph {
             if (ambientIndex != 1) {
                 this.onXMLMinorError("light ambient out of order for ID =" + materialId);
             }
-            ambient = this.parseFields(children[ambientIndex], [["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 0]], "lights > material id = " + materialId + " > ambient");
+            ambient = this.parseFields(children[ambientIndex], ["single", ["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 0]], "lights > material id = " + materialId + " > ambient");
         }
 
         if (diffuseIndex == -1) {
@@ -644,7 +644,7 @@ class MySceneGraph {
             if (diffuseIndex != 2) {
                 this.onXMLMinorError("light diffuse out of order for ID =" + materialId);
             }
-            diffuse = this.parseFields(children[diffuseIndex], [["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 0]], "lights > material id = " + materialId + " > diffuse");
+            diffuse = this.parseFields(children[diffuseIndex], ["single", ["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 0]], "lights > material id = " + materialId + " > diffuse");
         }
         if (specularIndex == -1) {
             return "light specular undefined for ID = " + materialId;
@@ -653,7 +653,7 @@ class MySceneGraph {
             if (specularIndex != 3) {
                 this.onXMLMinorError("light specular out of order for ID =" + materialId);
             }
-            specular = this.parseFields(children[specularIndex], [["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 0]], "lights > material id = " + materialId + " > specular");
+            specular = this.parseFields(children[specularIndex], ["single", ["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 0]], "lights > material id = " + materialId + " > specular");
         }
 
         let material = new CGFappearance(this.scene);
@@ -709,11 +709,11 @@ class MySceneGraph {
 
         for (let i = 0; i < children.length; i++) {
             if (children[i].nodeName == "translate") {
-                info = this.parseFields(children[i], [["x", "ff", 0], ["y", "ff", 0], ["z", "ff", 0]], "transformations > transformation id = " + transformationId);
+                info = this.parseFields(children[i], ["all", ["x", "ff", 0], ["y", "ff", 0], ["z", "ff", 0]], "transformations > transformation id = " + transformationId);
                 this.scene.translate(info.x, info.y, info.z);
             }
             else if (children[i].nodeName == "rotate") {
-                info = this.parseFields(children[i], [["axis", "cc", 0], ["angle", "ff", 0]], "transformations > transformation id = " + transformationId);
+                info = this.parseFields(children[i], ["single",["axis", "cc", 0], ["angle", "ff", 0]], "transformations > transformation id = " + transformationId);
                 let radAngle = (info.angle * Math.PI) / 180;
                 switch (info.axis) {
                     case "x":
@@ -728,7 +728,7 @@ class MySceneGraph {
                 }
             }
             else if (children[i].nodeName == "scale") {
-                info = this.parseFields(children[i], [["x", "ff", 1], ["y", "ff", 1], ["z", "ff", 1]], "transformations > transformation id = " + transformationId);
+                info = this.parseFields(children[i], ["all", ["x", "ff", 1], ["y", "ff", 1], ["z", "ff", 1]], "transformations > transformation id = " + transformationId);
                 this.scene.scale(info.x, info.y, info.z);
             }
             else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in transformation id = " + transformationId);
@@ -806,8 +806,7 @@ class MySceneGraph {
 
         //INFO
         let info;
-        info = this.parseFields(rectangleNode, [["x1", "ff", 0], ["y1", "ff", 0], ["x2", "ff", 0], ["y2", "ff", 0]], "primitives > rectangle id = " + primitiveId);
-
+        info = this.parseFields(rectangleNode, ["all", ["x1", "ff", -0.5], ["y1", "ff", -0.5], ["x2", "ff", 0.5], ["y2", "ff", 0.5]], "primitives > rectangle id = " + primitiveId);
         this.primitives[primitiveId] = new MyQuad(this.scene, info.x1, info.y1, info.x2, info.y2);
     }
 
@@ -815,7 +814,7 @@ class MySceneGraph {
 
         //INFO
         let info;
-        info = this.parseFields(triangleNode, [["x1", "ff", 0], ["y1", "ff", 0], ["z1", "ff", 0], ["x2", "ff", 0], ["y2", "ff", 0], ["z2", "ff", 0], ["x3", "ff", 0], ["y3", "ff", 0], ["z3", "ff", 0]], "primitives > triangle id = " + primitiveId);
+        info = this.parseFields(triangleNode, ["all", ["x1", "ff", -0.5], ["y1", "ff", -0.288], ["z1", "ff", 0], ["x2", "ff", 0.5], ["y2", "ff", -0.288], ["z2", "ff", 0], ["x3", "ff", 0], ["y3", "ff", 0.577], ["z3", "ff", 0]], "primitives > triangle id = " + primitiveId);
 
         this.primitives[primitiveId] = new MyTriangle(this.scene, info.x1, info.y1, info.z1, info.x2, info.y2, info.z2, info.x3, info.y3, info.z3);
     }
@@ -824,7 +823,7 @@ class MySceneGraph {
 
         //INFO
         let info;
-        info = this.parseFields(cylinderNode, [["base", "ff", 1], ["top", "ff", 1], ["height", "ff", 3], ["slices", "ii", 10], ["stacks", "ii", 10]], "primitives > cylinder id = " + primitiveId);
+        info = this.parseFields(cylinderNode, ["all", ["base", "ff", 1], ["top", "ff", 1], ["height", "ff", 3], ["slices", "ii", 100], ["stacks", "ii", 10]], "primitives > cylinder id = " + primitiveId);
 
         this.primitives[primitiveId] = new MyCylinder(this.scene, info.base, info.top, info.height, info.slices, info.stacks);
     }
@@ -833,7 +832,7 @@ class MySceneGraph {
 
         //INFO
         let info;
-        info = this.parseFields(sphereNode, [["radius", "ff", 1], ["slices", "ii", 10], ["stacks", "ii", 10]], "primitives > sphere id = " + primitiveId);
+        info = this.parseFields(sphereNode, ["all", ["radius", "ff", 1], ["slices", "ii", 100], ["stacks", "ii", 100]], "primitives > sphere id = " + primitiveId);
 
         this.primitives[primitiveId] = new MySphere(this.scene, info.radius, info.slices, info.stacks);
     }
@@ -842,7 +841,7 @@ class MySceneGraph {
 
         //INFO
         let info;
-        info = this.parseFields(torusNode, [["inner", "ff", 1], ["outer", "ff", 2], ["slices", "ii", 10], ["loops", "ii", 1]], "primitives > torus id = " + primitiveId);
+        info = this.parseFields(torusNode, ["all", ["inner", "ff", 1], ["outer", "ff", 2], ["slices", "ii", 100], ["loops", "ii", 100]], "primitives > torus id = " + primitiveId);
 
         this.primitives[primitiveId] = new MyTorus(this.scene, info.inner, info.outer, info.slices, info.loops);
     }
@@ -1013,11 +1012,11 @@ class MySceneGraph {
                     reference = false;
 
                 if (children[i].nodeName == "translate") {
-                    info = this.parseFields(children[i], [["x", "ff", 0], ["y", "ff", 0], ["z", "ff", 0]], "components > component id = " + id);
+                    info = this.parseFields(children[i], ["all", ["x", "ff", 0], ["y", "ff", 0], ["z", "ff", 0]], "components > component id = " + id);
                     this.scene.translate(info.x, info.y, info.z);
 
                 } else if (children[i].nodeName == "rotate") {
-                    info = this.parseFields(children[i], [["axis", "cc", 0], ["angle", "ff", 0]], "components > component id = " + id);
+                    info = this.parseFields(children[i], ["single", ["axis", "cc", 0], ["angle", "ff", 0]], "components > component id = " + id);
                     let radAngle = (info.angle * Math.PI) / 180;
                     switch (info.axis) {
                         case "x":
@@ -1032,7 +1031,7 @@ class MySceneGraph {
                     }
 
                 } else if (children[i].nodeName == "scale") {
-                    info = this.parseFields(children[i], [["x", "ff", 1], ["y", "ff", 1], ["z", "ff", 1]], "components > component id = " + id);
+                    info = this.parseFields(children[i], ["all", ["x", "ff", 1], ["y", "ff", 1], ["z", "ff", 1]], "components > component id = " + id);
                     this.scene.scale(info.x, info.y, info.z);
                 }
 
@@ -1085,7 +1084,7 @@ class MySceneGraph {
 
         this.components[id].texture = textureId;
 
-        let info = this.parseFields(compTextureNode, [["length_s", "ff", 1.0], ["length_t", "ff", 1.0]], "components > component id = " + id + " > texture");
+        let info = this.parseFields(compTextureNode, ["single", ["length_s", "ff", 1.0], ["length_t", "ff", 1.0]], "components > component id = " + id + " > texture");
 
         this.components[id].texture = {
             id: textureId,
@@ -1131,49 +1130,94 @@ class MySceneGraph {
     }
     parseFields(node, especificationArray, XMLsection) {
         let result = [];
-        for (let i = 0; i < especificationArray.length; i++) {
+        let flag = especificationArray[0];
+        let setAllDefaults = false;
+        for (let i = 1; i < especificationArray.length; i++) {
             if (especificationArray[i][TYPE] == "ff") {
                 let float = this.reader.getFloat(node, especificationArray[i][NAME]);
-                if (float == null || isNaN(float)) {
-                    this.onXMLMinorError("unable to parse " + especificationArray[i][NAME] + " value from section " + XMLsection + "; assuming " + especificationArray[i][NAME] + " = " + especificationArray[i][DEFAULT_VALUE]);
-                    float = especificationArray[i][DEFAULT_VALUE];
+                if (float == null || isNaN(float) || float == undefined) {
+                    if (flag == "all") {
+                        this.onXMLMinorError("unable to parse " + especificationArray[i][NAME] + " value from section " + XMLsection);
+                        setAllDefaults = true;
+                        break;
+                    }
+                    else {
+                        this.onXMLMinorError("unable to parse " + especificationArray[i][NAME] + " value from section " + XMLsection + "; assuming " + especificationArray[i][NAME] + " = " + especificationArray[i][DEFAULT_VALUE]);
+                        float = especificationArray[i][DEFAULT_VALUE];
+                    }
                 }
                 result[especificationArray[i][NAME]] = float;
             }
             else if (especificationArray[i][TYPE] == "ss") {
                 let string = this.reader.getString(node, especificationArray[i][NAME]);
                 if (string == null) {
-                    this.onXMLMinorError("unable to parse " + especificationArray[i][NAME] + " value from section " + XMLsection + "; assuming " + especificationArray[i][NAME] + " = " + especificationArray[i][DEFAULT_VALUE]);
-                    string = especificationArray[i][DEFAULT_VALUE];
+                    if (flag == "all") {
+                        this.onXMLMinorError("unable to parse " + especificationArray[i][NAME] + " value from section " + XMLsection);
+                        setAllDefaults = true;
+                        break;
+                    }
+                    else {
+                        this.onXMLMinorError("unable to parse " + especificationArray[i][NAME] + " value from section " + XMLsection + "; assuming " + especificationArray[i][NAME] + " = " + especificationArray[i][DEFAULT_VALUE]);
+                        string = especificationArray[i][DEFAULT_VALUE];
+                    }
                 }
                 result[especificationArray[i][NAME]] = string;
             }
             else if (especificationArray[i][TYPE] == "tt") {
                 let float = this.reader.getFloat(node, especificationArray[i][NAME]);
                 if (float == null || (float != 0 && float != 1)) {
-                    this.onXMLMinorError("unable to parse " + especificationArray[i][NAME] + " value from section " + XMLsection + "; assuming " + especificationArray[i][NAME] + " = " + especificationArray[i][DEFAULT_VALUE]);
-                    float = especificationArray[i][DEFAULT_VALUE];
+                    if (flag == "all") {
+                        this.onXMLMinorError("unable to parse " + especificationArray[i][NAME] + " value from section " + XMLsection);
+                        setAllDefaults = true;
+                        break;
+                    }
+                    else {
+                        this.onXMLMinorError("unable to parse " + especificationArray[i][NAME] + " value from section " + XMLsection + "; assuming " + especificationArray[i][NAME] + " = " + especificationArray[i][DEFAULT_VALUE]);
+                        float = especificationArray[i][DEFAULT_VALUE];
+                    }
                 }
                 result[especificationArray[i][NAME]] = float;
             }
             else if (especificationArray[i][TYPE] == "cc") {
                 let string = this.reader.getString(node, especificationArray[i][NAME]);
                 if (string == null || (string != "x" && string != "y" && string != "z")) {
-                    this.onXMLMinorError("unable to parse " + especificationArray[i][NAME] + " value from section " + XMLsection + "; assuming " + especificationArray[i][NAME] + " = " + especificationArray[i][DEFAULT_VALUE]);
-                    string = especificationArray[i][DEFAULT_VALUE];
+                    if (flag == "all") {
+                        this.onXMLMinorError("unable to parse " + especificationArray[i][NAME] + " value from section " + XMLsection);
+                        setAllDefaults = true;
+                        break;
+                    }
+                    else {
+                        this.onXMLMinorError("unable to parse " + especificationArray[i][NAME] + " value from section " + XMLsection + "; assuming " + especificationArray[i][NAME] + " = " + especificationArray[i][DEFAULT_VALUE]);
+                        string = especificationArray[i][DEFAULT_VALUE];
+                    }
                 }
                 result[especificationArray[i][NAME]] = string;
             }
             else if (especificationArray[i][TYPE] == "ii") {
                 let float = this.reader.getFloat(node, especificationArray[i][NAME]);
                 if (float == null || ((float % 1) != 0)) {
-                    this.onXMLMinorError("unable to parse " + especificationArray[i][NAME] + " value from section " + XMLsection + "; assuming " + especificationArray[i][NAME] + " = " + especificationArray[i][DEFAULT_VALUE]);
-                    float = especificationArray[i][DEFAULT_VALUE];
+                    if (flag == "all") {
+                        this.onXMLMinorError("unable to parse " + especificationArray[i][NAME] + " value from section " + XMLsection);
+                        setAllDefaults = true;
+                        break;
+                    } else {
+                        this.onXMLMinorError("unable to parse " + especificationArray[i][NAME] + " value from section " + XMLsection + "; assuming " + especificationArray[i][NAME] + " = " + especificationArray[i][DEFAULT_VALUE]);
+                        float = especificationArray[i][DEFAULT_VALUE];
+                    }
                 }
                 result[especificationArray[i][NAME]] = float;
             }
 
         }
+
+        if (setAllDefaults) {
+            for (let i = 1; i < especificationArray.length; i++) {
+                result[especificationArray[i][NAME]] = especificationArray[i][DEFAULT_VALUE];
+                this.onXMLMinorError("assuming " + especificationArray[i][NAME] + " = " + especificationArray[i][DEFAULT_VALUE]);
+            }
+            console.log(result);
+        }
+
 
         return result;
     }
