@@ -1214,29 +1214,29 @@ class MySceneGraph {
         //TODO: Render loop starting at root of graph
         this.materialStack = [];
         this.textureStack = [];
+        this.sStack = [];
+        this.tStack = [];
         this.displayRecursive(this.values.scene.root);
     }
 
 
     displayRecursive(idNode) {
-        /*
-                if (this.scene.interface.isKeyPressed("KeyS")) {
-                    this.displayIndex++;
-                }
-        */
+
         let node = this.components[idNode];
 
 
         if (node.transformation != undefined)
             this.scene.multMatrix(node.transformation);
 
-        let materialAndTexture = this.adaptTextureAndMaterial(idNode);
+        let info = this.adaptTextureAndMaterial(idNode);
 
         for (let i = 0; i < node.children.length; i++) {
 
             if (this.primitives[node.children[i]] == undefined) {
-                this.materialStack.push(materialAndTexture[0]);
-                this.textureStack.push(materialAndTexture[1]);
+                this.materialStack.push(info.mId);
+                this.textureStack.push(info.tId);
+                this.sStack.push(info.s);
+                this.tStack.push(info.t);
                 this.scene.pushMatrix();
 
                 this.displayRecursive(node.children[i]);
@@ -1244,8 +1244,13 @@ class MySceneGraph {
                 this.scene.popMatrix();
                 this.textureStack.pop();
                 this.materialStack.pop();
+                this.sStack.pop();
+                this.tStack.pop();
             }
             else {
+                let s = info.s;
+                let t = info.t;
+                this.primitives[node.children[i]].updateCoords(s, t);
                 this.primitives[node.children[i]].display();
             }
 
@@ -1273,8 +1278,14 @@ class MySceneGraph {
             textureId = this.textureStack.pop();
             if (textureId == "none")
                 material.apply();
-            else
+            else {
+                s = this.sStack.pop();
+                this.sStack.push(s);
+                t = this.tStack.pop();
+                this.tStack.push(t);
                 this.textures[textureId].apply();
+            }
+
             this.textureStack.push(textureId);
         }
         else if (textureId == "none") {
@@ -1286,7 +1297,12 @@ class MySceneGraph {
             texture.apply();
         }
 
-        return [materialId, textureId];
+        return {
+            mId: materialId,
+            tId: textureId,
+            s: s,
+            t: t
+        };
     }
 
 }

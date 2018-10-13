@@ -148,7 +148,6 @@
 				<componentref id="wreath_left" />
 				<componentref id="wreath_right" />
 				<componentref id="candle_cols" />
-				<componentref id="head_table" />
 			</children>
 		</component>
 		<component id="room">
@@ -174,7 +173,7 @@
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="floor" length_s="1.0" length_t="1.0" />
+			<texture id="floor" length_s="1" length_t="0.3" />
 			<children>
 				<primitiveref id="rectangle" />
 			</children>
@@ -241,7 +240,7 @@
 			<materials>
 				<material id="white" />
 			</materials>
-			<texture id="smallXmasTree" length_s="1.0" length_t="1.0" />
+			<texture id="smallXmasTree" length_s="1" length_t="1" />
 			<children>
 				<componentref id="tree1" />
 				<componentref id="tree2" />
@@ -497,7 +496,7 @@
 		</component>
 		<component id="head_table">
 			<transformation>
-				<translate x="0" y="1.2" z="-85" />
+				<translate x="0" y="1.2" z="5" />
 				<rotate axis="y" angle="90" />
 			</transformation>
 			<materials>
@@ -515,7 +514,7 @@
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="tableWood" length_s="1" length_t="1" />
+			<texture id="inherit" length_s="1" length_t="1" />
 			<children>
 				<componentref id="row1" />
 				<componentref id="row2" />
@@ -628,7 +627,7 @@
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="inherit" length_s="1.0" length_t="1.0" />
+			<texture id="tableWood" length_s="3.0" length_t="1.0" />
 			<children>
 				<componentref id="top" />
 				<componentref id="leg1" />
@@ -755,11 +754,12 @@
 			<materials>
 				<material id="marroon" />
 			</materials>
-			<texture id="elevation" length_s="1.0" length_t="1.0" />
+			<texture id="elevation" length_s="3.0" length_t="13.0" />
 			<children>
 				<componentref id="elevation_step1" />
 				<componentref id="elevation_step2" />
 				<componentref id="elevation_step3" />
+				<componentref id="head_table" />
 			</children>
 		</component>
 		<component id="elevation_step1">

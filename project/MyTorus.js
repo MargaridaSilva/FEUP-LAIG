@@ -25,13 +25,15 @@ class MyTorus extends CGFobject
         this.initBuffers();
 	};
 
-    setS(maxS){
-		this.maxS = maxS;
-	}
+    updateCoords(s, t){
+        /*sRatio = this.maxS 
+        for(let i = 0; i < this.texCoords.length; i++){
+            this.texCoords[0] = ;
+            this.texCoords[1] = ;
+        }*/
 
-	setT(maxT){
-		this.maxT = maxT;
-	}
+        this.updateTexCoordsGLBuffers();
+    }
 
 	initBuffers()
 	{   

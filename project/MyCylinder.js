@@ -42,13 +42,22 @@ class MyCylinder extends CGFobject {
     this.initGLBuffers();
   };
 
-  setS(maxS){
-		this.maxS = maxS;
-	}
+  updateCoords(s, t){
+    let sRatio = this.maxS / s;
+		let tRatio = this.maxT / t ;
 
-	setT(maxT){
-		this.maxT = maxT;
-	}
+		for (let i = 0; i < this.texCoords.length; i += 2) {
+			this.texCoords[i] *= sRatio;
+			this.texCoords[i + 1] *= tRatio;
+		}
+
+		this.updateTexCoordsGLBuffers();
+
+		for (let i = 0; i < this.texCoords.length; i += 2) {
+			this.texCoords[i] /= sRatio;
+			this.texCoords[i + 1] /= tRatio;
+		}
+}
 
 
   fillVertices() {

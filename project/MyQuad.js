@@ -4,63 +4,69 @@
  * @constructor
  */
 
-class MyQuad extends CGFobject
-{
-	constructor(scene, bottomLeftX, bottomLeftY, topRightX, topRightY, minS=0, maxS=1, minT=0, maxT=1)
-	{
+class MyQuad extends CGFobject {
+	constructor(scene, bottomLeftX, bottomLeftY, topRightX, topRightY, minS = 0, maxS = 1, minT = 0, maxT = 1) {
 		super(scene);
 
 		this.minS = minS;
 		this.maxS = maxS;
 		this.minT = minT;
-        this.maxT = maxT;
-        
-        this.bottomLeftX = bottomLeftX;
-        this.bottomLeftY = bottomLeftY;
-        this.topRightX = topRightX;
-        this.topRightY = topRightY;
+		this.maxT = maxT;
+
+		this.bottomLeftX = bottomLeftX;
+		this.bottomLeftY = bottomLeftY;
+		this.topRightX = topRightX;
+		this.topRightY = topRightY;
 
 		this.initBuffers();
 	};
 
-	setS(maxS){
-		this.maxS = maxS;
+	updateCoords(s, t) {
+		let sRatio = this.maxS / s;
+		let tRatio = this.maxT / t ;
+
+		for (let i = 0; i < this.texCoords.length; i += 2) {
+			this.texCoords[i] *= sRatio;
+			this.texCoords[i + 1] *= tRatio;
+		}
+
+		this.updateTexCoordsGLBuffers();
+
+		for (let i = 0; i < this.texCoords.length; i += 2) {
+			this.texCoords[i] /= sRatio;
+			this.texCoords[i + 1] /= tRatio;
+		}
 	}
 
-	setT(maxT){
-		this.maxT = maxT;
-	}
-
-	initBuffers()
-	{
+	initBuffers() {
 		this.vertices = [
-				this.bottomLeftX, this.bottomLeftY, 0,
-				this.topRightX , this.bottomLeftY, 0,
-				this.bottomLeftX, this.topRightY,  0,
-				this.topRightX, this.topRightY,  0
-				];
+			this.bottomLeftX, this.bottomLeftY, 0,
+			this.topRightX, this.bottomLeftY, 0,
+			this.bottomLeftX, this.topRightY, 0,
+			this.topRightX, this.topRightY, 0
+		];
 
 		//Regra da mão direita -> define o sentido visivel
 		this.indices = [
-				0, 1, 2,
-				3, 2, 1
-			];
+			0, 1, 2,
+			3, 2, 1
+		];
 
-			this.normals = [
-				0, 0, 1,
-				0, 0, 1,
-				0, 0, 1,
-				0, 0, 1
-			];
+		this.normals = [
+			0, 0, 1,
+			0, 0, 1,
+			0, 0, 1,
+			0, 0, 1
+		];
 
-			this.texCoords = [
-				this.minS, this.maxT,
-				this.maxS, this.maxT,
-				this.minS, this.minT,
-				this.maxS, this.minT
-			];
+		this.texCoords = [
+			this.minS, this.maxT,
+			this.maxS, this.maxT,
+			this.minS, this.minT,
+			this.maxS, this.minT
+		];
 
-		this.primitiveType=this.scene.gl.TRIANGLES;
+		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
 	};
 };

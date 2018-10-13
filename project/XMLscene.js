@@ -134,7 +134,7 @@ class XMLscene extends CGFscene {
     }
 
     handleInput(code) {
-        //if (code == "KeyS")
+        if (code == "KeyS")
             this.graph.displayIndex++;
     }
 
