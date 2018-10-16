@@ -565,8 +565,7 @@ class MySceneGraph {
             return "no file defined for texture id = " + textureId;
 
         this.textureIds.push(textureId);
-        this.textures[textureId] = new CGFappearance(this.scene);
-        this.textures[textureId].loadTexture(file);
+        this.textures[textureId] = new CGFtexture(this.scene, file);
     }
 
     parseMaterials(materialsNode) {
@@ -1308,34 +1307,23 @@ class MySceneGraph {
         let material, texture;
 
         if (materialId == "inherit") {
-            materialId = this.materialStack.pop();
-            this.materialStack.push(materialId);
+            materialId = this.materialStack.peek();
         }
 
         material = this.materials[materialId];
 
         if (textureId == "inherit") {
-            textureId = this.textureStack.pop();
-            if (textureId == "none")
-                material.apply();
-            else {
-                s = this.sStack.pop();
-                this.sStack.push(s);
-                t = this.tStack.pop();
-                this.tStack.push(t);
-                this.textures[textureId].apply();
-            }
-
-            this.textureStack.push(textureId);
+            textureId = this.textureStack.peek();
         }
-        else if (textureId == "none") {
-            material.apply();
+        
+        if (textureId == "none") {
+            texture = null;
         }
         else {
             texture = this.textures[textureId];
-            texture.setTextureWrap('CLAMP_TP_EDGE', 'CLAMP_TP_EDGE');
-            texture.apply();
         }
+        material.setTexture(texture);
+        material.apply();
 
         return {
             mId: materialId,
