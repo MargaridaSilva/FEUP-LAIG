@@ -1239,7 +1239,6 @@ class MySceneGraph {
         console.warn("Warning: " + message);
     }
 
-
     /**
      * Callback to be executed on any message.
      * @param {string} message
@@ -1247,8 +1246,6 @@ class MySceneGraph {
     log(message) {
         console.log("   " + message);
     }
-
-
 
     /**
      * Displays the scene, processing each node, starting in the root node.
@@ -1303,7 +1300,6 @@ class MySceneGraph {
     }
 
     adaptTextureAndMaterial(idNode) {
-
         let textureId = this.components[idNode].texture.id;
         let s = this.components[idNode].texture.length_s;
         let t = this.components[idNode].texture.length_t;
