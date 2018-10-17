@@ -56,7 +56,7 @@ class MySphere extends CGFobject {
                 this.vertices.push(vertexX, vertexY, vertexZ);
 
                 // normal
-                let norm = Math.sqrt(vertexX * vertexX + vertexY * vertexY + vertexZ * vertexZ);
+                let norm = Math.sqrt((vertexX * vertexX) + (vertexY * vertexY) + (vertexZ * vertexZ));
                 this.normals.push(vertexX / norm, vertexY / norm, vertexZ / norm);
 
 

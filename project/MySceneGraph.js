@@ -57,6 +57,7 @@ class MySceneGraph {
         this.functionVect = [this.parseScene, this.parseViews, this.parseAmbient, this.parseLights, this.parseTextures, this.parseMaterials, this.parseTransformations, this.parsePrimitives, this.parseComponents];
 
         this.values = [];
+        this.deg2rad = Math.PI / 180;
 
         this.displayIndex = 0;
     }
@@ -278,7 +279,7 @@ class MySceneGraph {
         this.perspectiveViews[perspectiveId] = {
             near: info.near,
             far: info.far,
-            angle: info.angle,
+            angle: info.angle*this.deg2rad,
             from: coordsF,
             to: coordsT
         }
@@ -713,7 +714,7 @@ class MySceneGraph {
             }
             else if (children[i].nodeName == "rotate") {
                 info = this.parseFields(children[i], ["single",["axis", "cc", 0], ["angle", "ff", 0]], "transformations > transformation id = " + transformationId);
-                let radAngle = (info.angle * Math.PI) / 180;
+                let radAngle = info.angle * this.deg2rad;
                 switch (info.axis) {
                     case "x":
                         this.scene.rotate(radAngle, 1, 0, 0);
@@ -1016,7 +1017,7 @@ class MySceneGraph {
 
                 } else if (children[i].nodeName == "rotate") {
                     info = this.parseFields(children[i], ["single", ["axis", "cc", 0], ["angle", "ff", 0]], "components > component id = " + id);
-                    let radAngle = (info.angle * Math.PI) / 180;
+                    let radAngle = info.angle * this.deg2rad;
                     switch (info.axis) {
                         case "x":
                             this.scene.rotate(radAngle, 1, 0, 0);
