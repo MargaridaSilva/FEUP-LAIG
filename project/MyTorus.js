@@ -11,8 +11,8 @@ class MyTorus extends CGFobject
         
         super(scene);
 
+        this.outer = outer;
         this.inner = inner;
-        this.tube_radious = (outer-inner)/2;
         this.slices = slices; 
         this.loops = loops;
 
@@ -54,16 +54,16 @@ class MyTorus extends CGFobject
 
                 // vertex
 
-                vertex.x = ( this.inner + this.tube_radious * Math.cos( v ) ) * Math.cos( u );
-                vertex.y = ( this.inner + this.tube_radious * Math.cos( v ) ) * Math.sin( u );
-                vertex.z = this.tube_radious * Math.sin( v );
+                vertex.x = ( this.outer + this.inner * Math.cos( v ) ) * Math.cos( u );
+                vertex.y = ( this.outer + this.inner * Math.cos( v ) ) * Math.sin( u );
+                vertex.z = this.inner * Math.sin( v );
 
                 this.vertices.push( vertex.x, vertex.y, vertex.z );
 
                 // normal
 
-                center.x = this.inner * Math.cos( u );
-                center.y = this.inner * Math.sin( u );
+                center.x = this.outer * Math.cos( u );
+                center.y = this.outer * Math.sin( u );
                 
                 normal.x = vertex.x - center.x;
                 normal.y = vertex.y - center.y;

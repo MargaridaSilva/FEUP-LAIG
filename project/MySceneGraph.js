@@ -997,10 +997,11 @@ class MySceneGraph {
 
                 if (reference == null)
                     reference = true;
+
                 else if (reference == false) {
                     this.onXMLMinorError("there cannot be a referenced transformation alon with explicit transformations in component definition; only the reference definition will be considered");
                 }
-                this.components[id].transformation = this.transformationIds[transfId];
+                this.components[id].transformation = this.transformations[transfId];
             }
             else if (children[i].nodeName == "translate" || children[i].nodeName == "rotate" || children[i].nodeName == "scale") {
                 if (reference == true) {
@@ -1044,11 +1045,6 @@ class MySceneGraph {
         if (!reference) {
             this.components[id].transformation = matrix;
         }
-
-        //There has to be at least one transformation
-        // if (children.length == 0) {
-        //     return "at least one transformation (either referenced or explicit) must be defined in component id = " + id;
-        // }
     }
 
     parseComponentMaterials(compMaterialsNode, id) {
@@ -1314,14 +1310,24 @@ class MySceneGraph {
 
         if (textureId == "inherit") {
             textureId = this.textureStack.peek();
+
+            if(textureId == "none"){
+                texture = null;
+            }
+            else{
+                s = this.sStack.peek();
+                t = this.tStack.peek();
+                texture = this.textures[textureId];
+            }
         }
         
-        if (textureId == "none") {
+        else if (textureId == "none") {
             texture = null;
         }
         else {
             texture = this.textures[textureId];
         }
+        material.setTextureWrap('REPEAT', 'REPEAT');
         material.setTexture(texture);
         material.apply();
 

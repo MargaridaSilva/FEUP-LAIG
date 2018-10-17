@@ -1,5 +1,5 @@
 /**
- * MyPrism
+ * MyCylinder
  * @param gl {WebGLRenderingContext}
  * @constructor
  */
@@ -69,13 +69,13 @@ class MyCylinder extends CGFobject {
 
 
         var r = this.top * this.h * j / this.height + this.base * (this.height - this.h*j)/this.height;
-        var x = r * Math.cos(angleVertice)/2;
-        var y = r * Math.sin(angleVertice)/2;
+        var x = r * Math.cos(angleVertice);
+        var y = r * Math.sin(angleVertice);
 
 
 
 
-        this.vertices.push(x, y, (j - this.stacks / 2) * this.h);
+        this.vertices.push(x, y, j * this.h);
         this.texCoords.push(this.ds * i, this.dt * j);
         this.normals.push(x, y, 0);
       }
