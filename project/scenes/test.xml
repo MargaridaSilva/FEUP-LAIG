@@ -1,7 +1,7 @@
 <yas>
     <scene root="scene" axis_length="5" />
     <views default="global">
-        <perspective id="global" near="0.1" far="500" angle="0.4">
+        <perspective id="global" near="0.1" far="500" angle="45">
             <from x="10" y="10" z="10" />
             <to x="0" y="0" z="0" />
         </perspective>
@@ -75,7 +75,7 @@
         <texture id="slytherinFlag" file="scenes/images/slytherinFlag.jpg" />
         <texture id="door" file="scenes/images/door.jpg" />
         <texture id="warning" file="scenes/images/warning.jpg"/>
-        <texture id="wall" file="scenes/images/wall.jpg"/>
+        <texture id="wall" file="scenes/images/earth.jpg"/>
     </textures>
     <materials>
         <material id="white" shininess="10">
@@ -118,9 +118,6 @@
         <primitive id="cylinder">
             <cylinder base="1" top="1" height="1" slices="100" stacks="10" />
         </primitive>
-        <primitive id="cone">
-            <cylinder base="1" top="0" height="1" slices="100" stacks="10" />
-        </primitive>
         <primitive id="sphere">
             <sphere radius="0.5" slices="100" stacks="100" />
         </primitive>
@@ -151,7 +148,7 @@
             </materials>
             <texture id="wall" length_s="1" length_t="1" />
             <children>
-                <primitiveref id="triangle" />
+                <primitiveref id="sphere" />
             </children>
         </component>
     </components>

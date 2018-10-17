@@ -5,7 +5,7 @@
  */
 
 class MyCylinder extends CGFobject {
-  constructor(scene, base, top, height, slices, stacks, minS = 0, maxS = 1, minT = 0, maxT = 1) {
+  constructor(scene, base, top, height, slices, stacks) {
     super(scene);
 
     //N Arestas base
@@ -20,91 +20,77 @@ class MyCylinder extends CGFobject {
     this.normals = [];
     this.texCoords = [];
 
-    this.minS = minS;
-    this.maxS = maxS;
-    this.minT = minT;
-    this.maxT = maxT;
-
-    this.ds = (this.maxS - this.minS) / this.slices;
-    this.dt = (this.maxT - this.minT) / this.stacks;
-    this.h = this.height / this.stacks;
-
-    this.angle = 2 * Math.PI / slices;
-
     this.initBuffers();
   };
 
   initBuffers() {
-    this.fillVertices();
-    this.fillIndex();
+
+    var slope = (this.base - this.top) / this.height;
+
+    for (let i = 0; i <= this.slices; i++) {
+
+      var u = i / this.slices;
+      var theta = u * 2 * Math.PI;
+      var sinTheta = Math.sin(theta);
+      var cosTheta = Math.cos(theta);
+
+      for (let j = 0; j <= this.stacks; j++) {
+
+        var v = j / this.stacks;
+
+        var radius = v * (this.base - this.top) + this.top;
+
+        // vertex
+        let vertex = [];
+        vertex.x = radius * sinTheta;
+        vertex.y = radius * cosTheta;
+        vertex.z = v*this.height;
+        this.vertices.push(vertex.x, vertex.y, vertex.z);
+
+        // normal
+        let normal = [sinTheta, cosTheta, slope].normalize();
+        this.normals.push(normal[0], normal[1], normal[2]);
+
+        // texCoords
+        this.texCoords.push(1 - u, 1 - v);
+
+      }
+    }
+
+    // index
+    for (let i = 0; i < this.slices; i++) {
+      for (let j = 0; j < this.stacks; j++) {
+
+        var v1 = (this.stacks + 1) * i + j;
+        var v2 = (this.stacks + 1) * i + (j + 1);
+        var v3 = (this.stacks + 1) * (i + 1) + (j + 1);
+        var v4 = (this.stacks + 1) * (i + 1) + j;
+
+        this.indices.push(v1, v2, v4);
+        this.indices.push(v2, v3, v4);
+      }
+    }
 
     this.primitiveType = this.scene.gl.TRIANGLES;
     this.initGLBuffers();
   };
 
-  updateCoords(s, t){
-    let sRatio = this.maxS / s;
-		let tRatio = this.maxT / t ;
-
-		for (let i = 0; i < this.texCoords.length; i += 2) {
-			this.texCoords[i] *= sRatio;
-			this.texCoords[i + 1] *= tRatio;
-		}
-
-		this.updateTexCoordsGLBuffers();
-
-		for (let i = 0; i < this.texCoords.length; i += 2) {
-			this.texCoords[i] /= sRatio;
-			this.texCoords[i + 1] /= tRatio;
-		}
-}
 
 
-  fillVertices() {
+  updateCoords(s, t) {
+    //   let sRatio = this.maxS / s;
+    //   let tRatio = this.maxT / t;
 
-    for (var i = 0; i < this.slices; i++) {
-      var angleVertice = i * this.angle;
+    //   for (let i = 0; i < this.texCoords.length; i += 2) {
+    //     this.texCoords[i] *= sRatio;
+    //     this.texCoords[i + 1] *= tRatio;
+    //   }
 
-      for (var j = 0; j <= this.stacks; j++) {
+    //   this.updateTexCoordsGLBuffers();
 
-
-        var r = this.top * this.h * j / this.height + this.base * (this.height - this.h*j)/this.height;
-        var x = r * Math.cos(angleVertice);
-        var y = r * Math.sin(angleVertice);
-
-
-
-
-        this.vertices.push(x, y, j * this.h);
-        this.texCoords.push(this.ds * i, this.dt * j);
-        this.normals.push(x, y, 0);
-      }
-    }
-
-  };
-
-  fillIndex() {
-    for (var i = 0; i < this.slices; i++) {
-      for (var j = 0; j < this.stacks; j++) {
-        var v1, v2, v3, v4;
-        var ind = (this.stacks + 1) * i + j;
-
-        if (i + 1 != this.slices) {
-          v1 = ind;
-          v2 = ind + this.stacks + 1;
-          v3 = ind + this.stacks + 2;
-          v4 = ind + 1;
-        }
-        else {
-          v1 = ind;
-          v2 = j
-          v3 = j + 1;
-          v4 = ind + 1;
-        }
-
-        this.indices.push(v1, v2, v3);
-        this.indices.push(v3, v4, v1);
-      }
-    }
-  };
+    //   for (let i = 0; i < this.texCoords.length; i += 2) {
+    //     this.texCoords[i] /= sRatio;
+    //     this.texCoords[i + 1] /= tRatio;
+    //   }
+  }
 };

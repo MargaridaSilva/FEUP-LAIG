@@ -3,7 +3,7 @@
  * @constructor
  */
 class MySphere extends CGFobject {
-    constructor(scene, radius, slices, stacks, minS = 0, maxS = 1, minT = 0, maxT = 1) {
+    constructor(scene, radius, slices, stacks) {
         super(scene);
         this.radius = radius;
         this.slices = slices;
@@ -47,24 +47,22 @@ class MySphere extends CGFobject {
 
 
                 // vertex
-
-                let vertexX = - this.radius * Math.cos(teta) * Math.sin(phi);
-                let vertexY = this.radius * Math.cos(phi);
-                let vertexZ = this.radius * Math.sin(teta) * Math.sin(phi);
-
+                let vertex = [];
+                vertex.x = this.radius * Math.cos(teta) * Math.sin(phi);
+                vertex.y = this.radius * Math.sin(teta) * Math.sin(phi);
+                vertex.z = this.radius * Math.cos(phi);
                 
-                this.vertices.push(vertexX, vertexY, vertexZ);
+                this.vertices.push(vertex.x, vertex.y, vertex.z);
+
 
                 // normal
-                let norm = Math.sqrt((vertexX * vertexX) + (vertexY * vertexY) + (vertexZ * vertexZ));
-                this.normals.push(vertexX / norm, vertexY / norm, vertexZ / norm);
+                let normal = vertex.normalize();
+                this.normals.push(normal.x, normal.y, normal.z);
 
 
                 // texCoords
-                this.texCoords.push(u, 1 - v);
-                
-                verticesRow.push( index ++ );
-
+                this.texCoords.push(u, v);
+                verticesRow.push(index ++);
             }
     
             grid.push( verticesRow );
