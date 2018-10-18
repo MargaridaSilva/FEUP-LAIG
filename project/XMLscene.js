@@ -1,5 +1,3 @@
-var DEGREE_TO_RAD = Math.PI / 180;
-
 /**
  * XMLscene class, representing the scene that is to be rendered.
  */
@@ -16,6 +14,7 @@ class XMLscene extends CGFscene {
         this.lightValues = {};
         this.viewValues = [];
         this.cameras = {};
+        this.lights = [];
     }
 
     /**
@@ -25,29 +24,25 @@ class XMLscene extends CGFscene {
     init(application) {
         super.init(application);
 
-        this.lights = [];
-
         this.sceneInited = false;
 
         this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(100, 150, 150), vec3.fromValues(0, 0, 0));
+        this.axis = new CGFaxis(this);
 
         this.enableTextures(true);
-
 
         this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
         this.gl.clearDepth(100.0);
         this.gl.enable(this.gl.DEPTH_TEST);
         this.gl.enable(this.gl.CULL_FACE);
         this.gl.depthFunc(this.gl.LEQUAL);
-        this.axis = new CGFaxis(this);
+
     }
 
     /**
      * Initializes the scene cameras.
      */
     initCameras() {
-
-        var i = 0;
 
         for (var key in this.graph.perspectiveViews) {
 
@@ -59,20 +54,19 @@ class XMLscene extends CGFscene {
             }
 
         }
-
-        //Falta alterar
-        /*
+        
         for(var key in this.graph.orthoViews){
 
             if(this.graph.orthoViews.hasOwnProperty(key)){
                 var view = this.graph.orthoViews[key];
                 var position = vec3.fromValues(view.from.x, view.from.y, view.from.z);
                 var target = vec3.fromValues(view.to.x, view.to.y, view.to.z);
-                this.cameras[key] = new CGFcamera(view.angle, view.near, view.far, position, target);
+                var up = vec3.fromValues(0, 1, 0);
+                this.cameras[key] = new CGFcamera(view.left, view.right, view.bottom, view.top, view.near, view.far, position, target, up);
             }
-
-        }*/
+        }
     }
+
     /**
      * Initializes the scene lights with the values read from the XML file.
      */
@@ -142,7 +136,6 @@ class XMLscene extends CGFscene {
      * As loading is asynchronous, this may be called already after the application has started the run loop
      */
     onGraphLoaded() {
-
         this.axis = new CGFaxis(this, this.graph.values.scene.axis_length);
 
         var background = this.graph.ambient.background;
@@ -150,8 +143,6 @@ class XMLscene extends CGFscene {
 
         var ambient = this.graph.ambient.ambient;
         this.setGlobalAmbientLight(ambient.r, ambient.g, ambient.b, ambient.a);
-
-        //this.sceneGraph = new SceneGraph(this.graph.values.scene.root, this.graph.components);
 
         this.interfaceValues = {
             view: this.graph.views_default
@@ -161,9 +152,8 @@ class XMLscene extends CGFscene {
         this.initLights();
 
         // Adds lights group.
-        this.interface.addLightsGroup(this.graph.omniLights);
-        this.interface.addViewsGroup(this.graph.perspectiveViews);
-
+        this.interface.addLightsGroup(Array.prototype.merge(this.graph.omniLights, this.graph.spotLights));
+        this.interface.addViewsGroup(Array.prototype.merge(this.graph.perspectiveViews, this.graph.orthoViews));
 
         this.sceneInited = true;
     }
@@ -207,13 +197,6 @@ class XMLscene extends CGFscene {
                     this.lights[i].update();
                     i++;
                 }
-            }
-
-
-            if (this.interfaceValues.view != this.currentView) {
-                this.camera = this.cameras[this.interfaceValues.view];
-                this.interface.setActiveCamera(this.camera);
-                this.currentView = this.interfaceValues.view;
             }
 
             this.graph.displayScene();

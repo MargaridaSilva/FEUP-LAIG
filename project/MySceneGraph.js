@@ -441,10 +441,10 @@ class MySceneGraph {
             return "no ID defined for light";
 
 
-        if (this.viewIds.indexOf(spotId) != -1)
+        if (this.lightIds.indexOf(spotId) != -1)
             return "ID must be unique for each light (conflict: ID = " + spotId + ")";
 
-        this.viewIds.push(spotId);
+        this.lightIds.push(spotId);
 
         //OTHER INFO
         let info = this.parseFields(spotNode, ["single", ["enabled", "tt", true], ["angle", "ff", 0], ["exponent", "ff", 0]], "lights > spot id = " + spotId);
@@ -1287,7 +1287,7 @@ class MySceneGraph {
             else {
                 let s = info.s;
                 let t = info.t;
-                this.primitives[node.children[i]].updateCoords(s, t);
+                //this.primitives[node.children[i]].updateCoords(s, t);
                 this.primitives[node.children[i]].display();
             }
 

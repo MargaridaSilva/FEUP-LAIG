@@ -1,23 +1,23 @@
 <yas>
 	<scene root="scene" axis_length="5" />
 	<views default="global">
-		<perspective id="global" near="0.1" far="500" angle="0.4">
+		<perspective id="global" near="0.1" far="500" angle="45">
 			<from x="100" y="150" z="150" />
 			<to x="0" y="0" z="0" />
 		</perspective>
-		<perspective id="door" near="0.1" far="500" angle="0.4">
+		<perspective id="door" near="0.1" far="500" angle="45">
 			<from x="0" y="100" z="-150" />
 			<to x="0" y="0" z="90" />
 		</perspective>
-		<perspective id="hufflepuff" near="0.1" far="500" angle="0.4">
+		<perspective id="hufflepuff" near="0.1" far="500" angle="45">
 			<from x="-80" y="20" z="35" />
 			<to x="20" y="20" z="35" />
 		</perspective>
-		<perspective id="flags" near="0.1" far="500" angle="0.4">
+		<perspective id="flags" near="0.1" far="500" angle="45">
 			<from x="-20" y="30" z="-100" />
 			<to x="40" y="15" z="90" />
 		</perspective>
-		<perspective id="inside" near="0.1" far="500" angle="0.4">
+		<perspective id="inside" near="0.1" far="500" angle="45">
 			<from x="0" y="10" z="100" />
 			<to x="0" y="10" z="-80" />
 		</perspective>
@@ -235,12 +235,12 @@
 		<component id="smallTrees">
 			<transformation>
 				<translate x="0" y="0" z="-60" />
-				<scale x="4" y="4" z="4" />
+				<scale x="3" y="4" z="3" />
 			</transformation>
 			<materials>
 				<material id="white" />
 			</materials>
-			<texture id="smallXmasTree" length_s="1" length_t="1" />
+			<texture id="smallXmasTree" length_s="0.5" length_t="0.5" />
 			<children>
 				<componentref id="tree1" />
 				<componentref id="tree2" />

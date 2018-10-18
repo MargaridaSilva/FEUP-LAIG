@@ -146,9 +146,9 @@
             <materials>
                 <material id="white" />
             </materials>
-            <texture id="wall" length_s="1" length_t="1" />
+            <texture id="wall" length_s="0.5" length_t="1" />
             <children>
-                <primitiveref id="sphere" />
+                <primitiveref id="triangle" />
             </children>
         </component>
     </components>

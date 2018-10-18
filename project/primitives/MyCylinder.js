@@ -8,7 +8,6 @@ class MyCylinder extends CGFobject {
   constructor(scene, base, top, height, slices, stacks) {
     super(scene);
 
-    //N Arestas base
     this.base = base;
     this.top = top;
     this.height = height;
@@ -19,8 +18,11 @@ class MyCylinder extends CGFobject {
     this.vertices = [];
     this.normals = [];
     this.texCoords = [];
+    this.originaltexCoords = [];
 
     this.initBuffers();
+
+    this.originaltexCoords = this.texCoords.slice();
   };
 
   initBuffers() {
@@ -38,14 +40,11 @@ class MyCylinder extends CGFobject {
 
         var v = j / this.stacks;
 
-        var radius = v * (this.base - this.top) + this.top;
+        var radius = v * (this.top - this.base) + this.base;
 
         // vertex
-        let vertex = [];
-        vertex.x = radius * sinTheta;
-        vertex.y = radius * cosTheta;
-        vertex.z = v*this.height;
-        this.vertices.push(vertex.x, vertex.y, vertex.z);
+        let vertex = [radius * sinTheta, radius * cosTheta, v * this.height];
+        this.vertices.push(vertex[0], vertex[1], vertex[2]);
 
         // normal
         let normal = [sinTheta, cosTheta, slope].normalize();
@@ -53,7 +52,6 @@ class MyCylinder extends CGFobject {
 
         // texCoords
         this.texCoords.push(1 - u, 1 - v);
-
       }
     }
 
@@ -78,19 +76,15 @@ class MyCylinder extends CGFobject {
 
 
   updateCoords(s, t) {
-    //   let sRatio = this.maxS / s;
-    //   let tRatio = this.maxT / t;
 
-    //   for (let i = 0; i < this.texCoords.length; i += 2) {
-    //     this.texCoords[i] *= sRatio;
-    //     this.texCoords[i + 1] *= tRatio;
-    //   }
+    let sRatio = this.base / s;
+    let tRatio = this.base / t;
 
-    //   this.updateTexCoordsGLBuffers();
+    for (let i = 0; i < this.texCoords.length; i += 2) {
+      this.texCoords[i] = this.originaltexCoords[i] * sRatio;
+      this.texCoords[i + 1] = this.originaltexCoords[i + 1] * tRatio;
+    }
 
-    //   for (let i = 0; i < this.texCoords.length; i += 2) {
-    //     this.texCoords[i] /= sRatio;
-    //     this.texCoords[i + 1] /= tRatio;
-    //   }
+    this.updateTexCoordsGLBuffers();
   }
 };

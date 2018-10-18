@@ -29,26 +29,21 @@ class MyTriangle extends CGFobject {
         this.sen = Math.sqrt(1 - this.cos * this.cos);
 
         this.initBuffers();
+
+        this.originaltexCoords = this.texCoords.slice();
     };
 
     updateCoords(s, t) {
 
-        let sRatio = 1 / s;
-        let tRatio = 1 / t;
+        // let sRatio = this.c / s;
+        // let tRatio = 1 / t;
 
-        let v = 0;
+        // for (let i = 0; i < this.texCoords.length; i += 2) {
+        //     this.texCoords[i] = this.originaltexCoords[i] * sRatio;
+        //     this.texCoords[i + 1] = this.originaltexCoords[i + 1] * tRatio;
+        //   }
 
-        let hx = this.c - this.a * this.cos;
-        let hy = v - this.a * this.sen;
-
-
-        this.texCoords = [
-            hx * sRatio, hy * tRatio,
-            0, 0,
-            this.c * sRatio, v * tRatio
-        ];
-
-        this.updateTexCoordsGLBuffers();
+        // this.updateTexCoordsGLBuffers();
     }
 
     initBuffers() {
@@ -76,6 +71,13 @@ class MyTriangle extends CGFobject {
             v1Xv2.x, v1Xv2.y, v1Xv2.z,
             v1Xv2.x, v1Xv2.y, v1Xv2.z,
             v1Xv2.x, v1Xv2.y, v1Xv2.z
+        ];
+
+
+        this.texCoords = [
+            (this.c - this.a * this.cos)/this.c, - this.a * this.sen,
+            0, 0,
+            1, 0
         ];
 
         this.primitiveType = this.scene.gl.TRIANGLES;
