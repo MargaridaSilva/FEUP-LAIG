@@ -29,13 +29,7 @@ class MySphere extends CGFobject {
  
     initBuffers() {
 
-
-	var index = 0;
-	var grid = [];
-
         for (let iy = 0; iy <= this.stacks; iy++) {
-
-            var verticesRow = [];
 
             let v = iy / this.stacks;
             let phi = v * Math.PI;
@@ -62,10 +56,7 @@ class MySphere extends CGFobject {
 
                 // texCoords
                 this.texCoords.push(u, v);
-                verticesRow.push(index ++);
             }
-    
-            grid.push( verticesRow );
         }
 
 

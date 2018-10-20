@@ -35,15 +35,15 @@ class MyTriangle extends CGFobject {
 
     updateCoords(s, t) {
 
-        // let sRatio = this.c / s;
-        // let tRatio = 1 / t;
+        let sRatio = this.c / s;
+        let tRatio = 1 / t;
 
-        // for (let i = 0; i < this.texCoords.length; i += 2) {
-        //     this.texCoords[i] = this.originaltexCoords[i] * sRatio;
-        //     this.texCoords[i + 1] = this.originaltexCoords[i + 1] * tRatio;
-        //   }
+        for (let i = 0; i < this.texCoords.length; i += 2) {
+            this.texCoords[i] = this.originaltexCoords[i] * sRatio;
+            this.texCoords[i + 1] = this.originaltexCoords[i + 1] * tRatio;
+          }
 
-        // this.updateTexCoordsGLBuffers();
+        this.updateTexCoordsGLBuffers();
     }
 
     initBuffers() {

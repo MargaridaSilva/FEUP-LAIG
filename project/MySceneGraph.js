@@ -807,7 +807,7 @@ class MySceneGraph {
         //INFO
         let info;
         info = this.parseFields(rectangleNode, ["all", ["x1", "ff", -0.5], ["y1", "ff", -0.5], ["x2", "ff", 0.5], ["y2", "ff", 0.5]], "primitives > rectangle id = " + primitiveId);
-        this.primitives[primitiveId] = new MyQuad(this.scene, info.x1, info.y1, info.x2, info.y2);
+        this.primitives[primitiveId] = new MyPlane(this.scene, info.x1, info.y1, info.x2, info.y2);
     }
 
     parseTriangle(triangleNode, primitiveId) {
@@ -1287,7 +1287,7 @@ class MySceneGraph {
             else {
                 let s = info.s;
                 let t = info.t;
-                //this.primitives[node.children[i]].updateCoords(s, t);
+                this.primitives[node.children[i]].updateCoords(s, t);
                 this.primitives[node.children[i]].display();
             }
 

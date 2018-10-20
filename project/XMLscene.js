@@ -14,7 +14,6 @@ class XMLscene extends CGFscene {
         this.lightValues = {};
         this.viewValues = [];
         this.cameras = {};
-        this.lights = [];
     }
 
     /**
@@ -54,15 +53,15 @@ class XMLscene extends CGFscene {
             }
 
         }
-        
-        for(var key in this.graph.orthoViews){
 
-            if(this.graph.orthoViews.hasOwnProperty(key)){
+        for (var key in this.graph.orthoViews) {
+
+            if (this.graph.orthoViews.hasOwnProperty(key)) {
                 var view = this.graph.orthoViews[key];
                 var position = vec3.fromValues(view.from.x, view.from.y, view.from.z);
                 var target = vec3.fromValues(view.to.x, view.to.y, view.to.z);
                 var up = vec3.fromValues(0, 1, 0);
-                this.cameras[key] = new CGFcamera(view.left, view.right, view.bottom, view.top, view.near, view.far, position, target, up);
+                this.cameras[key] = new CGFcameraOrtho(view.left, view.right, view.bottom, view.top, view.near, view.far, position, target, up);
             }
         }
     }
@@ -71,7 +70,6 @@ class XMLscene extends CGFscene {
      * Initializes the scene lights with the values read from the XML file.
      */
     initLights() {
-
         var i = 0;
         // Lights index.
 
@@ -82,7 +80,7 @@ class XMLscene extends CGFscene {
 
             if (this.graph.omniLights.hasOwnProperty(key)) {
                 var light = this.graph.omniLights[key];
-                //lights are predefined in cgfscene
+
                 this.lights[i] = new CGFlight(this, i);
                 this.lights[i].setPosition(light.location.x, light.location.y, light.location.z, light.location.w);
                 this.lights[i].setAmbient(light.ambient.r, light.ambient.g, light.ambient.b, light.ambient.a);
@@ -100,10 +98,15 @@ class XMLscene extends CGFscene {
 
                 i++;
             }
+        }
+
+        for (var key in this.graph.spotLights) {
+            if (i >= 8)
+                break;              // Only eight lights allowed by WebGL.
 
             if (this.graph.spotLights.hasOwnProperty(key)) {
                 var light = this.graph.spotLights[key];
-                //lights are predefined in cgfscene
+
                 this.lights[i] = new CGFlight(this, i);
                 this.lights[i].setPosition(light.location.x, light.location.y, light.location.z, light.location.w);
                 this.lights[i].setAmbient(light.ambient.r, light.ambient.g, light.ambient.b, light.ambient.a);
@@ -127,6 +130,7 @@ class XMLscene extends CGFscene {
         }
     }
 
+
     handleInput(code) {
         if (code == "KeyM")
             this.graph.displayIndex++;
@@ -149,7 +153,11 @@ class XMLscene extends CGFscene {
         }
 
         this.initCameras();
+
+        this.lights = [];
+
         this.initLights();
+
 
         // Adds lights group.
         this.interface.addLightsGroup(Array.prototype.merge(this.graph.omniLights, this.graph.spotLights));
@@ -182,7 +190,6 @@ class XMLscene extends CGFscene {
         if (this.sceneInited) {
             // Draw axis
             this.axis.display();
-
             var i = 0;
             for (var key in this.lightValues) {
                 if (this.lightValues.hasOwnProperty(key)) {

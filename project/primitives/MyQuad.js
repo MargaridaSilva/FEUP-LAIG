@@ -5,37 +5,31 @@
  */
 
 class MyQuad extends CGFobject {
-	constructor(scene, bottomLeftX, bottomLeftY, topRightX, topRightY, minS = 0, maxS = 1, minT = 0, maxT = 1) {
+	constructor(scene, bottomLeftX, bottomLeftY, topRightX, topRightY) {
 		super(scene);
-
-		this.minS = minS;
-		this.maxS = maxS;
-		this.minT = minT;
-		this.maxT = maxT;
-
 		this.bottomLeftX = bottomLeftX;
 		this.bottomLeftY = bottomLeftY;
 		this.topRightX = topRightX;
 		this.topRightY = topRightY;
+		
+		this.dx = topRightX - bottomLeftX;
+		this.dy = topRightY - bottomLeftY;
 
 		this.initBuffers();
+
+		this.originaltexCoords = this.texCoords.slice();
 	};
 
 	updateCoords(s, t) {
-		let sRatio = this.maxS / s;
-		let tRatio = this.maxT / t ;
+		let sRatio =  this.dx / s;
+		let tRatio = this.dy / t ;
 
 		for (let i = 0; i < this.texCoords.length; i += 2) {
-			this.texCoords[i] *= sRatio;
-			this.texCoords[i + 1] *= tRatio;
+			this.texCoords[i] = this.originaltexCoords[i] * sRatio;
+			this.texCoords[i + 1] = this.originaltexCoords[i + 1] * tRatio;
 		}
 
 		this.updateTexCoordsGLBuffers();
-
-		for (let i = 0; i < this.texCoords.length; i += 2) {
-			this.texCoords[i] /= sRatio;
-			this.texCoords[i + 1] /= tRatio;
-		}
 	}
 
 	initBuffers() {
@@ -46,7 +40,6 @@ class MyQuad extends CGFobject {
 			this.topRightX, this.topRightY, 0
 		];
 
-		//Regra da mão direita -> define o sentido visivel
 		this.indices = [
 			0, 1, 2,
 			3, 2, 1
@@ -60,10 +53,10 @@ class MyQuad extends CGFobject {
 		];
 
 		this.texCoords = [
-			this.minS, this.maxT,
-			this.maxS, this.maxT,
-			this.minS, this.minT,
-			this.maxS, this.minT
+			0, 1,
+			1, 1,
+			0, 0,
+			1, 0
 		];
 
 		this.primitiveType = this.scene.gl.TRIANGLES;
