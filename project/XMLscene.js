@@ -46,14 +46,14 @@ class XMLscene extends CGFscene {
         for (var key in this.graph.perspectiveViews) {
 
             if (this.graph.perspectiveViews.hasOwnProperty(key)) {
-                var view = this.graph.perspectiveViews[key];
-                var position = vec3.fromValues(view.from.x, view.from.y, view.from.z);
-                var target = vec3.fromValues(view.to.x, view.to.y, view.to.z);
+                let view = this.graph.perspectiveViews[key];
+                let position = vec3.fromValues(view.from.x, view.from.y, view.from.z);
+                let target = vec3.fromValues(view.to.x, view.to.y, view.to.z);
                 this.cameras[key] = new CGFcamera(view.angle, view.near, view.far, position, target);
             }
 
         }
-
+        
         for (var key in this.graph.orthoViews) {
 
             if (this.graph.orthoViews.hasOwnProperty(key)) {

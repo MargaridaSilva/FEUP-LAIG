@@ -1080,7 +1080,7 @@ class MySceneGraph {
 
         this.components[id].texture = textureId;
 
-        let info = this.parseFields(compTextureNode, ["single", ["length_s", "ff", 1.0], ["length_t", "ff", 1.0]], "components > component id = " + id + " > texture");
+        let info = this.parseFields(compTextureNode, ["ignore", ["length_s", "ff", 1.0], ["length_t", "ff", 1.0]], "components > component id = " + id + " > texture");
 
         this.components[id].texture = {
             id: textureId,
@@ -1130,14 +1130,14 @@ class MySceneGraph {
         let setAllDefaults = false;
         for (let i = 1; i < especificationArray.length; i++) {
             if (especificationArray[i][TYPE] == "ff") {
-                let float = this.reader.getFloat(node, especificationArray[i][NAME]);
-                if (float == null || isNaN(float) || float == undefined) {
+                let float = this.reader.getFloat(node, especificationArray[i][NAME], false);
+                if (isNaN(float) || float == null) {
                     if (flag == "all") {
                         this.onXMLMinorError("unable to parse " + especificationArray[i][NAME] + " value from section " + XMLsection);
                         setAllDefaults = true;
                         break;
                     }
-                    else {
+                    else if (flag == "single" || (flag == "ignore" && isNaN(float)) ){
                         this.onXMLMinorError("unable to parse " + especificationArray[i][NAME] + " value from section " + XMLsection + "; assuming " + especificationArray[i][NAME] + " = " + especificationArray[i][DEFAULT_VALUE]);
                         float = especificationArray[i][DEFAULT_VALUE];
                     }
@@ -1328,6 +1328,7 @@ class MySceneGraph {
         else {
             texture = this.textures[textureId];
         }
+
         material.setTextureWrap('REPEAT', 'REPEAT');
         material.setTexture(texture);
         material.apply();
