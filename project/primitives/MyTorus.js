@@ -47,12 +47,13 @@ class MyTorus extends CGFobject
 
         // generate vertices, normals and uvs
 
-        for ( j = 0; j <= this.slices; j ++ ) {
+        for ( j = 0; j <= this.loops; j ++ ) {
 
-            for ( i = 0; i <= this.loops; i ++ ) {
+            var v = j / this.loops * Math.PI * 2;
 
-                var u = i / this.loops * Math.PI * 2;
-                var v = j / this.slices * Math.PI * 2;
+            for ( i = 0; i <= this.slices; i ++ ) {
+
+                var u = i / this.slices * Math.PI * 2;
 
                 // vertex
 
@@ -81,8 +82,8 @@ class MyTorus extends CGFobject
 
                 // uv
 
-                this.texCoords.push( i / this.loops );
-                this.texCoords.push( j / this.slices );
+                this.texCoords.push( i / this.slices );
+                this.texCoords.push( j / this.loops );
 
             }
 
@@ -90,16 +91,16 @@ class MyTorus extends CGFobject
 
         // generate indices
 
-        for ( j = 1; j <= this.slices; j ++ ) {
+        for ( j = 1; j <= this.loops; j ++ ) {
 
-            for ( i = 1; i <= this.loops; i ++ ) {
+            for ( i = 1; i <= this.slices; i ++ ) {
 
                 // indices
 
-                var a = ( this.loops + 1 ) * j + i - 1;
-                var b = ( this.loops + 1 ) * ( j - 1 ) + i - 1;
-                var c = ( this.loops + 1 ) * ( j - 1 ) + i;
-                var d = ( this.loops + 1 ) * j + i;
+                var a = ( this.slices + 1 ) * j + i - 1;
+                var b = ( this.slices + 1 ) * ( j - 1 ) + i - 1;
+                var c = ( this.slices + 1 ) * ( j - 1 ) + i;
+                var d = ( this.slices + 1 ) * j + i;
 
                 // faces
 

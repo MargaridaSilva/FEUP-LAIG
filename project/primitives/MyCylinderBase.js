@@ -19,16 +19,20 @@ class MyCylinderBase extends CGFobject {
         this.texCoords.push(0.5, 0.5);
 
         for (var i = 0; i < this.slices; i++) {
-            this.vertices.push(Math.cos(i * (2 * Math.PI) / this.slices) * this.radius);
-            this.vertices.push(Math.sin(i * (2 * Math.PI) / this.slices) * this.radius);
+            let angle = i * (2 * Math.PI) / this.slices;
+            let sin = Math.sin(angle);
+            let cos = Math.cos(angle);
+
+            this.vertices.push(sin * this.radius);
+            this.vertices.push(cos * this.radius);
             this.vertices.push(0);
 
             this.normals.push(0);
             this.normals.push(0);
             this.normals.push(1);
 
-            this.texCoords.push(0.5 + Math.cos(i * (2 * Math.PI) / this.slices) / 2);
-            this.texCoords.push(0.5 - Math.sin(i * (2 * Math.PI) / this.slices) / 2);
+            this.texCoords.push(0.5 + sin / 2);
+            this.texCoords.push(0.5 - cos / 2);
         }
 
 

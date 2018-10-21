@@ -14,6 +14,7 @@ class XMLscene extends CGFscene {
         this.lightValues = {};
         this.viewValues = [];
         this.cameras = {};
+
     }
 
     /**
