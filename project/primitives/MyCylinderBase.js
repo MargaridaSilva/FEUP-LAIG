@@ -14,13 +14,14 @@ class MyCylinderBase extends CGFobject {
     }
 
     initBuffers() {
+
         this.vertices.push(0, 0, 0);
         this.normals.push(0, 0, 1);
         this.texCoords.push(0.5, 0.5);
 
         for (var i = 0; i < this.slices; i++) {
-            this.vertices.push(Math.cos(i * (2 * Math.PI) / this.slices)*this.radius);
-            this.vertices.push(Math.sin(i * (2 * Math.PI) / this.slices)*this.radius);
+            this.vertices.push(Math.cos(i * (2 * Math.PI) / this.slices) * this.radius);
+            this.vertices.push(Math.sin(i * (2 * Math.PI) / this.slices) * this.radius);
             this.vertices.push(0);
 
             this.normals.push(0);
@@ -53,21 +54,22 @@ class MyCylinderBase extends CGFobject {
                 this.indices.push(i + 2);
             }
         }
-
+        
+        this.originaltexCoords = this.texCoords.slice();
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
     }
 
     updateCoords(s, t) {
 
-        let sRatio = this.base / s;
-        let tRatio = this.base / t;
-    
+        let sRatio = this.radius / s;
+        let tRatio = this.radius / t;
+
         for (let i = 0; i < this.texCoords.length; i += 2) {
-          this.texCoords[i] = this.originaltexCoords[i] * sRatio;
-          this.texCoords[i + 1] = this.originaltexCoords[i + 1] * tRatio;
+            this.texCoords[i] = this.originaltexCoords[i] * sRatio;
+            this.texCoords[i + 1] = this.originaltexCoords[i + 1] * tRatio;
         }
-    
+
         this.updateTexCoordsGLBuffers();
-      }
+    }
 }
