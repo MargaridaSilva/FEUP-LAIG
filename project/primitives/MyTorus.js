@@ -22,15 +22,19 @@ class MyTorus extends CGFobject
         this.normals = [];
         this.texCoords = [];
 
+        this.dx = outer;
+        this.dy = inner*2*Math.PI;
         this.initBuffers();
 	};
 
     updateCoords(s, t){
-        /*sRatio = this.maxS 
-        for(let i = 0; i < this.texCoords.length; i++){
-            this.texCoords[0] = ;
-            this.texCoords[1] = ;
-        }*/
+        let sRatio = this.dx / s;
+        let tRatio = this.dy / t;
+
+        for (let i = 0; i < this.texCoords.length; i += 2) {
+            this.texCoords[i] = this.originaltexCoords[i] * sRatio;
+            this.texCoords[i + 1] = this.originaltexCoords[i + 1] * tRatio;
+        }
 
         this.updateTexCoordsGLBuffers();
     }

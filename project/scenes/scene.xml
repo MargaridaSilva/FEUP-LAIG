@@ -628,7 +628,7 @@
 			<materials>
 				<material id="white" />
 			</materials>
-			<texture id="smallXmasTree" length_s="0.5" length_t="0.5" />
+			<texture id="smallXmasTree" length_s="0.5" length_t="3.14" />
 			<children>
 				<componentref id="tree1" />
 				<componentref id="tree2" />
@@ -679,7 +679,7 @@
 			<materials>
 				<material id="white" />
 			</materials>
-			<texture id="inherit" length_s="1.0" length_t="1.0" />
+			<texture id="inherit" length_s="1" length_t="1" />
 			<children>
 				<primitiveref id="cone" />
 			</children>
@@ -692,7 +692,7 @@
 			<materials>
 				<material id="white" />
 			</materials>
-			<texture id="treeTrunk" length_s="1.0" length_t="1.0" />
+			<texture id="treeTrunk" length_s="1" length_t="6.28" />
 			<children>
 				<primitiveref id="cylinder" />
 			</children>
@@ -908,7 +908,7 @@
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="inherit" length_s="1.0" length_t="1.0" />
+			<texture id="inherit" length_s="6.28" length_t="1" />
 			<children>
 				<primitiveref id="cylinder" />
 			</children>
@@ -933,7 +933,7 @@
 			<materials>
 				<material id="white" />
 			</materials>
-			<texture id="leftWreath" length_s="1.0" length_t="1.0" />
+			<texture id="leftWreath" length_s="2.0" length_t="6.28" />
 			<children>
 				<componentref id="wreath1" />
 				<componentref id="wreath2" />
@@ -949,7 +949,7 @@
 			<materials>
 				<material id="white" />
 			</materials>
-			<texture id="rightWreath" length_s="1.0" length_t="1.0" />
+			<texture id="rightWreath" length_s="2.0" length_t="6.28"  />
 			<children>
 				<componentref id="wreath1" />
 				<componentref id="wreath2" />
@@ -967,7 +967,7 @@
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="inherit" length_s="1.0" length_t="1.0" />
+			<texture id="inherit" length_s="2.0" length_t="6.28" />
 			<children>
 				<primitiveref id="torus" />
 			</children>
@@ -981,7 +981,7 @@
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="inherit" length_s="1.0" length_t="1.0" />
+			<texture id="inherit" length_s="2.0" length_t="6.28"  />
 			<children>
 				<primitiveref id="torus" />
 			</children>
@@ -995,7 +995,7 @@
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="inherit" length_s="1.0" length_t="1.0" />
+			<texture id="inherit" length_s="2.0" length_t="6.28"  />
 			<children>
 				<primitiveref id="torus" />
 			</children>
@@ -1299,7 +1299,7 @@
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="inherit" length_s="1" length_t="1" />
+			<texture id="inherit" length_s="6.28" length_t="1" />
 			<children>
 				<primitiveref id="cylinder" />
 			</children>

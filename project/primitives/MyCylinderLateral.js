@@ -20,6 +20,8 @@ class MyCylinderLateral extends CGFobject {
     this.texCoords = [];
     this.originaltexCoords = [];
 
+    this.dx = height;
+    this.dy = base*2*Math.PI;
     this.initBuffers();
   };
 
@@ -76,8 +78,8 @@ class MyCylinderLateral extends CGFobject {
 
   updateCoords(s, t) {
 
-    let sRatio = this.base / s;
-    let tRatio = this.base / t;
+    let sRatio = this.dx / s;
+    let tRatio = this.dy / t;
 
     for (let i = 0; i < this.texCoords.length; i += 2) {
       this.texCoords[i] = this.originaltexCoords[i] * sRatio;
