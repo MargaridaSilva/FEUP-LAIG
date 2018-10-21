@@ -35,7 +35,6 @@ class XMLscene extends CGFscene {
         this.gl.enable(this.gl.DEPTH_TEST);
         this.gl.enable(this.gl.CULL_FACE);
         this.gl.depthFunc(this.gl.LEQUAL);
-
     }
 
     /**
@@ -209,7 +208,6 @@ class XMLscene extends CGFscene {
                     i++;
                 }
             }
-
             this.graph.displayScene();
         }
         else {

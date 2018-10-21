@@ -1328,11 +1328,7 @@ class MySceneGraph {
         else {
             texture = this.textures[textureId];
         }
-
-        console.log(idNode);
-        console.log(textureId);
-
-        //material.setTextureWrap('REPEAT', 'REPEAT');
+        material.setTextureWrap('REPEAT', 'REPEAT');
         material.setTexture(texture);
         material.apply();
 

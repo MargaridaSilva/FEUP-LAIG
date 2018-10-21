@@ -2,6 +2,7 @@ class MyCylinder {
 
     constructor(scene, base, top, height, slices, stacks){
         this.scene = scene;
+        this.height = height;
         this.lateral = new MyCylinderLateral(scene, base, top, height, slices, stacks);
         this.base1 = new MyCylinderBase(scene, slices, base);
         this.base2 = new MyCylinderBase(scene, slices, top);
@@ -11,7 +12,7 @@ class MyCylinder {
         this.lateral.display();
         this.base1.display();
         this.scene.pushMatrix();
-        this.scene.translate(0, 0, 1);
+        this.scene.translate(0, 0, this.height);
         this.base2.display();
         this.scene.popMatrix();
     }
