@@ -876,16 +876,24 @@ class MySceneGraph {
         }
 
         let rootMaterials = this.components[this.values.scene.root].materials;
-        let rootTexture = this.components[this.values.scene.root].texture.id;
+        this.rootTexture = this.components[this.values.scene.root].texture.id;
+        this.rootTS = this.components[this.values.scene.root].texture.length_s;
+        this.rootTT = this.components[this.values.scene.root].texture.length_t;
         let nMaterials = Object.keys(rootMaterials).length;
+        this.rootMaterial = this.components[this.values.scene.root].materials[this.displayIndex % nMaterials];
 
-        if (rootTexture == "none" || rootTexture == "inherit") {
+        if (this.rootTexture == "none" || this.rootTexture == "inherit") {
             this.onXMLMinorError("the root component should have a defined texture, instead of being " + rootTexture + "; warning texture was applied");
-            this.components[this.values.scene.root].texture.id = this.textures[0];
+            this.rootTexture = this.textures[0];
+            rootTS = 1.0;
+            rootTT = 1.0;
         }
-        if (rootMaterials[this.displayIndex % nMaterials] == "inherit") {
+        if (this.rootMaterial == "inherit") {
             this.onXMLMinorError("the root component should have a defined material, instead of being inherit; first material was assumed");
-            this.components[this.values.scene.root].materials[this.displayIndex % nMaterials] = this.materials[0];
+            for(let key in this.materials){
+                this.rootMaterial = key;
+                break;
+            }
         }
 
         this.log("Parsed Components");
@@ -1214,7 +1222,6 @@ class MySceneGraph {
                 result[especificationArray[i][NAME]] = especificationArray[i][DEFAULT_VALUE];
                 this.onXMLMinorError("assuming " + especificationArray[i][NAME] + " = " + especificationArray[i][DEFAULT_VALUE]);
             }
-            console.log(result);
         }
 
 
@@ -1256,7 +1263,27 @@ class MySceneGraph {
         this.textureStack = [];
         this.sStack = [];
         this.tStack = [];
+
+        let rootMaterials = this.components[this.values.scene.root].materials;
+        let nMaterials = Object.keys(rootMaterials).length;
+        this.rootMaterial = this.components[this.values.scene.root].materials[this.displayIndex % nMaterials];
+
+        if (this.rootMaterial == "inherit") {
+            for(let key in this.materials){
+                this.rootMaterial = key;
+                break;
+            }
+        }
+
+        this.materialStack.push(this.rootMaterial);
+        this.textureStack.push(this.rootTexture);
+        this.sStack.push(this.rootTS);
+        this.tStack.push(this.rootTT);
         this.displayRecursive(this.values.scene.root);
+        this.sStack.pop();
+        this.tStack.pop();
+        this.materialStack.pop();
+        this.textureStack.pop();
     }
 
 
@@ -1332,6 +1359,9 @@ class MySceneGraph {
         material.setTexture(texture);
         material.apply();
 
+        if (idNode == "painting"){
+            console.log(textureId, materialId, s, t);
+        }
         return {
             mId: materialId,
             tId: textureId,
