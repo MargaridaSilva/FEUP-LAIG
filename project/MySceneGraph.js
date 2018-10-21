@@ -1356,8 +1356,15 @@ class MySceneGraph {
             texture = this.textures[textureId];
         }
 
-        material.setTextureWrap('REPEAT', 'REPEAT');
-        
+
+        if(texture != null){
+            if(isPowerOfTwo(texture.image.width) && isPowerOfTwo(texture.image.height)){
+                material.setTextureWrap('REPEAT', 'REPEAT');
+            }
+            else{
+                material.setTextureWrap('CLAMP_TO_EDGE', 'CLAMP_TO_EDGE');
+            }
+        }
 
         material.setTexture(texture);
         material.apply();

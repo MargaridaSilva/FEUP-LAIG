@@ -37,3 +37,8 @@ Array.prototype.merge = function (arr1, arr2) {
     }
     return ret;
 }
+
+isPowerOfTwo = function(x)
+{
+    return (x & (x - 1)) == 0;
+}
