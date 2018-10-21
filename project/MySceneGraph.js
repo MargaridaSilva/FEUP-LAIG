@@ -1356,12 +1356,8 @@ class MySceneGraph {
             texture = this.textures[textureId];
         }
 
-        if (s == 1 && t == 1){
-            material.setTextureWrap('CLAMP_TO_EDGE', 'CLAMP_TO_EDGE');
-        }
-        else{
-            material.setTextureWrap('REPEAT', 'REPEAT');
-        }
+        material.setTextureWrap('REPEAT', 'REPEAT');
+        
 
         material.setTexture(texture);
         material.apply();

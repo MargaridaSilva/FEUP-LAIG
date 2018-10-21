@@ -1,5 +1,5 @@
 /**
- * MyHalfSphere
+ * MySphere
  * @constructor
  */
 class MySphere extends CGFobject {
@@ -14,16 +14,12 @@ class MySphere extends CGFobject {
         this.indices = [];
         this.texCoords = [];
 
-
-        this.dx = 2 * radius * Math.PI;
-        this.dy = 2 * radius * Math.PI;
-
         this.initBuffers();
     }
 
     updateCoords(s, t) {
-        let sRatio = this.dx / s;
-        let tRatio = this.dy / t;
+        let sRatio = 1 / s;
+        let tRatio = 1 / t;
 
         for (let i = 0; i < this.texCoords.length; i += 2) {
             this.texCoords[i] = this.originaltexCoords[i] * sRatio;
