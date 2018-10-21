@@ -25,7 +25,7 @@ class XMLscene extends CGFscene {
 
         this.sceneInited = false;
 
-        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(100, 150, 150), vec3.fromValues(0, 0, 0));
+        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
         this.axis = new CGFaxis(this);
 
         this.enableTextures(true);
@@ -64,6 +64,10 @@ class XMLscene extends CGFscene {
                 this.cameras[key] = new CGFcameraOrtho(view.left, view.right, view.bottom, view.top, view.near, view.far, position, target, up);
             }
         }
+
+
+        this.camera = this.cameras[this.graph.views_default];
+        this.interface.setActiveCamera(this.camera);
     }
 
     /**
