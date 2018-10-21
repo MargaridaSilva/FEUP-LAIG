@@ -883,10 +883,10 @@ class MySceneGraph {
         this.rootMaterial = this.components[this.values.scene.root].materials[this.displayIndex % nMaterials];
 
         if (this.rootTexture == "none" || this.rootTexture == "inherit") {
-            this.onXMLMinorError("the root component should have a defined texture, instead of being " + rootTexture + "; warning texture was applied");
+            this.onXMLMinorError("the root component should have a defined texture, instead of being " + this.rootTexture + "; warning texture was applied");
             this.rootTexture = this.textures[0];
-            rootTS = 1.0;
-            rootTT = 1.0;
+            this.rootTS = 1.0;
+            this.rootTT = 1.0;
         }
         if (this.rootMaterial == "inherit") {
             this.onXMLMinorError("the root component should have a defined material, instead of being inherit; first material was assumed");
