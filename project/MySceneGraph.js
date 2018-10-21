@@ -216,7 +216,7 @@ class MySceneGraph {
             }
             else if (children[i].nodeName == "to") {
                 if (!processTo) {
-                    coordsT = this.parseFields(children[i], ["all",["x", "ff", 0], ["y", "ff", 0], ["z", "ff", 0]], "views > ortho id = " + orthoId + " > to");
+                    coordsT = this.parseFields(children[i], ["all", ["x", "ff", 0], ["y", "ff", 0], ["z", "ff", 0]], "views > ortho id = " + orthoId + " > to");
                     processTo = true;
                 }
                 else this.onXMLMinorError("more than one <to> definitions in view id=" + orthoId + " ; only the first was considered");
@@ -279,7 +279,7 @@ class MySceneGraph {
         this.perspectiveViews[perspectiveId] = {
             near: info.near,
             far: info.far,
-            angle: info.angle*this.deg2rad,
+            angle: info.angle * this.deg2rad,
             from: coordsF,
             to: coordsT
         }
@@ -402,7 +402,7 @@ class MySceneGraph {
             if (ambientIndex != 1) {
                 this.onXMLMinorError("light ambient out of order for ID =" + omniId);
             }
-            ambient = this.parseFields(children[ambientIndex], ["single",["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 0]], "lights > omni id = " + omniId + " > ambient");
+            ambient = this.parseFields(children[ambientIndex], ["single", ["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 0]], "lights > omni id = " + omniId + " > ambient");
         }
 
         if (diffuseIndex == -1) {
@@ -412,7 +412,7 @@ class MySceneGraph {
             if (diffuseIndex != 2) {
                 this.onXMLMinorError("light diffuse out of order for ID =" + omniId);
             }
-            diffuse = this.parseFields(children[diffuseIndex], ["single",["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 0]], "lights > omni id = " + omniId + " > diffuse");
+            diffuse = this.parseFields(children[diffuseIndex], ["single", ["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 0]], "lights > omni id = " + omniId + " > diffuse");
         }
         if (specularIndex == -1) {
             return "light specular undefined for ID = " + omniId;
@@ -421,7 +421,7 @@ class MySceneGraph {
             if (specularIndex != 3) {
                 this.onXMLMinorError("light specular out of order for ID =" + omniId);
             }
-            specular = this.parseFields(children[specularIndex], ["single",["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 0]], "lights > omni id = " + omniId + " > specular");
+            specular = this.parseFields(children[specularIndex], ["single", ["r", "ff", 0], ["g", "ff", 0], ["b", "ff", 0], ["a", "ff", 0]], "lights > omni id = " + omniId + " > specular");
         }
 
         this.omniLights[omniId] = {
@@ -534,7 +534,7 @@ class MySceneGraph {
         this.textureIds = [];
         let error;
 
-        this.textures["warning"] = new CGFtexture(this.scene, "scene/images/warning.jpg");
+        this.textures["warning"] = new CGFtexture(this.scene, "scenes/images/warning.jpg");
 
         for (let i = 0; i < children.length; i++) {
             if (children[i].nodeName == "texture") {
@@ -715,7 +715,7 @@ class MySceneGraph {
                 this.scene.translate(info.x, info.y, info.z);
             }
             else if (children[i].nodeName == "rotate") {
-                info = this.parseFields(children[i], ["single",["axis", "cc", 0], ["angle", "ff", 0]], "transformations > transformation id = " + transformationId);
+                info = this.parseFields(children[i], ["single", ["axis", "cc", 0], ["angle", "ff", 0]], "transformations > transformation id = " + transformationId);
                 let radAngle = info.angle * this.deg2rad;
                 switch (info.axis) {
                     case "x":
@@ -890,7 +890,7 @@ class MySceneGraph {
         }
         if (this.rootMaterial == "inherit") {
             this.onXMLMinorError("the root component should have a defined material, instead of being inherit; first material was assumed");
-            for(let key in this.materials){
+            for (let key in this.materials) {
                 this.rootMaterial = key;
                 break;
             }
@@ -1148,7 +1148,7 @@ class MySceneGraph {
                         setAllDefaults = true;
                         break;
                     }
-                    else if (flag == "single" || (flag == "ignore" && isNaN(float)) ){
+                    else if (flag == "single" || (flag == "ignore" && isNaN(float))) {
                         this.onXMLMinorError("unable to parse " + especificationArray[i][NAME] + " value from section " + XMLsection + "; assuming " + especificationArray[i][NAME] + " = " + especificationArray[i][DEFAULT_VALUE]);
                         float = especificationArray[i][DEFAULT_VALUE];
                     }
@@ -1269,7 +1269,7 @@ class MySceneGraph {
         this.rootMaterial = this.components[this.values.scene.root].materials[this.displayIndex % nMaterials];
 
         if (this.rootMaterial == "inherit") {
-            for(let key in this.materials){
+            for (let key in this.materials) {
                 this.rootMaterial = key;
                 break;
             }
@@ -1298,26 +1298,26 @@ class MySceneGraph {
         let info = this.adaptTextureAndMaterial(idNode);
 
         for (let i = 0; i < node.children.primitives.length; i++) {
-                let s = info.s;
-                let t = info.t;
-                this.primitives[node.children.primitives[i]].updateCoords(s, t);
-                this.primitives[node.children.primitives[i]].display();
+            let s = info.s;
+            let t = info.t;
+            this.primitives[node.children.primitives[i]].updateCoords(s, t);
+            this.primitives[node.children.primitives[i]].display();
         }
 
         for (let i = 0; i < node.children.components.length; i++) {
-                this.materialStack.push(info.mId);
-                this.textureStack.push(info.tId);
-                this.sStack.push(info.s);
-                this.tStack.push(info.t);
-                this.scene.pushMatrix();
+            this.materialStack.push(info.mId);
+            this.textureStack.push(info.tId);
+            this.sStack.push(info.s);
+            this.tStack.push(info.t);
+            this.scene.pushMatrix();
 
-                this.displayRecursive(node.children.components[i]);
+            this.displayRecursive(node.children.components[i]);
 
-                this.scene.popMatrix();
-                this.textureStack.pop();
-                this.materialStack.pop();
-                this.sStack.pop();
-                this.tStack.pop();
+            this.scene.popMatrix();
+            this.textureStack.pop();
+            this.materialStack.pop();
+            this.sStack.pop();
+            this.tStack.pop();
         }
 
     }
@@ -1339,29 +1339,32 @@ class MySceneGraph {
         if (textureId == "inherit") {
             textureId = this.textureStack.peek();
 
-            if(textureId == "none"){
+            if (textureId == "none") {
                 texture = null;
             }
-            else{
+            else {
                 s = this.sStack.peek();
                 t = this.tStack.peek();
                 texture = this.textures[textureId];
             }
         }
-        
+
         else if (textureId == "none") {
             texture = null;
         }
         else {
             texture = this.textures[textureId];
         }
-        material.setTextureWrap('REPEAT', 'REPEAT');
+
+        if (s == 1 && t == 1){
+            material.setTextureWrap('CLAMP_TO_EDGE', 'CLAMP_TO_EDGE');
+        }
+        else{
+            material.setTextureWrap('REPEAT', 'REPEAT');
+        }
+
         material.setTexture(texture);
         material.apply();
-
-        if (idNode == "painting"){
-            console.log(textureId, materialId, s, t);
-        }
         return {
             mId: materialId,
             tId: textureId,
