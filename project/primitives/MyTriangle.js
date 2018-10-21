@@ -29,8 +29,6 @@ class MyTriangle extends CGFobject {
         this.sen = Math.sqrt(1 - this.cos * this.cos);
 
         this.initBuffers();
-
-        this.originaltexCoords = this.texCoords.slice();
     };
 
     updateCoords(s, t) {
@@ -80,6 +78,8 @@ class MyTriangle extends CGFobject {
             1, 0
         ];
 
+        
+        this.originaltexCoords = this.texCoords.slice();
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
     };
