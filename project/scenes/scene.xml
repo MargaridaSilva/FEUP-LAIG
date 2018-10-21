@@ -1080,7 +1080,7 @@
 			<materials>
 				<material id="shine" />
 			</materials>
-			<texture id="moon" length_s="1.0" length_t="1.0" />
+			<texture id="moon" length_s="31.42" length_t="31.42" />
 			<children>
 				<primitiveref id="sphere" />
 			</children>

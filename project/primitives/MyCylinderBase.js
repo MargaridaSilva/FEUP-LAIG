@@ -62,8 +62,8 @@ class MyCylinderBase extends CGFobject {
 
     updateCoords(s, t) {
 
-        let sRatio = this.radius / s;
-        let tRatio = this.radius / t;
+        let sRatio = (2*this.radius) / s;
+        let tRatio = (2*this.radius) / t;
 
         for (let i = 0; i < this.texCoords.length; i += 2) {
             this.texCoords[i] = this.originaltexCoords[i] * sRatio;

@@ -14,19 +14,25 @@ class MySphere extends CGFobject {
         this.indices = [];
         this.texCoords = [];
 
+
+        this.dx = 2 * radius * Math.PI;
+        this.dy = 2 * radius * Math.PI;
+
         this.initBuffers();
     }
 
-    updateCoords(s, t){
-        /*sRatio = this.maxS 
-        for(let i = 0; i < this.texCoords.length; i++){
-            this.texCoords[0] = ;
-            this.texCoords[1] = ;
-        }*/
+    updateCoords(s, t) {
+        let sRatio = this.dx / s;
+        let tRatio = this.dy / t;
+
+        for (let i = 0; i < this.texCoords.length; i += 2) {
+            this.texCoords[i] = this.originaltexCoords[i] * sRatio;
+            this.texCoords[i + 1] = this.originaltexCoords[i + 1] * tRatio;
+        }
 
         this.updateTexCoordsGLBuffers();
     }
- 
+
     initBuffers() {
 
         for (let iy = 0; iy <= this.stacks; iy++) {
@@ -45,7 +51,7 @@ class MySphere extends CGFobject {
                 vertex.x = this.radius * Math.cos(teta) * Math.sin(phi);
                 vertex.y = this.radius * Math.sin(teta) * Math.sin(phi);
                 vertex.z = this.radius * Math.cos(phi);
-                
+
                 this.vertices.push(vertex.x, vertex.y, vertex.z);
 
 
@@ -70,13 +76,13 @@ class MySphere extends CGFobject {
                 var c = (iy + 1) * (this.slices + 1) + ix;
                 var d = (iy + 1) * (this.slices + 1) + (ix + 1);
 
-                if ( iy != 0) this.indices.push( a, b, d );
-                if ( iy != this.stacks - 1) this.indices.push( b, c, d );
+                if (iy != 0) this.indices.push(a, b, d);
+                if (iy != this.stacks - 1) this.indices.push(b, c, d);
 
             }
         }
 
-        
+
         this.originaltexCoords = this.texCoords.slice();
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
