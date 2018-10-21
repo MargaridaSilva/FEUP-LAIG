@@ -19,9 +19,13 @@ class MyPlane extends CGFobject {
         this.ds = 1 / this.nrDivsX;
         this.dt = 1 / this.nrDivsY;
 
-        this.initBuffers();
+        
+        this.vertices = [];
+        this.normals = [];
+        this.texCoords = [];
 
-        this.originaltexCoords = this.texCoords.slice();
+
+        this.initBuffers();
     };
 
     updateCoords(s, t) {
@@ -37,12 +41,7 @@ class MyPlane extends CGFobject {
     }
 
     initBuffers() {
-
         // Generate vertices and normals
-        this.vertices = [];
-        this.normals = [];
-        this.texCoords = [];
-
 
         let yCoord = this.topRightY;
 
@@ -76,6 +75,8 @@ class MyPlane extends CGFobject {
             ind++;
         }
 
+        
+        this.originaltexCoords = this.texCoords.slice();
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
     };

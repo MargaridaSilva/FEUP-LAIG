@@ -16,8 +16,6 @@ class MyQuad extends CGFobject {
 		this.dy = topRightY - bottomLeftY;
 
 		this.initBuffers();
-
-		this.originaltexCoords = this.texCoords.slice();
 	};
 
 	updateCoords(s, t) {
@@ -59,6 +57,8 @@ class MyQuad extends CGFobject {
 			1, 0
 		];
 
+		
+		this.originaltexCoords = this.texCoords.slice();
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
 	};

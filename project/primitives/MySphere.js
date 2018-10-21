@@ -76,6 +76,8 @@ class MySphere extends CGFobject {
             }
         }
 
+        
+        this.originaltexCoords = this.texCoords.slice();
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
     };
