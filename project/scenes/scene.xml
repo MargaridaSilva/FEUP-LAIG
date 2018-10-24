@@ -1,6 +1,6 @@
 <yas>
 	<scene root="scene" axis_length="5" />
-	<views default="global">
+	<views default="ortho">
 		<perspective id="global" near="0.1" far="500" angle="35">
 			<from x="100" y="150" z="150" />
 			<to x="0" y="0" z="0" />
@@ -22,16 +22,16 @@
 			<to x="0" y="10" z="-80" />
 		</perspective>
 		<perspective id="close" near="0.1" far="500" angle="45">
-			<from x="10" y="10" z="10" />
-			<to x="5" y="0" z="0" />
+			<from x="5" y="3.5" z="30" />
+			<to x="5" y="3" z="10" />
 		</perspective>
 		<perspective id="point counter" near="0.1" far="500" angle="60">
 			<from x="0" y="15" z="-40" />
 			<to x="0" y="15" z="-90" />
 		</perspective>
-		<ortho id="ortho" near="0.1" far="500" right="100.0" left="-100.0" top="100.0" bottom="-100.0">
-			<from x="100" y="150" z="150" />
-			<to x="0" y="0" z="0" />
+		<ortho id="ortho" near="0.1" far="500" right="80.0" left="-80.0" top="40.0" bottom="-40.0">
+			<from x="0" y="0" z="80" />
+			<to x="0" y="0" z="-80" />
 		</ortho>
 	</views>
 	<ambient>
