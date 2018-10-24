@@ -1,21 +1,21 @@
 <yas>
 	<scene root="scene" axis_length="5" />
 	<views default="global">
-		<perspective id="global" near="0.1" far="500" angle="45">
+		<perspective id="global" near="0.1" far="500" angle="35">
 			<from x="100" y="150" z="150" />
 			<to x="0" y="0" z="0" />
 		</perspective>
-		<perspective id="door" near="0.1" far="500" angle="45">
-			<from x="0" y="100" z="-150" />
-			<to x="0" y="0" z="90" />
+		<perspective id="up" near="0.1" far="500" angle="60">
+			<from x="0" y="200" z="0.1" />
+			<to x="0" y="0" z="0" />
 		</perspective>
-		<perspective id="hufflepuff" near="0.1" far="500" angle="45">
-			<from x="-80" y="20" z="35" />
-			<to x="20" y="20" z="35" />
+		<perspective id="hufflepuff" near="0.1" far="500" angle="50">
+			<from x="-20" y="15" z="35" />
+			<to x="30" y="15" z="35" />
 		</perspective>
 		<perspective id="flags" near="0.1" far="500" angle="45">
-			<from x="-20" y="30" z="-100" />
-			<to x="40" y="15" z="90" />
+			<from x="0" y="5" z="-20" />
+			<to x="0" y="10" z="40" />
 		</perspective>
 		<perspective id="inside" near="0.1" far="500" angle="45">
 			<from x="0" y="10" z="100" />
@@ -23,15 +23,19 @@
 		</perspective>
 		<perspective id="close" near="0.1" far="500" angle="45">
 			<from x="10" y="10" z="10" />
-			<to x="0" y="0" z="0" />
+			<to x="5" y="0" z="0" />
 		</perspective>
-		<ortho id="exp" near="0.1" far="500" right="100.0" left="-100.0" top="100.0" bottom="-100.0">
+		<perspective id="point counter" near="0.1" far="500" angle="60">
+			<from x="0" y="15" z="-40" />
+			<to x="0" y="15" z="-90" />
+		</perspective>
+		<ortho id="ortho" near="0.1" far="500" right="100.0" left="-100.0" top="100.0" bottom="-100.0">
 			<from x="100" y="150" z="150" />
 			<to x="0" y="0" z="0" />
 		</ortho>
 	</views>
 	<ambient>
-		<ambient r="0" g="0" b="0" a="1" />
+		<ambient r="0.2" g="0.2" b="0.2" a="1" />
 		<background r="0.05" g="0.05" b="0.1" a="1" />
 	</ambient>
 	<lights>
@@ -145,11 +149,41 @@
 			<diffuse r="0" g="0.1" b="0.4" a="1" />
 			<specular r="0" g="0.1" b="0.4" a="1" />
 		</material>
-		<material id="metal" shininess="2">
+		<material id="metal" shininess="0">
 			<emission r="0" g="0" b="0" a="1" />
 			<ambient r="0.05" g="0.05" b="0.05" a="1" />
-			<diffuse r="0.05" g="0.05" b="0.05" a="1" />
-			<specular r="0.05" g="0.05" b="0.05" a="1" />
+			<diffuse r="0.1" g="0.1" b="0.1" a="1" />
+			<specular r="0.1" g="0.1" b="0.1" a="1" />
+		</material>
+		<material id="foodHolders" shininess="0">
+			<emission r="0" g="0" b="0" a="1" />
+			<ambient r="0.25" g="0.125" b="0.075" a="1" />
+			<diffuse r="0.25" g="0.125" b="0.075" a="1" />
+			<specular r="0.25" g="0.125" b="0.075" a="1" />
+		</material>
+		<material id="redFood" shininess="0">
+			<emission r="0" g="0" b="0" a="1" />
+			<ambient r="0.6" g="0.125" b="0.075" a="1" />
+			<diffuse r="0.6" g="0.125" b="0.075" a="1" />
+			<specular r="0.6" g="0.125" b="0.075" a="1" />
+		</material>
+		<material id="orangeFood" shininess="0">
+			<emission r="0" g="0" b="0" a="1" />
+			<ambient r="0.5" g="0.25" b="0.1" a="1" />
+			<diffuse r="0.5" g="0.25" b="0.1" a="1" />
+			<specular r="0.5" g="0.25" b="0.1" a="1" />
+		</material>
+		<material id="greenFood" shininess="0">
+			<emission r="0" g="0" b="0" a="1" />
+			<ambient r="0.1" g="0.25" b="0" a="1" />
+			<diffuse r="0.1" g="0.25" b="0" a="1" />
+			<specular r="0.5" g="0.25" b="0" a="1" />
+		</material>
+		<material id="yellowFood" shininess="0">
+			<emission r="0" g="0" b="0" a="1" />
+			<ambient r="0.75" g="0.5" b="0" a="1" />
+			<diffuse r="0.75" g="0.5" b="0" a="1" />
+			<specular r="0.75" g="0.5" b="0" a="1" />
 		</material>
 	</materials>
 	<transformations>
@@ -188,8 +222,11 @@
 			<rectangle x1="-90" y1="-20" x2="90" y2="20" />
 		</primitive>
 		<primitive id="torus">
-			<torus inner="1" outer="2" slices="10" loops="50">
+			<torus inner="1" outer="2" slices="20" loops="50">
 			</torus>
+		</primitive>
+		<primitive id="food">
+			<sphere radius="1" slices="100" stacks="100" />
 		</primitive>
 	</primitives>
 	<components>
@@ -423,6 +460,7 @@
 				<componentref id="leg_pair_back" />
 				<componentref id="bench1" />
 				<componentref id="bench2" />
+				<componentref id="foodHolders" />
 			</children>
 		</component>
 		<!-- Table Top -->
@@ -554,6 +592,404 @@
 				<componentref id="cube" />
 			</children>
 		</component>
+
+
+	<component id="foodHolders">
+			<transformation>
+				<translate x="0" y="1" z="0" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" length_s="6.28" length_t="1" />
+			<children>
+				<componentref id="foodHolder1" />
+				<componentref id="foodHolder2" />
+				<componentref id="foodHolder3" />
+				<componentref id="foodHolder4" />
+				<componentref id="foodHolder5" />
+				<componentref id="foodHolder6" />
+				<componentref id="foodHolder7" />
+				<componentref id="foodHolder8" />
+				<componentref id="foodHolder9" />
+			</children>
+		</component>
+		<component id="foodHolder1">
+			<transformation>
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" length_s="6.28" length_t="1" />
+			<children>
+				<componentref id="foodHolder" />
+			</children>
+		</component>
+		<component id="foodHolder2">
+			<transformation>
+				<translate x="0" y="0" z="4" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" length_s="6.28" length_t="1" />
+			<children>
+				<componentref id="foodHolder" />
+			</children>
+		</component>
+		<component id="foodHolder3">
+			<transformation>
+				<translate x="0" y="0" z="8" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" length_s="6.28" length_t="1" />
+			<children>
+				<componentref id="foodHolder" />
+			</children>
+		</component>
+		<component id="foodHolder4">
+			<transformation>
+				<translate x="0" y="0" z="-4" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" length_s="6.28" length_t="1" />
+			<children>
+				<componentref id="foodHolder" />
+			</children>
+		</component>
+		<component id="foodHolder5">
+			<transformation>
+				<translate x="0" y="0" z="-8" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" length_s="6.28" length_t="1" />
+			<children>
+				<componentref id="foodHolder" />
+			</children>
+		</component>
+		<component id="foodHolder6">
+			<transformation>
+				<translate x="0" y="0" z="12" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" length_s="6.28" length_t="1" />
+			<children>
+				<componentref id="foodHolder" />
+			</children>
+		</component>
+		<component id="foodHolder7">
+			<transformation>
+				<translate x="0" y="0" z="-12" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" length_s="6.28" length_t="1" />
+			<children>
+				<componentref id="foodHolder" />
+			</children>
+		</component>
+		<component id="foodHolder8">
+			<transformation>
+				<translate x="0" y="0" z="16" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" length_s="6.28" length_t="1" />
+			<children>
+				<componentref id="foodHolder" />
+			</children>
+		</component>
+		<component id="foodHolder9">
+			<transformation>
+				<translate x="0" y="0" z="-16" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" length_s="6.28" length_t="1" />
+			<children>
+				<componentref id="foodHolder" />
+			</children>
+		</component>
+		<component id="foodHolder">
+			<transformation>
+				<scale x="0.12" y="0.12" z="0.12" />
+			</transformation>
+			<materials>
+				<material id="foodHolders" />
+			</materials>
+			<texture id="none" length_s="6.28" length_t="1" />
+			<children>
+				<componentref id="foodHolderBase" />
+				<componentref id="foodHolderSupport" />
+				<componentref id="foodHolderPlate" />
+				<componentref id="food" />
+			</children>
+		</component>
+		<component id="foodHolderBase">
+			<transformation>
+				<translate x="0" y="2" z="0" />
+				<rotate axis="x" angle="90" />
+				<scale x="3" y="3" z="1" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" length_s="6.28" length_t="1" />
+			<children>
+				<primitiveref id="cylinder" />
+			</children>
+		</component>
+		<component id="foodHolderSupport">
+			<transformation>
+				<translate x="0" y="7" z="0" />
+				<rotate axis="x" angle="90" />
+				<scale x="0.3" y="0.3" z="5" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" length_s="6.28" length_t="1" />
+			<children>
+				<primitiveref id="cylinder" />
+			</children>
+		</component>
+		<component id="foodHolderPlate">
+			<transformation>
+				<translate x="0" y="8" z="0" />
+				<rotate axis="x" angle="90" />
+				<scale x="5" y="5" z="1" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" length_s="6.28" length_t="1" />
+			<children>
+				<primitiveref id="cylinder" />
+			</children>
+		</component>
+		<component id="food">
+			<transformation>
+				<translate x="0" y="9" z="0" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="none" />
+			<children>
+				<componentref id="food1"/>
+				<componentref id="food2"/>
+				<componentref id="food3"/>
+				<componentref id="food4"/>
+				<componentref id="food5"/>
+				<componentref id="food6"/>
+				<componentref id="food7"/>
+				<componentref id="food8"/>
+				<componentref id="food9"/>
+				<componentref id="food10"/>
+				<componentref id="food11"/>
+				<componentref id="food12"/>
+			</children>
+		</component>
+		<component id="food1">
+			<transformation>
+				<translate x="0" y="0" z="0" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="none" />
+			<children>
+				<componentref id="orangeFood" />
+			</children>
+		</component>
+		<component id="food2">
+			<transformation>
+				<translate x="1.5" y="0" z="1.5" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="none" />
+			<children>
+				<componentref id="redFood" />
+			</children>
+		</component>
+		<component id="food3">
+			<transformation>
+				<translate x="-1.5" y="0" z="-1.5" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="none" />
+			<children>
+				<componentref id="orangeFood" />
+			</children>
+		</component>
+		<component id="food4">
+			<transformation>
+				<translate x="-1.5" y="0" z="1.5" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="none" />
+			<children>
+				<componentref id="greenFood" />
+			</children>
+		</component>
+		<component id="food5">
+			<transformation>
+				<translate x="1.5" y="0" z="-1.5" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="none" />
+			<children>
+				<componentref id="orangeFood" />
+			</children>
+		</component>
+		<component id="food6">
+			<transformation>
+				<translate x="0" y="0" z="3" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="none" />
+			<children>
+				<componentref id="redFood" />
+			</children>
+		</component>
+		<component id="food7">
+			<transformation>
+				<translate x="0" y="0" z="-3" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="none" />
+			<children>
+				<componentref id="yellowFood" />
+			</children>
+		</component>
+		<component id="food8">
+			<transformation>
+				<translate x="3" y="0" z="0" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="none" />
+			<children>
+				<componentref id="greenFood" />
+			</children>
+		</component>
+		<component id="food9">
+			<transformation>
+				<translate x="-3" y="0" z="0" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="none" />
+			<children>
+				<componentref id="redFood" />
+			</children>
+		</component>
+		<component id="food10">
+			<transformation>
+				<translate x="0" y="2" z="0" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="none" />
+			<children>
+				<componentref id="orangeFood" />
+			</children>
+		</component>
+		<component id="food11">
+			<transformation>
+				<translate x="1" y="1.5" z="2" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="none" />
+			<children>
+				<componentref id="yellowFood" />
+			</children>
+		</component>
+		<component id="food12">
+			<transformation>
+				<translate x="2" y="1.5" z="-1" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="none" />
+			<children>
+				<componentref id="redFood" />
+			</children>
+		</component>
+		<component id="redFood">
+			<transformation>
+			</transformation>
+			<materials>
+				<material id="redFood" />
+			</materials>
+			<texture id="none" />
+			<children>
+				<primitiveref id="food" />
+			</children>
+		</component>
+		<component id="orangeFood">
+			<transformation>
+			</transformation>
+			<materials>
+				<material id="orangeFood" />
+			</materials>
+			<texture id="none" />
+			<children>
+				<primitiveref id="food" />
+			</children>
+		</component>
+		<component id="greenFood">
+			<transformation>
+			</transformation>
+			<materials>
+				<material id="greenFood" />
+			</materials>
+			<texture id="none" />
+			<children>
+				<primitiveref id="food" />
+			</children>
+		</component>
+ 		<component id="yellowFood">
+			<transformation>
+			</transformation>
+			<materials>
+				<material id="yellowFood" />
+			</materials>
+			<texture id="none" />
+			<children>
+				<primitiveref id="food" />
+			</children>
+		</component>
+
 		<!-- Elevation -->
 		<component id="elevation">
 			<transformation>
@@ -1276,7 +1712,7 @@
 			</children>
 		</component>
 
-        <component id="hufflepuffPoints">
+		<component id="hufflepuffPoints">
 			<transformation>
 				<scale x="1" y="0.8" z="1" />
 				<translate x="2.25" y="0" z="0" />
@@ -1303,7 +1739,7 @@
 			</children>
 		</component>
 
-        <component id="slytherinPoints">
+		<component id="slytherinPoints">
 			<transformation>
 				<scale x="1" y="0.7" z="1" />
 				<translate x="-2.25" y="0" z="0" />
@@ -1330,7 +1766,7 @@
 			</children>
 		</component>
 
-        <component id="ravenclawPoints">
+		<component id="ravenclawPoints">
 			<transformation>
 				<scale x="1" y="0.5" z="1" />
 				<translate x="-0.75" y="0" z="0" />

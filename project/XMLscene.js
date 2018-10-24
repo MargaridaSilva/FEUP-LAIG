@@ -162,6 +162,8 @@ class XMLscene extends CGFscene {
 
         this.initLights();
 
+        console.log(this.lights);
+
 
         // Adds lights group.
         this.interface.addLightsGroup(Array.prototype.merge(this.graph.omniLights, this.graph.spotLights));
