@@ -1137,7 +1137,11 @@ class MySceneGraph {
         let setAllDefaults = false;
         for (let i = 1; i < especificationArray.length; i++) {
             if (especificationArray[i][TYPE] == "ff") {
-                let float = this.reader.getFloat(node, especificationArray[i][NAME], false);
+                let float;
+                if (flag == "ignore")
+                    float = this.reader.getFloat(node, especificationArray[i][NAME], false);
+                else
+                    float = this.reader.getFloat(node, especificationArray[i][NAME], true);
                 if (isNaN(float) || float == null) {
                     if (flag == "all") {
                         this.onXMLMinorError("unable to parse " + especificationArray[i][NAME] + " value from section " + XMLsection);
@@ -1353,11 +1357,11 @@ class MySceneGraph {
         }
 
 
-        if(texture != null){
-            if(isPowerOfTwo(texture.image.width) && isPowerOfTwo(texture.image.height)){
+        if (texture != null) {
+            if (isPowerOfTwo(texture.image.width) && isPowerOfTwo(texture.image.height)) {
                 material.setTextureWrap('REPEAT', 'REPEAT');
             }
-            else{
+            else {
                 material.setTextureWrap('CLAMP_TO_EDGE', 'CLAMP_TO_EDGE');
             }
         }
