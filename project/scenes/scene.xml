@@ -608,10 +608,6 @@
 				<componentref id="foodHolder3" />
 				<componentref id="foodHolder4" />
 				<componentref id="foodHolder5" />
-				<componentref id="foodHolder6" />
-				<componentref id="foodHolder7" />
-				<componentref id="foodHolder8" />
-				<componentref id="foodHolder9" />
 			</children>
 		</component>
 		<component id="foodHolder1">
@@ -627,7 +623,7 @@
 		</component>
 		<component id="foodHolder2">
 			<transformation>
-				<translate x="0" y="0" z="4" />
+				<translate x="0" y="0" z="8" />
 			</transformation>
 			<materials>
 				<material id="inherit" />
@@ -639,7 +635,7 @@
 		</component>
 		<component id="foodHolder3">
 			<transformation>
-				<translate x="0" y="0" z="8" />
+				<translate x="0" y="0" z="-8" />
 			</transformation>
 			<materials>
 				<material id="inherit" />
@@ -651,54 +647,6 @@
 		</component>
 		<component id="foodHolder4">
 			<transformation>
-				<translate x="0" y="0" z="-4" />
-			</transformation>
-			<materials>
-				<material id="inherit" />
-			</materials>
-			<texture id="inherit" length_s="6.28" length_t="1" />
-			<children>
-				<componentref id="foodHolder" />
-			</children>
-		</component>
-		<component id="foodHolder5">
-			<transformation>
-				<translate x="0" y="0" z="-8" />
-			</transformation>
-			<materials>
-				<material id="inherit" />
-			</materials>
-			<texture id="inherit" length_s="6.28" length_t="1" />
-			<children>
-				<componentref id="foodHolder" />
-			</children>
-		</component>
-		<component id="foodHolder6">
-			<transformation>
-				<translate x="0" y="0" z="12" />
-			</transformation>
-			<materials>
-				<material id="inherit" />
-			</materials>
-			<texture id="inherit" length_s="6.28" length_t="1" />
-			<children>
-				<componentref id="foodHolder" />
-			</children>
-		</component>
-		<component id="foodHolder7">
-			<transformation>
-				<translate x="0" y="0" z="-12" />
-			</transformation>
-			<materials>
-				<material id="inherit" />
-			</materials>
-			<texture id="inherit" length_s="6.28" length_t="1" />
-			<children>
-				<componentref id="foodHolder" />
-			</children>
-		</component>
-		<component id="foodHolder8">
-			<transformation>
 				<translate x="0" y="0" z="16" />
 			</transformation>
 			<materials>
@@ -709,7 +657,7 @@
 				<componentref id="foodHolder" />
 			</children>
 		</component>
-		<component id="foodHolder9">
+		<component id="foodHolder5">
 			<transformation>
 				<translate x="0" y="0" z="-16" />
 			</transformation>
