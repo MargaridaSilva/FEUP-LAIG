@@ -135,10 +135,7 @@ class XMLscene extends CGFscene {
     }
 
 
-    handleInput(code) {
-        if (code == "KeyM")
-            this.graph.displayIndex++;
-    }
+    
 
     /* Handler called when the graph is finally loaded. 
      * As loading is asynchronous, this may be called already after the application has started the run loop
