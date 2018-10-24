@@ -1168,7 +1168,7 @@ class MySceneGraph {
             }
             else if (especificationArray[i][TYPE] == "tt") {
                 let float = this.reader.getFloat(node, especificationArray[i][NAME]);
-                if (float == null || (float != 0 && float != 1)) {
+                if (float == null || isNaN(float) || (float != 0 && float != 1)) {
                     if (flag == "all") {
                         this.onXMLMinorError("unable to parse " + especificationArray[i][NAME] + " value from section " + XMLsection);
                         setAllDefaults = true;
@@ -1198,7 +1198,7 @@ class MySceneGraph {
             }
             else if (especificationArray[i][TYPE] == "ii") {
                 let float = this.reader.getFloat(node, especificationArray[i][NAME]);
-                if (float == null || ((float % 1) != 0)) {
+                if (float == null || isNaN(float) || ((float % 1) != 0)) {
                     if (flag == "all") {
                         this.onXMLMinorError("unable to parse " + especificationArray[i][NAME] + " value from section " + XMLsection);
                         setAllDefaults = true;
