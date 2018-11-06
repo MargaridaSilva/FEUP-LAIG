@@ -196,6 +196,13 @@
 			<rotate axis="x" angle="90" />
 		</transformation>
 	</transformations>
+	<animations>
+		<linear id="example" span="0" >
+			<controlpoint xx="0" yy="0" zz="0"/>
+			<controlpoint xx="1" yy="1" zz="1"/>
+		</linear>
+		<circular id="example" span="0" center="0 0 0" radius="1" startang="1" rotang="1"/>
+	</animations>
 	<primitives>
 		<primitive id="rectangle">
 			<rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />

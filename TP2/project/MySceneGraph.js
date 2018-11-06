@@ -49,8 +49,8 @@ class MySceneGraph {
         */
 
 
-        this.tagNames = ["scene", "views", "ambient", "lights", "textures", "materials", "transformations", "primitives", "components"];
-        this.functionVect = [this.parseScene, this.parseViews, this.parseAmbient, this.parseLights, this.parseTextures, this.parseMaterials, this.parseTransformations, this.parsePrimitives, this.parseComponents];
+        this.tagNames = ["scene", "views", "ambient", "lights", "textures", "materials", "transformations", "animations", "primitives", "components"];
+        this.functionVect = [this.parseScene, this.parseViews, this.parseAmbient, this.parseLights, this.parseTextures, this.parseMaterials, this.parseTransformations, this.parseAnimations, this.parsePrimitives, this.parseComponents];
 
         this.values = [];
         this.deg2rad = Math.PI / 180;
@@ -735,6 +735,36 @@ class MySceneGraph {
         this.scene.popMatrix();
 
         this.transformations[transformationId] = finalMatrix;
+    }
+
+    
+    parseAnimations(animationsNode){
+        let children = animationsNode.children;
+        this.linearAnimations = [];
+        this.circularAnimations = [];
+
+        //ID
+        let animationId = this.reader.getString(children[i], 'id');
+        if (animationId == null)
+            return "no ID defined for animation";
+
+        for (let i = 0; i < children.length; i++){
+            if (children[i].nodeName == "linear"){
+
+                if (this.linearAnimations.hasOwnProperty(animationId))
+                    return "ID must be unique for each primitive (conflict: ID = " + animationId + ")";
+
+                
+                
+            }
+            else if (children[i].nodeName == "circular"){
+
+                if (this.linearAnimations.hasOwnProperty(animationId))
+                    return "ID must be unique for each primitive (conflict: ID = " + animationId + ")";
+
+            }
+            else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in animations node was ignored");
+        }
     }
 
     parsePrimitives(primitivesNode) {
