@@ -758,15 +758,15 @@ class MySceneGraph {
                 let grandchildren = children[i].children;
                 let controlpoint, controlpoints = [];
 
-                for(let j = 0; j < grandchildren.length; j++){
-                    if (grandchildren[j].nodeName == "controlpoint"){
+                for (let j = 0; j < grandchildren.length; j++) {
+                    if (grandchildren[j].nodeName == "controlpoint") {
                         controlpoint = this.parseFields(grandchildren[j], ["all", ["xx", "ff", 0], ["yy", "ff", 0], ["zz", "ff", 0]], "animations > linear animation id =" + animationId);
                         controlpoints.push(controlpoint);
                     }
                     else this.onXMLMinorError("inappropriate tag <" + grandchildren[j].nodeName + "> in linear animation id = " + animationId + " was ignored");
                 }
                 if (controlpoints.length < 2)
-                return "Unsufficient controlpoints for linear animation id =" + animationId;
+                    return "Unsufficient controlpoints for linear animation id =" + animationId;
 
                 console.log(animationId);
 
@@ -970,10 +970,12 @@ class MySceneGraph {
         let transfIndex = nodeNames.indexOf("transformation");
         let materialIndex = nodeNames.indexOf("materials");
         let textureIndex = nodeNames.indexOf("texture");
+        let animationIndex = nodeNames.indexOf("animations");
         let childrenIndex = nodeNames.indexOf("children");
 
         this.components[componentId] = {
             transformation: null,
+            animations: [],
             materials: [],
             texture: null,
             children: []
@@ -993,12 +995,23 @@ class MySceneGraph {
                 return (error);
         }
 
+
+        //Animations
+        if (animationIndex != -1) {
+            if (animationIndex != 1) {
+                this.onXMLMinorError("component animation out of order for ID =" + componentId);
+            }
+            error = this.parseComponentAnimation(children[animationIndex], componentId);
+            if (error != null)
+                return (error);
+        }
+
         //Material
         if (materialIndex == -1) {
             return "component materials undefined for ID = " + componentId;
         }
         else {
-            if (materialIndex != 1) {
+            if (materialIndex != 1 || (materialIndex != 2 && animationIndex != -1)) {
                 this.onXMLMinorError("component materials out of order for ID =" + componentId);
             }
             error = this.parseComponentMaterials(children[materialIndex], componentId);
@@ -1011,7 +1024,7 @@ class MySceneGraph {
             return "component texture undefined for ID = " + componentId;
         }
         else {
-            if (textureIndex != 2) {
+            if (textureIndex != 2 || (textureIndex != 2 && animationIndex != -1)) {
                 this.onXMLMinorError("component texture out of order for ID =" + componentId);
             }
             error = this.parseComponentTexture(children[textureIndex], componentId);
@@ -1019,12 +1032,13 @@ class MySceneGraph {
                 return (error);
         }
 
+
         //Children
         if (childrenIndex == -1) {
             return "component children undefined for ID = " + componentId;
         }
         else {
-            if (childrenIndex != 3) {
+            if ((childrenIndex != 3) || (childrenIndex != 4 && animationIndex != -1)) {
                 this.onXMLMinorError("component children out of order for ID =" + componentId);
             }
             error = this.parseComponentChildren(children[childrenIndex], componentId);
@@ -1144,6 +1158,25 @@ class MySceneGraph {
             length_s: info.length_s,
             length_t: info.length_t
         };
+    }
+
+    parseComponentAnimation(compAnimationsNode, id) {
+        let children = compAnimationsNode;
+
+        for (let i = 0; i < children.length; i++) {
+            if (children[i].nodeName == "animationref") {
+                //ID
+                let animationId = this.reader.getString(children[i], 'id');
+                if (materialId == null)
+                    return "no ID defined for material in component id = " + id;
+
+                if (this.linearAnimations.hasOwnProperty(animationId) || this.circularAnimations.hasOwnProperty(animationId))
+                    this.components[id].animations.push(animationId);
+                else return "animation ID not found for in component id = " + id;
+            }
+            else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in animatios of component id = " + id);
+        }
+
     }
 
     parseComponentChildren(compChildrenNode, id) {
