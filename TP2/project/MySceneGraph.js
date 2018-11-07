@@ -769,15 +769,13 @@ class MySceneGraph {
                     return "Unsufficient controlpoints for linear animation id =" + animationId;
 
                 console.log(animationId);
-
-                //WHY ERROR
-                //this.linearAnimations[animationId] = controlpoints;
+                this.linearAnimations[animationId] = controlpoints;
 
             }
             else if (children[i].nodeName == "circular") {
                 let circularAnimation;
 
-                if (this.linearAnimations.hasOwnProperty(animationId))
+                if (this.circularAnimations.hasOwnProperty(animationId))
                     return "ID must be unique for each primitive (conflict: ID = " + animationId + ")";
 
                 circularAnimation = this.parseFields(children[i], ["single", ["span", "ff", 0], ["center", "ff", 0], ["radius", "ff", 0], ["startang", "ff", 0], ["rotang", "ff", 0]], "animations > circular animation id =" + animationId);
