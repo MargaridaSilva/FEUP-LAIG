@@ -816,28 +816,24 @@ class MySceneGraph {
 
     parsePrimitive(primitiveNode, primitiveId) {
         let children = primitiveNode.children;
+        this.parsePrimitiveFunction = [];
+        this.parsePrimitiveFunction["rectangle"] = this.parseRectangle;
+        this.parsePrimitiveFunction["triangle"] = this.parseTriangle;
+        this.parsePrimitiveFunction["sphere"] = this.parseSphere;
+        this.parsePrimitiveFunction["torus"] = this.parseTorus;
+        this.parsePrimitiveFunction["plane"] = this.parsePlane;
+        this.parsePrimitiveFunction["patch"] = this.parsePatch;
+        this.parsePrimitiveFunction["vehicle"] = this.parseVehicle;
+        this.parsePrimitiveFunction["cylinder2"] = this.parseCylinder2;
+        this.parsePrimitiveFunction["terrain"] = this.parseTerrain;
+        this.parsePrimitiveFunction["water"] = this.parseWat;
 
         let error;
 
         for (let i = 0; i < children.length; i++) {
-            if (children[i].nodeName == "rectangle") {
-                if ((error = this.parseRectangle(children[i], primitiveId)) != null)
-                    return error;
-            }
-            else if (children[i].nodeName == "triangle") {
-                if ((error = this.parseTriangle(children[i], primitiveId)) != null)
-                    return error;
-            }
-            else if (children[i].nodeName == "cylinder") {
-                if ((error = this.parseCylinder(children[i], primitiveId)) != null)
-                    return error;
-            }
-            else if (children[i].nodeName == "sphere") {
-                if ((error = this.parseSphere(children[i], primitiveId)) != null)
-                    return error;
-            }
-            else if (children[i].nodeName == "torus") {
-                if ((error = this.parseTorus(children[i], primitiveId)) != null)
+            if (this.parsePrimitiveFunction.hasOwnProperty(children[i].nodeName)) {
+                error = this.parseTriangle(children[i], primitiveId);
+                if (error != null)
                     return error;
             }
             else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in <primitives> block was ignored")
@@ -892,7 +888,88 @@ class MySceneGraph {
 
         this.primitives[primitiveId] = new MyTorus(this.scene, info.inner, info.outer, info.slices, info.loops);
     }
+    parsePlane(planeNode, primitiveId) {
+        //INFO
+        let info;
+        info = this.parseFields(planeNode, ["all", ["npartsU", "ii", 1], ["npartsV", "ff", 1]], "primitives > plane id = " + primitiveId);
 
+        this.primitives[primitiveId] = new MyPlane(this.scene, info.npartsU, info.npartsV);
+    }
+    parsePatch(patchNode, primitiveId) {
+        //INFO
+        let info;
+        info = this.parseFields(planeNode, ["all", ["npartsU", "ii", 1], ["npartsV", "ff", 1]], "primitives > patch id = " + primitiveId);
+
+        let children = patchNode.children;
+        let controlpoint, controlpoints = [];
+
+        for (let j = 0; j < children.length; j++) {
+            if (children[j].nodeName == "controlpoint") {
+                controlpoint = this.parseFields(children[j], ["all", ["xx", "ff", 0], ["yy", "ff", 0], ["zz", "ff", 0]], "primitives > patch id =" + animationId);
+                controlpoints.push(controlpoint);
+            }
+            else this.onXMLMinorError("inappropriate tag <" + children[j].nodeName + "> in patch  id = " + primitiveId + " was ignored");
+        }
+        if (controlpoints.length < 2)
+            return "Unsufficient controlpoints for patch id =" + animationId;
+    }
+
+    parseVehicle(vehicleNode, primitiveId) {
+
+    }
+
+    parseCylinder2(cylinder2Node, primitiveId) {
+        //INFO
+        let info;
+        info = this.parseFields(cylinder2Node, ["all", ["base", "ff", 1], ["top", "ff", 1], ["height", "ff", 1], ["slices", "ii", 1], ["stacks", "ii", 1]], "primitives > cylinder2 id = " + primitiveId);
+
+        this.primitives[primitiveId] = new MyCylinder2(this.scene, info.base, info.top, info.height, info.slices, info.stacks);
+    }
+    parseTerrain(terrainNode, primitiveId) {
+        //IDS
+        let idtexture = this.reader.getString(children[i], 'idtexture');
+        if (idtexture == null)
+            return "no idtexture defined for terrain in primitive id = " + primitiveId;
+
+        if (!this.textures.hasOwnProperty(idtexture))
+            return "texture not found for idtexture of terrain in primitive id = " + primitiveidID;
+
+        let idheightmap = this.reader.getString(children[i], 'idheightmap');
+        if (idheightmap == null)
+            return "no idheight defined for terrain in primitive id = " + primitiveId;
+
+        if (!this.textures.hasOwnProperty(idheightmap))
+            return "texture not found for idheightmap of terrain in primitive id = " + primitiveidID;
+
+        //INFO
+        let info;
+        info = this.parseFields(terrainNode, ["all", ["parts", "ii", 1], ["heightscale", "ff", 1]], "primitives > terrain id = " + primitiveId);
+
+        this.primitives[primitiveId] = new MyTerrain(this.scene, idtexture, idheightmap, info.parts, info.heightscale);
+    }
+
+    parseWater(waterNode, primitiveId) {
+        //IDS
+        let idtexture = this.reader.getString(children[i], 'idtexture');
+        if (idtexture == null)
+            return "no idtexture defined for water in primitive id = " + primitiveId;
+
+        if (!this.textures.hasOwnProperty(idtexture))
+            return "texture not found for idtexture of water in primitive id = " + primitiveidID;
+
+        let idwavemap = this.reader.getString(children[i], 'idwavemap');
+        if (idwavemap == null)
+            return "no idwavemap defined for water in primitive id = " + primitiveId;
+
+        if (!this.textures.hasOwnProperty(idwavemap))
+            return "texture not found for idwavemap of water in primitive id = " + primitiveid;
+
+        //INFO
+        let info;
+        info = this.parseFields(terrainNode, ["all", ["parts", "ii", 1], ["heightscale", "ff", 1], ["texscale", "ff", 1]], "primitives > water id = " + primitiveId);
+
+        this.primitives[primitiveId] = new MyWater(this.scene, idtexture, idwavemap, info.parts, info.heightscale, info.texscale);
+    }
 
     parseComponents(componentsNode) {
 
