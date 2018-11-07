@@ -737,34 +737,55 @@ class MySceneGraph {
         this.transformations[transformationId] = finalMatrix;
     }
 
-    
-    parseAnimations(animationsNode){
+
+    parseAnimations(animationsNode) {
         let children = animationsNode.children;
         this.linearAnimations = [];
         this.circularAnimations = [];
 
-        //ID
-        let animationId = this.reader.getString(children[i], 'id');
-        if (animationId == null)
-            return "no ID defined for animation";
+        for (let i = 0; i < children.length; i++) {
 
-        for (let i = 0; i < children.length; i++){
-            if (children[i].nodeName == "linear"){
+            //ID
+            let animationId = this.reader.getString(children[i], 'id');
+            if (animationId == null)
+                return "no ID defined for animation";
+
+            if (children[i].nodeName == "linear") {
 
                 if (this.linearAnimations.hasOwnProperty(animationId))
                     return "ID must be unique for each primitive (conflict: ID = " + animationId + ")";
 
-                
-                
+                let grandchildren = children[i].children;
+                let controlpoint, controlpoints = [];
+
+                for(let j = 0; j < grandchildren.length; j++){
+                    if (grandchildren[j].nodeName == "controlpoint"){
+                        controlpoint = this.parseFields(grandchildren[j], ["all", ["xx", "ff", 0], ["yy", "ff", 0], ["zz", "ff", 0]], "animations > linear animation id =" + animationId);
+                        controlpoints.push(controlpoint);
+                    }
+                    else this.onXMLMinorError("inappropriate tag <" + grandchildren[j].nodeName + "> in linear animation id = " + animationId + " was ignored");
+                }
+                if (controlpoints.length < 2)
+                return "Unsufficient controlpoints for linear animation id =" + animationId;
+
+                console.log(animationId);
+
+                //WHY ERROR
+                //this.linearAnimations[animationId] = controlpoints;
+
             }
-            else if (children[i].nodeName == "circular"){
+            else if (children[i].nodeName == "circular") {
+                let circularAnimation;
 
                 if (this.linearAnimations.hasOwnProperty(animationId))
                     return "ID must be unique for each primitive (conflict: ID = " + animationId + ")";
 
+                circularAnimation = this.parseFields(children[i], ["single", ["span", "ff", 0], ["center", "ff", 0], ["radius", "ff", 0], ["startang", "ff", 0], ["rotang", "ff", 0]], "animations > circular animation id =" + animationId);
+                this.circularAnimations[animationId] = circularAnimation;
             }
             else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in animations node was ignored");
         }
+        this.log("Parsed Animations");
     }
 
     parsePrimitives(primitivesNode) {
