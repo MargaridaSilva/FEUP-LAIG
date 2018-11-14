@@ -43,7 +43,7 @@
 	</animations>
 	<primitives>
 		<primitive id="rectangle">
-			<rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
+			<vehicle/>
 		</primitive>
 	</primitives>
 	<components>

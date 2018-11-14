@@ -48,20 +48,6 @@ class MySceneGraph {
         Não espera que o ficheiro seja carregado
         */
 
-        /*
-        this.tagParse = {
-            "scene": { "index" : 0, "function": this.parseScene},
-            "views": this.parseViews,
-            "ambient": this.parseAmbient,
-            "lights": this.parseLights,
-            "textures": this.parseTextures,
-            "materials": this.parseMaterials,
-            "transformations": this.parseTransformations,
-            "animations": this.parseAnimations,
-            "primitives": this.parsePrimitives,
-            "components":this.parseComponents
-        }
-        */
         this.tagNames = ["scene", "views", "ambient", "lights", "textures", "materials", "transformations", "animations", "primitives", "components"];
         this.functionVect = [this.parseScene, this.parseViews, this.parseAmbient, this.parseLights, this.parseTextures, this.parseMaterials, this.parseTransformations, this.parseAnimations, this.parsePrimitives, this.parseComponents];
 
