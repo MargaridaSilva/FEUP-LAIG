@@ -1,84 +1,33 @@
-class MyPlane extends CGFobject {
-
-    constructor(scene, bottomLeftX, bottomLeftY, topRightX, topRightY) {
+class MyPlane extends CGFobject{
+    
+    constructor(scene, npartsU, npartsV){
         super(scene);
+        this.scene = scene;
+        this.npartsU = npartsU;
+        this.npartsV = npartsV;
 
-        this.patchLength = 1;
-
-        this.bottomLeftX = bottomLeftX;
-        this.bottomLeftY = bottomLeftY;
-        this.topRightX = topRightX;
-        this.topRightY = topRightY;
-
-        this.dx = this.topRightX - this.bottomLeftX;
-        this.dy = this.topRightY - this.bottomLeftY;
-
-        this.nrDivsX = this.dx / this.patchLength;
-        this.nrDivsY = this.dy / this.patchLength;
-
-        this.ds = 1 / this.nrDivsX;
-        this.dt = 1 / this.nrDivsY;
-
-        
-        this.vertices = [];
-        this.normals = [];
-        this.texCoords = [];
-
-
-        this.initBuffers();
-    };
-
-    updateCoords(s, t) {
-        let sRatio = this.dx / s;
-        let tRatio = this.dy / t;
-
-        for (let i = 0; i < this.texCoords.length; i += 2) {
-            this.texCoords[i] = this.originaltexCoords[i] * sRatio;
-            this.texCoords[i + 1] = this.originaltexCoords[i + 1] * tRatio;
-        }
-
-        this.updateTexCoordsGLBuffers();
+        this.plane = this.createNurb();
     }
 
-    initBuffers() {
-        // Generate vertices and normals
+    createNurb(){
 
-        let yCoord = this.topRightY;
+        let degreeU = 1;
+        let degreeV = 1;
 
-        for (let j = 0; j <= this.nrDivsY; j++) {
-            let xCoord = this.bottomLeftX;
-            for (let i = 0; i <= this.nrDivsX; i++) {
-                this.vertices.push(xCoord, yCoord, 0);
-                this.normals.push(0, 0, 1);
+		let controlvertexes = [
+                [ [-0.5, 0, 0.5, 1],     [-0.5, 0, -0.5, 1] ],
+                [ [+0.5, 0, 0.5, 1],     [+0.5, 0, -0.5, 1] ]
+			]
 
-                this.texCoords.push(this.ds * i, this.dt * j);
+		let nurbsSurface = new CGFnurbsSurface(degreeU, degreeV, controlvertexes);
+        let obj = new CGFnurbsObject(this.scene, this.npartsU, this.npartsV, nurbsSurface);
 
-                xCoord += this.patchLength;
-            }
-            yCoord -= this.patchLength;
-        }
+        return obj;
+    }
 
 
-        this.indices = [];
-        var ind = 0;
+    display(){
+        this.plane.display();
+    }
 
-
-        /* Alternative with TRIANGLES instead of TRIANGLE_STRIP. More indices, but no degenerate triangles */
-
-        for (var j = 0; j < this.nrDivsY; j++) {
-            for (var i = 0; i < this.nrDivsX; i++) {
-                this.indices.push(ind, ind + this.nrDivsX + 1, ind + 1);
-                this.indices.push(ind + 1, ind + this.nrDivsX + 1, ind + this.nrDivsX + 2);
-
-                ind++;
-            }
-            ind++;
-        }
-
-        
-        this.originaltexCoords = this.texCoords.slice();
-        this.primitiveType = this.scene.gl.TRIANGLES;
-        this.initGLBuffers();
-    };
-
-};
+}
