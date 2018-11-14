@@ -952,14 +952,14 @@ class MySceneGraph {
     }
     parseTerrain(terrainNode, primitiveId) {
         //IDS
-        let idtexture = this.reader.getString(children[i], 'idtexture');
+        let idtexture = this.reader.getString(terrainNode, 'idtexture');
         if (idtexture == null)
             return "no idtexture defined for terrain in primitive id = " + primitiveId;
 
         if (!this.textures.hasOwnProperty(idtexture))
             return "texture not found for idtexture of terrain in primitive id = " + primitiveidID;
 
-        let idheightmap = this.reader.getString(children[i], 'idheightmap');
+        let idheightmap = this.reader.getString(terrainNode, 'idheightmap');
         if (idheightmap == null)
             return "no idheight defined for terrain in primitive id = " + primitiveId;
 
@@ -970,7 +970,7 @@ class MySceneGraph {
         let info;
         info = this.parseFields(terrainNode, ["all", ["parts", "ii", 1], ["heightscale", "ff", 1]], "primitives > terrain id = " + primitiveId);
 
-        this.primitives[primitiveId] = new MyTerrain(this.scene, idtexture, idheightmap, info.parts, info.heightscale);
+        this.primitives[primitiveId] = new MyTerrain(this.scene, this.textures[idtexture], this.textures[idheightmap], info.parts, info.heightscale);
     }
 
     parseWater(waterNode, primitiveId) {

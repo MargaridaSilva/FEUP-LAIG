@@ -220,11 +220,12 @@ class XMLscene extends CGFscene {
                     i++;
                 }
             }
-            // this.graph.displayScene();
+           
 
             this.appearance.apply();
             this.scale(50, 50, 50);
-            this.terrain.display();
+            // this.terrain.display();
+            this.graph.displayScene();
 
         }
         else {

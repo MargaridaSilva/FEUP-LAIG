@@ -4,8 +4,8 @@ class MyTerrain extends CGFobject{
         super(scene);
         this.terrain = new MyPlane(scene, parts, parts);
         
-        this.heightmap = heightmap; //new CGFtexture(this, "textures/grass01_h.jpg");    
-        this.texture = texture; //= new CGFtexture(this, "textures/grass01.jpg");
+        this.heightmap = heightmap;
+        this.texture = texture;
 
         this.shader = new CGFshader(this.scene.gl, "shaders/terrain_vert.glsl", "shaders/terrain_frag.glsl");
         this.shader.setUniformsValues({uSampler2: 1, normScale: heightscale});
@@ -29,4 +29,8 @@ class MyTerrain extends CGFobject{
         this.scene.popMatrix();
     }
 
+
+    updateCoords(){
+        
+    }
 }

@@ -20,6 +20,9 @@
 	</lights>
 	<textures>
 		<texture id="tableWood" file="scenes/images/wood.jpg" />
+		<texture id="terrain_h" file="scenes/images/island-height.jpg" />
+		<texture id="terrain_t" file="scenes/images/island.jpg" />
+		
 	</textures>
 	<materials>
 		<material id="white" shininess="0.5">
@@ -45,6 +48,10 @@
 		<primitive id="rectangle">
 			<rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
 		</primitive>
+
+		<primitive id="terrain">
+			<terrain idtexture="terrain_t" idheightmap="terrain_h" parts="100" heightscale="20"/>
+		</primitive>
 	</primitives>
 	<components>
 		<component id="scene">
@@ -56,7 +63,7 @@
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0" />
 			<children>
-				<primitiveref id="rectangle" />
+				<primitiveref id="terrain" />
 			</children>
 		</component>
 	</components>
