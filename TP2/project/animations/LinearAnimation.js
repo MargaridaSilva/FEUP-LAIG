@@ -1,6 +1,3 @@
-
-
-
 class LinearAnimation extends Animation {
 
 	constructor(scene, points, span) {

@@ -24,6 +24,12 @@ class XMLscene extends CGFscene {
     init(application) {
         super.init(application);
 
+        this.appearance = new CGFappearance(this);
+        this.appearance.setAmbient(0.1, 0.1, 0.1, 1);
+        this.appearance.setDiffuse(0.9, 0.9, 0.9, 1);
+        this.appearance.setSpecular(0.6, 0.6, 0.6, 1);	
+        this.appearance.setShininess(5);
+
         this.sceneInited = false;
 
         this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
@@ -36,6 +42,12 @@ class XMLscene extends CGFscene {
         this.gl.enable(this.gl.DEPTH_TEST);
         this.gl.enable(this.gl.CULL_FACE);
         this.gl.depthFunc(this.gl.LEQUAL);
+
+
+        this.heightMap = new CGFtexture(this, "scenes/images/island-height.jpg");
+        this.texture = new CGFtexture(this, "scenes/images/island.jpg");
+
+        this.terrain = new MyTerrain(this, this.texture, this.heightMap, 100, 20);
     }
 
     /**
@@ -208,7 +220,12 @@ class XMLscene extends CGFscene {
                     i++;
                 }
             }
-            this.graph.displayScene();
+            // this.graph.displayScene();
+
+            this.appearance.apply();
+            this.scale(50, 50, 50);
+            this.terrain.display();
+
         }
         else {
             // Draw axis

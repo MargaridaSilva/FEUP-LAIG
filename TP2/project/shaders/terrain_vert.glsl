@@ -178,7 +178,7 @@ void main() {
     vec3 E = normalize(eyeVec);
 
     vFinalColor = lighting(vertex, E, N);
-    // vFinalColor = vec4(N, 1);
+    // vFinalColor = vec4(normal, 1);
 
 	gl_Position = uPMatrix * vertex;
 }
