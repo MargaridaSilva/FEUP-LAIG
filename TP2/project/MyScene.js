@@ -21,6 +21,17 @@ class MyScene extends CGFscene {
         this.axis = new CGFaxis(this);
 
         this.setAmbient(1.0, 1.0, 1.0, 1.0);
+
+        this.appearance = new CGFappearance(this);
+        this.appearance.setAmbient(0.1, 0.1, 0.1, 1);
+        this.appearance.setDiffuse(0.9, 0.9, 0.9, 1);
+        this.appearance.setSpecular(0.6, 0.6, 0.6, 1);	
+        this.appearance.setShininess(5);
+        
+        this.heightMap = new CGFtexture(this, "textures/grass01_h.jpg");
+        this.texture = new CGFtexture(this, "textures/grass01.jpg");
+
+        this.terrain = new MyTerrain(this, this.texture, this.heightMap, 100, 30);
     }
 
     /**
