@@ -912,6 +912,8 @@ class MySceneGraph {
         }
         if (controlpoints.length < 2)
             return "Unsufficient controlpoints for patch id =" + animationId;
+
+        this.primitives[primitiveId] = new MyPatch(this.scene, info.npartsU, info.npartsV, controlpoints);
     }
 
     parseVehicle(vehicleNode, primitiveId) {
