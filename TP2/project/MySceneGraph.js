@@ -832,9 +832,10 @@ class MySceneGraph {
 
         for (let i = 0; i < children.length; i++) {
             if (this.parsePrimitiveFunction.hasOwnProperty(children[i].nodeName)) {
-                error = this.parseTriangle(children[i], primitiveId);
+                error = this.parsePrimitiveFunction(children[i], primitiveId);
                 if (error != null)
                     return error;
+                
             }
             else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in <primitives> block was ignored")
         }
