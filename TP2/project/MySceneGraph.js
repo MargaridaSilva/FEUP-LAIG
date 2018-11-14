@@ -48,14 +48,45 @@ class MySceneGraph {
         Não espera que o ficheiro seja carregado
         */
 
-
+        /*
+        this.tagParse = {
+            "scene": { "index" : 0, "function": this.parseScene},
+            "views": this.parseViews,
+            "ambient": this.parseAmbient,
+            "lights": this.parseLights,
+            "textures": this.parseTextures,
+            "materials": this.parseMaterials,
+            "transformations": this.parseTransformations,
+            "animations": this.parseAnimations,
+            "primitives": this.parsePrimitives,
+            "components":this.parseComponents
+        }
+        */
         this.tagNames = ["scene", "views", "ambient", "lights", "textures", "materials", "transformations", "animations", "primitives", "components"];
         this.functionVect = [this.parseScene, this.parseViews, this.parseAmbient, this.parseLights, this.parseTextures, this.parseMaterials, this.parseTransformations, this.parseAnimations, this.parsePrimitives, this.parseComponents];
 
+        this.primitiveParse = {
+            "rectangle": this.parseRectangle,
+            "triangle" : this.parseTriangle,
+            "sphere": this.parseSphere,
+            "torus": this.parseTorus,
+            "plane":this.parsePlane,
+            "patch": this.parsePatch,
+            "vehicle": this.parseVehicle,
+            "cylinder2": this.parseCylinder2,
+            "terrain": this.parseTerrain,
+            "water": this.parseWater
+        }
+        
         this.values = [];
         this.deg2rad = Math.PI / 180;
 
         this.displayIndex = 0;
+
+        this.materialStack = [];
+        this.textureStack = [];
+        this.sStack = [];
+        this.tStack = [];
     }
 
     /*
@@ -816,23 +847,13 @@ class MySceneGraph {
 
     parsePrimitive(primitiveNode, primitiveId) {
         let children = primitiveNode.children;
-        this.parsePrimitiveFunction = [];
-        this.parsePrimitiveFunction["rectangle"] = this.parseRectangle;
-        this.parsePrimitiveFunction["triangle"] = this.parseTriangle;
-        this.parsePrimitiveFunction["sphere"] = this.parseSphere;
-        this.parsePrimitiveFunction["torus"] = this.parseTorus;
-        this.parsePrimitiveFunction["plane"] = this.parsePlane;
-        this.parsePrimitiveFunction["patch"] = this.parsePatch;
-        this.parsePrimitiveFunction["vehicle"] = this.parseVehicle;
-        this.parsePrimitiveFunction["cylinder2"] = this.parseCylinder2;
-        this.parsePrimitiveFunction["terrain"] = this.parseTerrain;
-        this.parsePrimitiveFunction["water"] = this.parseWat;
-
         let error;
 
         for (let i = 0; i < children.length; i++) {
-            if (this.parsePrimitiveFunction.hasOwnProperty(children[i].nodeName)) {
-                error = this.parsePrimitiveFunction(children[i], primitiveId);
+            if (this.primitiveParse.hasOwnProperty(children[i].nodeName)) {
+                console.log(children[i].nodeName);
+                this.primitiveFunction = this.primitiveParse[children[i].nodeName];
+                error = this.primitiveFunction(children[i], primitiveId);
                 if (error != null)
                     return error;
                 
@@ -850,6 +871,7 @@ class MySceneGraph {
 
         //INFO
         let info;
+        console.log(this);
         info = this.parseFields(rectangleNode, ["all", ["x1", "ff", -0.5], ["y1", "ff", -0.5], ["x2", "ff", 0.5], ["y2", "ff", 0.5]], "primitives > rectangle id = " + primitiveId);
         this.primitives[primitiveId] = new MyQuad(this.scene, info.x1, info.y1, info.x2, info.y2);
     }
@@ -918,7 +940,7 @@ class MySceneGraph {
     }
 
     parseVehicle(vehicleNode, primitiveId) {
-
+        this.primitives[primitiveId] = new MyVehicle(this.scene);
     }
 
     parseCylinder2(cylinder2Node, primitiveId) {
@@ -1006,6 +1028,13 @@ class MySceneGraph {
         this.rootTT = this.components[this.values.scene.root].texture.length_t;
         let nMaterials = Object.keys(rootMaterials).length;
         this.rootMaterial = this.components[this.values.scene.root].materials[this.displayIndex % nMaterials];
+
+        if (this.rootMaterial == "inherit") {
+            for (let key in this.materials) {
+                this.rootMaterial = key;
+                break;
+            }
+        }
 
         if (this.rootTexture == "none" || this.rootTexture == "inherit") {
             this.onXMLMinorError("the root component should have a defined texture, instead of being " + this.rootTexture + "; warning texture was applied");
@@ -1419,24 +1448,6 @@ class MySceneGraph {
      * Displays the scene, processing each node, starting in the root node.
      */
     displayScene() {
-        // entry point for graph rendering
-        //TODO: Render loop starting at root of graph
-        this.materialStack = [];
-        this.textureStack = [];
-        this.sStack = [];
-        this.tStack = [];
-
-        let rootMaterials = this.components[this.values.scene.root].materials;
-        let nMaterials = Object.keys(rootMaterials).length;
-        this.rootMaterial = this.components[this.values.scene.root].materials[this.displayIndex % nMaterials];
-
-        if (this.rootMaterial == "inherit") {
-            for (let key in this.materials) {
-                this.rootMaterial = key;
-                break;
-            }
-        }
-
         this.materialStack.push(this.rootMaterial);
         this.textureStack.push(this.rootTexture);
         this.sStack.push(this.rootTS);

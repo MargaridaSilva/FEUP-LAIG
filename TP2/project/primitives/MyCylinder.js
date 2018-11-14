@@ -1,4 +1,4 @@
-class MyCylinder {
+class MyCylinder extends CGFobject {
 
     constructor(scene, base, top, height, slices, stacks){
         this.scene = scene;
