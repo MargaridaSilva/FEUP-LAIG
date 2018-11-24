@@ -49,7 +49,7 @@
 		</transformation>
 	</transformations>
 	<animations>
-		<linear id="exampleLinear" span="0">
+		<linear id="exampleLinear" span="1" >
 			<controlpoint xx="0" yy="0" zz="0"/>
 			<controlpoint xx="1" yy="1" zz="1"/>
 		</linear>
@@ -83,26 +83,23 @@
 			<transformation>
 				<transformationref id="base" />
 			</transformation>
-			<animations>
-				<animationref id= "exampleLinear"/>
-			</animations>
 			<materials>
 				<material id="white" />
 			</materials>
 			<texture id="none" />
 			<children>
-				<componentref id="terrain" />
-				<componentref id="water" />
-				<componentref id="vehicle"/>
-				<!-- <primitiveref id="cylinder2" /> -->
+				<componentref id="cylinder"/>
 			</children>
 		</component>
 
 
-		<component id="terrain">
+		<component id="cylinder">
 			<transformation>
-				<scale x="50" y="50" z="50" />
+				<transformationref id="base"/>
 			</transformation>
+			<animations>
+				<animationref id= "exampleLinear"/>
+			</animations>
 			<materials>
 				<material id="inherit" />
 			</materials>

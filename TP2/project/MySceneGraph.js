@@ -1266,13 +1266,12 @@ class MySceneGraph {
                 let animationId = this.reader.getString(children[i], 'id');
                 if (animationId == null)
                     return "no ID defined for material in component id = " + id;
-                    console.log(animationId);
+
                 if (this.linearAnimations.hasOwnProperty(animationId)) {
                     let span = this.linearAnimations[animationId].span;
                     let points = this.linearAnimations[animationId].points;
                     let animation = new LinearAnimation(this.scene, points, span);
                     this.components[id].animations.push(animation);
-                    console.log("------------------"+this.components[id].animations);
                 }
                 else if (this.circularAnimations.hasOwnProperty(animationId)){
 
@@ -1461,7 +1460,6 @@ class MySceneGraph {
     displayRecursive(idNode) {
 
         let node = this.components[idNode];
-
 
         if (node.transformation != undefined)
             this.scene.multMatrix(node.transformation);

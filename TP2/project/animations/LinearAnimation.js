@@ -30,13 +30,13 @@ class LinearAnimation extends Animation {
 	}
 
 	update(dt) {
+
 		if (this.t < this.span) {
 			this.t += dt;
 
 			let speed = this.getSpeed();
-			this.position = this.position.add([speed[0] * dt, speed[1] * dt, speed[2] * dt]);
+			this.position = [this.position[0]+ this.speed[0] * dt, this.position[1] + this.speed[1] * dt, this.position[2] + this.speed[2] * dt];
 		}
-
 	}
 
 	apply() {
@@ -56,9 +56,11 @@ class LinearAnimation extends Animation {
 
 		for (let i = 0; i < this.points.length - 1; i++) {
 			let vec = this.points[i + 1].minus(this.points[i]);
-			direction[i] = [];
-			direction[i].vec = vec;
-			direction[i].norm = vec.norm();
+			console.log(this.points);
+			direction[i] = {
+				vec: vec,
+				norm: vec.norm
+			};
 		}
 
 		return direction;

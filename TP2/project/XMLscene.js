@@ -233,9 +233,14 @@ class XMLscene extends CGFscene {
         }
 
         this.dt = currTime - this.lastTime;
+        this.lastTime = currTime;
         
-        for(let key in this.graph.animations){
-            this.graph.animations[key].update(this.dt);
+
+        for(let key in this.graph.components){
+            let comp = this.graph.components[key];
+            if (comp.animations != undefined && comp.animations.length > 0) {
+                comp.animations[comp.activeAnimation].update(this.dt);
+            }
         }
     }
 }
