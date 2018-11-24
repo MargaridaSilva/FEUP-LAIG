@@ -28,6 +28,9 @@ serialInclude([ '../lib/CGF.js',
                 'primitives/MyPatch.js',
                 'primitives/MyTerrain.js',
                 'primitives/MyVehicle.js',
+                'animations/Animation.js',
+                'animations/LinearAnimation.js',
+                'animations/CircularAnimation.js',
 
 main=function()
 {

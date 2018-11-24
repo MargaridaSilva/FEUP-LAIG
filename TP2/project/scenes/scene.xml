@@ -38,11 +38,11 @@
 		</transformation>
 	</transformations>
 	<animations>
-		<linear id="example" span="0" >
+		<linear id="exampleLinear" span="0" >
 			<controlpoint xx="0" yy="0" zz="0"/>
 			<controlpoint xx="1" yy="1" zz="1"/>
 		</linear>
-		<circular id="example" span="0" center="0 0 0" radius="1" startang="1" rotang="1"/>
+		<circular id="exampleCircular" span="0" center="0 0 0" radius="1" startang="1" rotang="1"/>
 	</animations>
 	<primitives>
 		<primitive id="rectangle">
@@ -64,6 +64,9 @@
 			<transformation>
 				<transformationref id="base" />
 			</transformation>
+			<animations>
+				<animationref id= "exampleLinear"/>
+			</animations>
 			<materials>
 				<material id="white" />
 			</materials>

@@ -772,6 +772,10 @@ class MySceneGraph {
 
                 if (this.linearAnimations.hasOwnProperty(animationId))
                     return "ID must be unique for each primitive (conflict: ID = " + animationId + ")";
+                
+                let span = this.reader.getString(children[i], 'span');
+                if (span == null)
+                        return "no span defined for linear animation id = " + animationId;
 
                 let grandchildren = children[i].children;
                 let controlpoint, controlpoints = [];
@@ -786,8 +790,9 @@ class MySceneGraph {
                 if (controlpoints.length < 2)
                     return "Unsufficient controlpoints for linear animation id =" + animationId;
 
-                console.log(animationId);
-                this.linearAnimations[animationId] = controlpoints;
+                this.linearAnimations[animationId] = {
+                    span: span,
+                    points: controlpoints};
 
             }
             else if (children[i].nodeName == "circular") {
@@ -838,7 +843,6 @@ class MySceneGraph {
 
         for (let i = 0; i < children.length; i++) {
             if (this.primitiveParse.hasOwnProperty(children[i].nodeName)) {
-                console.log(children[i].nodeName);
                 this.primitiveFunction = this.primitiveParse[children[i].nodeName];
                 error = this.primitiveFunction(children[i], primitiveId);
                 if (error != null)
@@ -858,7 +862,6 @@ class MySceneGraph {
 
         //INFO
         let info;
-        console.log(this);
         info = this.parseFields(rectangleNode, ["all", ["x1", "ff", -0.5], ["y1", "ff", -0.5], ["x2", "ff", 0.5], ["y2", "ff", 0.5]], "primitives > rectangle id = " + primitiveId);
         this.primitives[primitiveId] = new MyQuad(this.scene, info.x1, info.y1, info.x2, info.y2);
     }
@@ -877,7 +880,6 @@ class MySceneGraph {
         //INFO
         let info;
         info = this.parseFields(cylinderNode, ["all", ["base", "ff", 1], ["top", "ff", 1], ["height", "ff", 3], ["slices", "ii", 100], ["stacks", "ii", 10]], "primitives > cylinder id = " + primitiveId);
-        console.log("-------------------ID " + primitiveId);
         this.primitives[primitiveId] = new MyCylinder(this.scene, info.base, info.top, info.height, info.slices, info.stacks);
     }
 
@@ -1072,7 +1074,8 @@ class MySceneGraph {
             animations: [],
             materials: [],
             texture: null,
-            children: []
+            children: [],
+            activeAnimation: 0
         };
 
 
@@ -1105,7 +1108,7 @@ class MySceneGraph {
             return "component materials undefined for ID = " + componentId;
         }
         else {
-            if (materialIndex != 1 || (materialIndex != 2 && animationIndex != -1)) {
+            if ((materialIndex != 1 && animationIndex == -1) || (materialIndex != 2 && animationIndex != -1)) {
                 this.onXMLMinorError("component materials out of order for ID =" + componentId);
             }
             error = this.parseComponentMaterials(children[materialIndex], componentId);
@@ -1118,7 +1121,7 @@ class MySceneGraph {
             return "component texture undefined for ID = " + componentId;
         }
         else {
-            if (textureIndex != 2 || (textureIndex != 2 && animationIndex != -1)) {
+            if ((textureIndex != 2 && animationIndex == -1) || (textureIndex != 3 && animationIndex != -1)) {
                 this.onXMLMinorError("component texture out of order for ID =" + componentId);
             }
             error = this.parseComponentTexture(children[textureIndex], componentId);
@@ -1132,7 +1135,7 @@ class MySceneGraph {
             return "component children undefined for ID = " + componentId;
         }
         else {
-            if ((childrenIndex != 3) || (childrenIndex != 4 && animationIndex != -1)) {
+            if ((childrenIndex != 3 && animationIndex == -1) || (childrenIndex != 4 && animationIndex != -1)) {
                 this.onXMLMinorError("component children out of order for ID =" + componentId);
             }
             error = this.parseComponentChildren(children[childrenIndex], componentId);
@@ -1255,17 +1258,25 @@ class MySceneGraph {
     }
 
     parseComponentAnimation(compAnimationsNode, id) {
-        let children = compAnimationsNode;
+        let children = compAnimationsNode.children;
 
         for (let i = 0; i < children.length; i++) {
             if (children[i].nodeName == "animationref") {
                 //ID
                 let animationId = this.reader.getString(children[i], 'id');
-                if (materialId == null)
+                if (animationId == null)
                     return "no ID defined for material in component id = " + id;
+                    console.log(animationId);
+                if (this.linearAnimations.hasOwnProperty(animationId)) {
+                    let span = this.linearAnimations[animationId].span;
+                    let points = this.linearAnimations[animationId].points;
+                    let animation = new LinearAnimation(this.scene, points, span);
+                    this.components[id].animations.push(animation);
+                    console.log("------------------"+this.components[id].animations);
+                }
+                else if (this.circularAnimations.hasOwnProperty(animationId)){
 
-                if (this.linearAnimations.hasOwnProperty(animationId) || this.circularAnimations.hasOwnProperty(animationId))
-                    this.components[id].animations.push(animationId);
+                }
                 else return "animation ID not found for in component id = " + id;
             }
             else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in animatios of component id = " + id);
@@ -1454,6 +1465,11 @@ class MySceneGraph {
 
         if (node.transformation != undefined)
             this.scene.multMatrix(node.transformation);
+
+        if (node.animations != undefined && node.animations.length > 0){
+            node.animations[node.activeAnimation].apply();
+            console.log(node.animations[node.activeAnimation]);
+        }
 
         let info = this.adaptTextureAndMaterial(idNode);
 
