@@ -58,7 +58,7 @@ class XMLscene extends CGFscene {
             }
 
         }
-        
+
         for (var key in this.graph.orthoViews) {
 
             if (this.graph.orthoViews.hasOwnProperty(key)) {
@@ -121,7 +121,7 @@ class XMLscene extends CGFscene {
                 this.lights[i].setAmbient(light.ambient.r, light.ambient.g, light.ambient.b, light.ambient.a);
                 this.lights[i].setDiffuse(light.diffuse.r, light.diffuse.g, light.diffuse.b, light.diffuse.a);
                 this.lights[i].setSpecular(light.specular.r, light.specular.g, light.specular.b, light.specular.a);
-                this.lights[i].setSpotDirection(light.target.x-light.location.x, light.target.y-light.location.y, light.target.z-light.location.z);
+                this.lights[i].setSpotDirection(light.target.x - light.location.x, light.target.y - light.location.y, light.target.z - light.location.z);
                 this.lights[i].setSpotCutOff(light.angle);
                 this.lights[i].setSpotExponent(light.exponent);
 
@@ -140,15 +140,15 @@ class XMLscene extends CGFscene {
     }
 
 
-    
+
 
     /* Handler called when the graph is finally loaded. 
      * As loading is asynchronous, this may be called already after the application has started the run loop
      */
     onGraphLoaded() {
         this.setUpdatePeriod(60);
-        this.time=0;
-        
+        this.time = 0;
+
         this.axis = new CGFaxis(this, this.graph.values.scene.axis_length);
 
         var background = this.graph.ambient.background;
@@ -213,7 +213,7 @@ class XMLscene extends CGFscene {
                     i++;
                 }
             }
-           
+
             this.graph.displayScene();
 
         }
@@ -234,12 +234,15 @@ class XMLscene extends CGFscene {
 
         this.dt = currTime - this.lastTime;
         this.lastTime = currTime;
-        
 
-        for(let key in this.graph.components){
+        for (let key in this.graph.components) {
             let comp = this.graph.components[key];
             if (comp.animations != undefined && comp.animations.length > 0) {
-                comp.animations[comp.activeAnimation].update(this.dt);
+                let index = comp.activeAnimation;
+                let ret = comp.animations[index].update(this.dt);
+                if (ret != undefined && (comp.activeAnimation + 1) < comp.animations.length)
+                    comp.activeAnimation++;
+
             }
         }
     }

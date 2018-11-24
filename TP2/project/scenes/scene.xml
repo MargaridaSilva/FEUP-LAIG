@@ -53,7 +53,7 @@
 			<controlpoint xx="0" yy="0" zz="0"/>
 			<controlpoint xx="1" yy="1" zz="1"/>
 		</linear>
-		<circular id="exampleCircular" span="0" center="0 0 0" radius="1" startang="1" rotang="1"/>
+		<circular id="exampleCircular" span="1" center="0 0 0" radius="1" startang="0" rotang="90"/>
 	</animations>
 	<primitives>
 		<primitive id="rectangle">
@@ -71,11 +71,7 @@
 		</primitive>
 
 		<primitive id="cylinder2">
-			<cylinder2 base = "2.0" top = "0.1" height = "2.0" slices = "20" stacks = "5"/>
-		</primitive>
-
-		<primitive id="cylinder">
-			<cylinder base = "2.0" top = "0.1" height = "2.0" slices = "20" stacks = "5"/>
+			<cylinder2 base = "2.0" top = "2.0" height = "2.0" slices = "20" stacks = "5"/>
 		</primitive>
 	</primitives>
 	<components>
@@ -98,6 +94,7 @@
 				<transformationref id="base"/>
 			</transformation>
 			<animations>
+				<!--<animationref id= "exampleCircular"/>-->
 				<animationref id= "exampleLinear"/>
 			</animations>
 			<materials>
@@ -105,7 +102,7 @@
 			</materials>
 			<texture id="none" />
 			<children>
-				<primitiveref id="terrain" />
+				<primitiveref id="cylinder2" />
 			</children>
 		</component>
 

@@ -4,9 +4,12 @@ class LinearAnimation extends Animation {
 		super(scene);
 		this.points = points;
 		this.span = span * 1000;
+		this.startPosition = [0,0,0];
+        this.position = this.startPosition;
 
 		let direction = this.calculateDirections();
 		let pathSize = this.calculatePathSize(direction);
+		console.log("directions" , direction);
 		let speed = pathSize / this.span;
 
 		this.speed = [];
@@ -19,24 +22,24 @@ class LinearAnimation extends Animation {
 
 			let tpath = norm / speed;
 			this.t += tpath;
-			this.speed[i] = vec.div(tpath);
+			this.speed[i] = [vec[0] / tpath, vec[1]/tpath, vec[2] /tpath];
 			this.tLimitPath[i] = this.t;
 		}
 
-		this.position = [0, 0, 0];
 		this.t = 0;
 		this.currentPath = 0;
 
 	}
 
 	update(dt) {
-
 		if (this.t < this.span) {
 			this.t += dt;
 
 			let speed = this.getSpeed();
-			this.position = [this.position[0]+ this.speed[0] * dt, this.position[1] + this.speed[1] * dt, this.position[2] + this.speed[2] * dt];
+			this.position = this.position.add(speed.mult(dt));
+			console.log(this.position);
 		}
+
 	}
 
 	apply() {
@@ -54,12 +57,11 @@ class LinearAnimation extends Animation {
 	calculateDirections() {
 		let direction = [];
 
-		for (let i = 0; i < this.points.length - 1; i++) {
+		for (let i = 0; (i +1) < this.points.length; i++) {
 			let vec = this.points[i + 1].minus(this.points[i]);
-			console.log(this.points);
 			direction[i] = {
 				vec: vec,
-				norm: vec.norm
+				norm: vec.norm()
 			};
 		}
 
