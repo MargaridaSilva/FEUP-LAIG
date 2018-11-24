@@ -1,7 +1,7 @@
 class MyCylinder extends CGFobject {
 
     constructor(scene, base, top, height, slices, stacks){
-        this.scene = scene;
+        super(scene);
         this.height = height;
         this.lateral = new MyCylinderLateral(scene, base, top, height, slices, stacks);
         this.base1 = new MyCylinderBase(scene, slices, base);
@@ -25,5 +25,4 @@ class MyCylinder extends CGFobject {
         this.base1.updateCoords(s, t);
         this.base2.updateCoords(s, t);
     }
-
 }

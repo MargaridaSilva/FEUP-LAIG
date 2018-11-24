@@ -55,6 +55,7 @@ class MySceneGraph {
             "rectangle": this.parseRectangle,
             "triangle" : this.parseTriangle,
             "sphere": this.parseSphere,
+            "cylinder": this.parseCylinder,
             "torus": this.parseTorus,
             "plane":this.parsePlane,
             "patch": this.parsePatch,
@@ -876,7 +877,7 @@ class MySceneGraph {
         //INFO
         let info;
         info = this.parseFields(cylinderNode, ["all", ["base", "ff", 1], ["top", "ff", 1], ["height", "ff", 3], ["slices", "ii", 100], ["stacks", "ii", 10]], "primitives > cylinder id = " + primitiveId);
-
+        console.log("-------------------ID " + primitiveId);
         this.primitives[primitiveId] = new MyCylinder(this.scene, info.base, info.top, info.height, info.slices, info.stacks);
     }
 
@@ -1459,8 +1460,9 @@ class MySceneGraph {
         for (let i = 0; i < node.children.primitives.length; i++) {
             let s = info.s;
             let t = info.t;
-            this.primitives[node.children.primitives[i]].updateCoords(s, t);
-            this.primitives[node.children.primitives[i]].display();
+            let key = node.children.primitives[i];
+            this.primitives[key].updateCoords(s, t);
+            this.primitives[key].display();
         }
 
         for (let i = 0; i < node.children.components.length; i++) {

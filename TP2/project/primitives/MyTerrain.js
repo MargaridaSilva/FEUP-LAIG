@@ -9,11 +9,6 @@ class MyTerrain extends CGFobject{
 
         this.shader = new CGFshader(this.scene.gl, "shaders/terrain_vert.glsl", "shaders/terrain_frag.glsl");
         this.shader.setUniformsValues({uSampler2: 1, normScale: heightscale});
-    
-        
-
-
-
     }
 
     display(){

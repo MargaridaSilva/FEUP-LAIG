@@ -15,6 +15,9 @@ class XMLscene extends CGFscene {
         this.viewValues = [];
         this.cameras = {};
 
+        this.lastTime = null;
+        this.dt = null;
+
     }
 
     /**
@@ -48,6 +51,8 @@ class XMLscene extends CGFscene {
         this.texture = new CGFtexture(this, "scenes/images/island.jpg");
 
         this.terrain = new MyTerrain(this, this.texture, this.heightMap, 100, 20);
+
+        this.setUpdatePeriod(20);
     }
 
     /**
@@ -223,7 +228,7 @@ class XMLscene extends CGFscene {
            
 
             this.appearance.apply();
-            this.scale(50, 50, 50);
+            //this.scale(50, 50, 50);
             // this.terrain.display();
             this.graph.displayScene();
 
@@ -235,5 +240,18 @@ class XMLscene extends CGFscene {
 
         this.popMatrix();
         // ---- END Background, camera and axis setup
+    }
+
+    update(currTime) {
+        if (this.lastTime == null) {
+            this.lastTime = currTime;
+            return;
+        }
+
+        this.dt = currTime - this.lastTime;
+        
+        for(let key in this.graph.animations){
+            this.graph.animations[key].update(this.dt);
+        }
     }
 }
