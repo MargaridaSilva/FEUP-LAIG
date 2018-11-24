@@ -132,7 +132,10 @@ class MyVehicle extends CGFobject {
                 -6, -10, 2
             ]
         );
-
+        
+        this.cone = new MyCylinder2(this.scene, 2, 4, 5, 20, 5);
+        this.cone2 = new MyCylinder2(this.scene, 1, 2, 30, 20, 5);
+        this.cylinder = new MyCylinder2(this.scene, 1, 1, 1, 20, 5);
 
     }
 
@@ -141,7 +144,9 @@ class MyVehicle extends CGFobject {
     }
 
     display() {
-        this.scene.rotate(1, 0, 0, Math.PI/2);
+    
+        this.scene.pushMatrix();
+        this.scene.rotate(-Math.PI/2, 1,0,0);
         this.partPatch1.display();
         this.partPatch2.display();
         this.partPatch3.display();
@@ -150,26 +155,108 @@ class MyVehicle extends CGFobject {
         this.partPatch6.display();
         this.partPatch7.display();
         this.partPatch8.display();
-    }
+        this.scene.popMatrix();
+        
+        //Corpo p1
+        this.scene.pushMatrix();
+        this.scene.translate(0, 6.5, -7);
+        this.cone.display();
+        this.scene.popMatrix();
 
-    cicleVector(radius, z, center) {
-        let v = Math.sin(Math.PI/4);
+        //Corpo p2
+        this.scene.pushMatrix();
+        this.scene.translate(0, 6.5, -37);
+        this.cone2.display();
+        this.scene.popMatrix();
+
+
+        //Helice
+        this.scene.pushMatrix();
+        this.scene.translate(0, 14, 0);
+        this.scene.scale(1,5,1);
+        this.scene.rotate(Math.PI/2, 1, 0, 0);
+        this.cylinder.display();
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+        this.scene.translate(0, 14.5, 0);
+        this.scene.scale(3,1,3);
+        this.scene.rotate(Math.PI/2, 1, 0, 0);
+        this.cylinder.display();
+        this.scene.popMatrix();
+
+
+
+        //Apoios
 
         
+        this.scene.pushMatrix();
+        this.scene.translate(-7.5, -9.5, 0);
+        this.scene.scale(0.4,0.4,20);
+        this.cylinder.display();
+        this.scene.popMatrix();
 
-        let points = [
-            [-radius*v, 0 + center, z, 1],
-            [-radius*v, radius*v + center, z, 3*v],
-            [0, radius, z + center, 5],
-            [radius*v, radius*v + center, z, 10*v],
-            [radius, 0 + center, z, 10],
-            [radius*v, -radius*v + center, z, 10*v],
-            [0, -radius + center, z, 5],
-            [-radius*v, -radius*v + center, z, 3*v],
-            [-radius*v, 0 + center, z, 1],
-        ];
+        this.scene.pushMatrix();
+        this.scene.translate(7.5, -9.5, 0);
+        this.scene.scale(0.4,0.4,20);
+        this.cylinder.display();
+        this.scene.popMatrix();
 
-        
-        return points;
+
+
+
+        this.scene.pushMatrix();
+        this.scene.translate(-5, -5, 15);
+        this.scene.rotate(-Math.PI/6, 0, 0, 1);
+        this.scene.rotate(Math.PI/2, 1, 0, 0);
+        this.scene.scale(0.4,0.4,10);
+        this.scene.translate(0, 0, -0.5);
+        this.cylinder.display();
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+        this.scene.translate(5, -5, 15);
+        this.scene.rotate(Math.PI/6, 0, 0, 1);
+        this.scene.rotate(Math.PI/2, 1, 0, 0);
+        this.scene.scale(0.4,0.4,10);
+        this.scene.translate(0, 0, -0.5);
+        this.cylinder.display();
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+        this.scene.translate(-5, -5, 5);
+        this.scene.rotate(-Math.PI/6, 0, 0, 1);
+        this.scene.rotate(Math.PI/2, 1, 0, 0);
+        this.scene.scale(0.4,0.4,10);
+        this.scene.translate(0, 0, -0.5);
+        this.cylinder.display();
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+        this.scene.translate(5, -5, 5);
+        this.scene.rotate(Math.PI/6, 0, 0, 1);
+        this.scene.rotate(Math.PI/2, 1, 0, 0);
+        this.scene.scale(0.4,0.4,10);
+        this.scene.translate(0, 0, -0.5);
+        this.cylinder.display();
+        this.scene.popMatrix();
+
+
+        //Helice
+        this.scene.pushMatrix();
+        this.scene.translate(0, 14, 0);
+        this.scene.scale(0.8, 0.2, 50);
+        this.scene.translate(0, 0, -0.5);
+        this.cylinder.display();
+        this.scene.popMatrix();
+
+        //Helice
+        this.scene.pushMatrix();
+        this.scene.rotate(Math.PI/2, 0, 1, 0);
+        this.scene.translate(0, 14, 0);
+        this.scene.scale(0.8, 0.2, 50);
+        this.scene.translate(0, 0, -0.5);
+        this.cylinder.display();
+        this.scene.popMatrix();
     }
 };

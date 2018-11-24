@@ -1,7 +1,11 @@
 <yas>
-	<scene root="scene" axis_length="5" />
+	<scene root="scene" axis_length="30" />
 	<views default="global">
 		<perspective id="global" near="0.1" far="500" angle="35">
+			<from x="50" y="50" z="50" />
+			<to x="0" y="0" z="0" />
+		</perspective>
+		<perspective id="close" near="0.1" far="500" angle="35">
 			<from x="5" y="5" z="5" />
 			<to x="0" y="0" z="0" />
 		</perspective>
@@ -45,7 +49,7 @@
 		</transformation>
 	</transformations>
 	<animations>
-		<linear id="exampleLinear" span="0" >
+		<linear id="exampleLinear" span="0">
 			<controlpoint xx="0" yy="0" zz="0"/>
 			<controlpoint xx="1" yy="1" zz="1"/>
 		</linear>
@@ -67,7 +71,11 @@
 		</primitive>
 
 		<primitive id="cylinder2">
-			<cylinder2 base = "1.0" top = "1.0" height = "7.0" slices = "20" stacks = "5"/>
+			<cylinder2 base = "2.0" top = "0.1" height = "2.0" slices = "20" stacks = "5"/>
+		</primitive>
+
+		<primitive id="cylinder">
+			<cylinder base = "2.0" top = "0.1" height = "2.0" slices = "20" stacks = "5"/>
 		</primitive>
 	</primitives>
 	<components>
@@ -85,6 +93,8 @@
 			<children>
 				<componentref id="terrain" />
 				<componentref id="water" />
+				<componentref id="vehicle"/>
+				<!-- <primitiveref id="cylinder2" /> -->
 			</children>
 		</component>
 
@@ -112,6 +122,20 @@
 			<texture id="none" />
 			<children>
 				<primitiveref id="water" />
+			</children>
+		</component>
+
+		<component id="vehicle">
+			<transformation>
+				<translate x="0" y="10" z="0" />
+				<scale x="0.1" y="0.1" z="0.1" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="none" />
+			<children>
+				<primitiveref id="vehicle" />
 			</children>
 		</component>
 

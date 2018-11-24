@@ -215,7 +215,6 @@ class XMLscene extends CGFscene {
             }
            
             this.graph.displayScene();
-            // this.vehicle.display();
 
         }
         else {

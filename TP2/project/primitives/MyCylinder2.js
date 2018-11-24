@@ -19,11 +19,12 @@ class MyCylinder2 extends CGFobject{
         let b = this.base;
         let h = this.height;
 
+
         let controlvertexes = [
-            [ [t, 0, 0, 1], [b, 0, h, 1] ],
-            [ [t, t, 0, 1/3], [b, b, h, 1/3] ],
-            [ [-t, t, 0, 1/3], [-b, b, h, 1/3] ],
-            [ [-t, 0, 0, 1], [-b, 0, h, 1] ]
+            [ [b, 0, 0, 1], [t, 0, h, 1] ],
+            [ [b, 2*b, 0, 1/3], [t, 2*t, h, 1/3] ],
+            [ [-b, 2*b, 0, 1/3], [-t, 2*t, h, 1/3] ],
+            [ [-b, 0, 0, 1], [-t, 0, h, 1] ]
         ];
 
         let degreeU = 3;
@@ -41,10 +42,10 @@ class MyCylinder2 extends CGFobject{
         let h = this.height;
 
         let controlvertexes = [
-            [ [-t, 0, 0, 1], [-b, 0, h, 1] ],
-            [ [-t, -t, 0, 1/3], [-b, -b, h, 1/3] ],
-            [ [t, -t, 0, 1/3], [b, -b, h, 1/3] ],
-            [ [t, 0, 0, 1], [b, 0, h, 1] ]
+            [ [-b, 0, 0, 1], [-t, 0, h, 1] ],
+            [ [-b, -2*b, 0, 1/3], [-t, -2*t, h, 1/3] ],
+            [ [b, -2*b, 0, 1/3], [t, -2*t, h, 1/3] ],
+            [ [b, 0, 0, 1], [t, 0, h, 1] ]
         ];
 
         let degreeU = 3;
