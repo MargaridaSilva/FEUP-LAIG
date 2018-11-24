@@ -61,4 +61,8 @@ class MyCylinder2 extends CGFobject{
         this.cylindeBottom.display();
     }
 
+    updateCoords(){
+        
+    }
+
 }

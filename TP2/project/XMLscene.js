@@ -15,6 +15,9 @@ class XMLscene extends CGFscene {
         this.viewValues = [];
         this.cameras = {};
 
+        this.lastTime = null;
+        this.dt = null;
+
     }
 
     /**
@@ -225,12 +228,15 @@ class XMLscene extends CGFscene {
     }
 
     update(currTime) {
+        if (this.lastTime == null) {
+            this.lastTime = currTime;
+            return;
+        }
 
-		let dt = (this.time - currTime);
-
-		if (this.time == 0)
-			dt = 60;
-
-        this.graph.primitives.water.update(dt);
-	};
+        this.dt = currTime - this.lastTime;
+        
+        for(let key in this.graph.animations){
+            this.graph.animations[key].update(this.dt);
+        }
+    }
 }

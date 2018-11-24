@@ -16,7 +16,7 @@ class MyPatch extends CGFobject{
         let degreeU = this.npointsU - 1;
         let degreeV = this.npointsV - 1;
 
-        let controlvertexes = this.createControlVetexes(this.vertexList);
+        let controlvertexes = this.createControlVertexes(this.vertexList);
 
         console.log(controlvertexes);
 
@@ -30,7 +30,7 @@ class MyPatch extends CGFobject{
         this.patch.display();
     }
 
-    createControlVetexes(vertexList){
+    createControlVertexes(vertexList){
         let controlvertexes = [];
         let index = 0;
 

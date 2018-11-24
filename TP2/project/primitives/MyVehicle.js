@@ -151,4 +151,25 @@ class MyVehicle extends CGFobject {
         this.partPatch7.display();
         this.partPatch8.display();
     }
+
+    cicleVector(radius, z, center) {
+        let v = Math.sin(Math.PI/4);
+
+        
+
+        let points = [
+            [-radius*v, 0 + center, z, 1],
+            [-radius*v, radius*v + center, z, 3*v],
+            [0, radius, z + center, 5],
+            [radius*v, radius*v + center, z, 10*v],
+            [radius, 0 + center, z, 10],
+            [radius*v, -radius*v + center, z, 10*v],
+            [0, -radius + center, z, 5],
+            [-radius*v, -radius*v + center, z, 3*v],
+            [-radius*v, 0 + center, z, 1],
+        ];
+
+        
+        return points;
+    }
 };

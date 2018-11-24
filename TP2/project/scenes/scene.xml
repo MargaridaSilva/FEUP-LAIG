@@ -2,7 +2,7 @@
 	<scene root="scene" axis_length="5" />
 	<views default="global">
 		<perspective id="global" near="0.1" far="500" angle="35">
-			<from x="50" y="50" z="50" />
+			<from x="5" y="5" z="5" />
 			<to x="0" y="0" z="0" />
 		</perspective>
 	</views>
@@ -45,17 +45,19 @@
 		</transformation>
 	</transformations>
 	<animations>
-		<linear id="example" span="0">
+		<linear id="exampleLinear" span="0" >
 			<controlpoint xx="0" yy="0" zz="0"/>
 			<controlpoint xx="1" yy="1" zz="1"/>
 		</linear>
-		<circular id="example" span="0" center="0 0 0" radius="1" startang="1" rotang="1"/>
+		<circular id="exampleCircular" span="0" center="0 0 0" radius="1" startang="1" rotang="1"/>
 	</animations>
 	<primitives>
 		<primitive id="rectangle">
-			<vehicle/>
+			<rectangle x1="0" y1="0" x2 ="1" y2="1" />
 		</primitive>
-
+		<primitive id="vehicle">
+			<vehicle />
+		</primitive>
 		<primitive id="terrain">
 			<terrain idtexture="terrain_t" idheightmap="terrain_h" parts="100" heightscale="0.2"/>
 		</primitive>
@@ -63,12 +65,19 @@
 		<primitive id="water">
 			<water idtexture="water_t" idwavemap="water_h" parts="100" heightscale="0.015" texscale="5" />
 		</primitive>
+
+		<primitive id="cylinder2">
+			<cylinder2 base = "1.0" top = "1.0" height = "7.0" slices = "20" stacks = "5"/>
+		</primitive>
 	</primitives>
 	<components>
 		<component id="scene">
 			<transformation>
 				<transformationref id="base" />
 			</transformation>
+			<animations>
+				<animationref id= "exampleLinear"/>
+			</animations>
 			<materials>
 				<material id="white" />
 			</materials>
@@ -89,7 +98,7 @@
 			</materials>
 			<texture id="none" />
 			<children>
-				<primitiveref id="terrain" />
+				<primitiveref id="cylinder2" />
 			</children>
 		</component>
 

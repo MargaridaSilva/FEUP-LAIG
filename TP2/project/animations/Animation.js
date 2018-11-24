@@ -1,7 +1,8 @@
 
 class Animation{
 
-	constructor() {
+	constructor(scene) {
+        this.scene = scene;
     }
     
     update(){

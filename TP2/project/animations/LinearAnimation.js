@@ -1,11 +1,9 @@
 class LinearAnimation extends Animation {
 
 	constructor(scene, points, span) {
-		super();
-
-		this.scene = scene;
+		super(scene);
 		this.points = points;
-		this.span = span * SEC_TO_MSEC;
+		this.span = span * 1000;
 
 		let direction = this.calculateDirections();
 		let pathSize = this.calculatePathSize(direction);
