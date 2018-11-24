@@ -18,6 +18,8 @@ class MyPatch extends CGFobject{
 
         let controlvertexes = this.createControlVetexes(this.vertexList);
 
+        console.log(controlvertexes);
+
 		let nurbsSurface = new CGFnurbsSurface(degreeU, degreeV, controlvertexes);
         let obj = new CGFnurbsObject(this.scene, this.npartsU, this.npartsV, nurbsSurface);
 
@@ -30,12 +32,19 @@ class MyPatch extends CGFobject{
 
     createControlVetexes(vertexList){
         let controlvertexes = [];
+        let index = 0;
 
         for(let i = 0; i < this.npointsU; i++){
             let lineV = [];
             for(let j = 0; j < this.npointsV; j++){
-                lineV.push(vertexList[i*this.npointsV + j]);
-            }  
+                let controlPoint = [];
+                for(let k = 0; k < 3; k++){
+                    controlPoint.push(vertexList[index]);
+                    index++;
+                }
+                controlPoint.push(1);
+                lineV.push(controlPoint);
+            } 
             controlvertexes.push(lineV);
         }
         return controlvertexes;

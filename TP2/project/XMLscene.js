@@ -24,12 +24,6 @@ class XMLscene extends CGFscene {
     init(application) {
         super.init(application);
 
-        this.appearance = new CGFappearance(this);
-        this.appearance.setAmbient(0.1, 0.1, 0.1, 1);
-        this.appearance.setDiffuse(0.9, 0.9, 0.9, 1);
-        this.appearance.setSpecular(0.6, 0.6, 0.6, 1);	
-        this.appearance.setShininess(5);
-
         this.sceneInited = false;
 
         this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
@@ -43,11 +37,7 @@ class XMLscene extends CGFscene {
         this.gl.enable(this.gl.CULL_FACE);
         this.gl.depthFunc(this.gl.LEQUAL);
 
-
-        this.heightMap = new CGFtexture(this, "scenes/images/island-height.jpg");
-        this.texture = new CGFtexture(this, "scenes/images/island.jpg");
-
-        this.terrain = new MyTerrain(this, this.texture, this.heightMap, 100, 20);
+        this.vehicle = new MyVehicle(this);
     }
 
     /**
@@ -153,6 +143,9 @@ class XMLscene extends CGFscene {
      * As loading is asynchronous, this may be called already after the application has started the run loop
      */
     onGraphLoaded() {
+        this.setUpdatePeriod(60);
+        this.time=0;
+        
         this.axis = new CGFaxis(this, this.graph.values.scene.axis_length);
 
         var background = this.graph.ambient.background;
@@ -170,9 +163,6 @@ class XMLscene extends CGFscene {
         this.lights = [];
 
         this.initLights();
-
-        console.log(this.lights);
-
 
         // Adds lights group.
         this.interface.addLightsGroup(Array.prototype.merge(this.graph.omniLights, this.graph.spotLights));
@@ -221,11 +211,8 @@ class XMLscene extends CGFscene {
                 }
             }
            
-
-            this.appearance.apply();
-            this.scale(50, 50, 50);
-            // this.terrain.display();
             this.graph.displayScene();
+            // this.vehicle.display();
 
         }
         else {
@@ -236,4 +223,14 @@ class XMLscene extends CGFscene {
         this.popMatrix();
         // ---- END Background, camera and axis setup
     }
+
+    update(currTime) {
+
+		let dt = (this.time - currTime);
+
+		if (this.time == 0)
+			dt = 60;
+
+        this.graph.primitives.water.update(dt);
+	};
 }

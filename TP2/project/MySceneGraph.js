@@ -961,14 +961,14 @@ class MySceneGraph {
 
     parseWater(waterNode, primitiveId) {
         //IDS
-        let idtexture = this.reader.getString(children[i], 'idtexture');
+        let idtexture = this.reader.getString(waterNode, 'idtexture');
         if (idtexture == null)
             return "no idtexture defined for water in primitive id = " + primitiveId;
 
         if (!this.textures.hasOwnProperty(idtexture))
             return "texture not found for idtexture of water in primitive id = " + primitiveidID;
 
-        let idwavemap = this.reader.getString(children[i], 'idwavemap');
+        let idwavemap = this.reader.getString(waterNode, 'idwavemap');
         if (idwavemap == null)
             return "no idwavemap defined for water in primitive id = " + primitiveId;
 
@@ -977,9 +977,9 @@ class MySceneGraph {
 
         //INFO
         let info;
-        info = this.parseFields(terrainNode, ["all", ["parts", "ii", 1], ["heightscale", "ff", 1], ["texscale", "ff", 1]], "primitives > water id = " + primitiveId);
-
-        this.primitives[primitiveId] = new MyWater(this.scene, idtexture, idwavemap, info.parts, info.heightscale, info.texscale);
+        info = this.parseFields(waterNode, ["all", ["parts", "ii", 1], ["heightscale", "ff", 1], ["texscale", "ff", 1]], "primitives > water id = " + primitiveId);
+ 
+        this.primitives[primitiveId] = new MyWater(this.scene, this.textures[idtexture], this.textures[idwavemap], info.parts, info.heightscale, info.texscale);
     }
 
     parseComponents(componentsNode) {

@@ -7,7 +7,14 @@ uniform float uCameraX;
 uniform float uCameraY;
 uniform float uCameraZ;
 uniform sampler2D uSampler;
-uniform float normScale;
+
+
+uniform float uHeightScale;
+uniform float uTexScale;
+uniform float uTimeFactor;
+
+varying vec3 vEye;
+
 
 struct lightProperties {
     vec4 position;                  // Default: (0, 0, 1, 0)
@@ -111,7 +118,6 @@ vec4 lighting(vec4 vertex, vec3 E, vec3 N) {
 
 vec4 heightMapData(){
     float offset = 50./256.;
-
     float center = texture2D(uSampler, vTextureCoord).x;
     float up     = texture2D(uSampler, vTextureCoord+vec2( 0, offset)).x;
     float down   = texture2D(uSampler, vTextureCoord+vec2( 0,-offset)).x;
@@ -124,8 +130,8 @@ vec4 heightMapData(){
     // vec3 vHor = vec3(2.0*offset, (right-left)*10.0, 0);
 
 
-    float d1 = (right-left)*normScale;
-    float d2 = (up-down)*normScale;
+    float d1 = (right-left)*uHeightScale;
+    float d2 = (up-down)*uHeightScale;
     vec3 normal = normalize(vec3(-offset*d1, 2.0*offset*offset, -offset*d2));
 
     // vec3 normal = normalize(cross(vHor, vVer));
@@ -133,15 +139,19 @@ vec4 heightMapData(){
 	return bump;
 }
 
+uniform sampler2D uNormalTexture;
+varying vec3 normal;
 void main() {
 
-	vTextureCoord = aTextureCoord;
+	vTextureCoord = (aTextureCoord + vec2(0, -uTimeFactor*0.00001)) * uTexScale;
 
 	vec4 heightMapData = heightMapData();
-	vec3 normal = heightMapData.xyz;
+	// vec3 normal = heightMapData.xyz;
+	normal = texture2D(uNormalTexture, vTextureCoord).rgb;
 	float height = heightMapData.w;
 
-	vec3 offset = aVertexNormal*height*normScale;
+	// vec3 offset = aVertexNormal*height*uHeightScale;
+    vec3 offset = vec3(0,0,0);
 
     // Transformed Vertex position
     vec4 vertex = uMVMatrix * vec4(aVertexPosition+offset, 1.0);
@@ -151,9 +161,9 @@ void main() {
 
     vec3 eyeVec = -vec3(vertex.xyz);
     vec3 E = normalize(eyeVec);
-
+    vEye = E;
+    
     vFinalColor = lighting(vertex, E, N);
-
 	gl_Position = uPMatrix * vertex;
 }
 
