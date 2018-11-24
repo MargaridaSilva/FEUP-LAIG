@@ -232,10 +232,13 @@ class XMLscene extends CGFscene {
             return;
         }
 
-        this.dt = currTime - this.lastTime;
-        
+        let dt = currTime - this.lastTime;
+        this.lastTime = currTime;
+
+        this.graph.primitives.vehicle.update(dt);
+
         for(let key in this.graph.animations){
-            this.graph.animations[key].update(this.dt);
+            this.graph.animations[key].update(dt);
         }
     }
 }

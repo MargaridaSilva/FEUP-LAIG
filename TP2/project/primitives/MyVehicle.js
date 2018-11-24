@@ -3,6 +3,9 @@ class MyVehicle extends CGFobject {
     constructor(scene) {
         super(scene);
 
+        this.currentTime = 0;
+        this.angle = 0;
+
         this.partPatch1 = new MyPatch(this.scene, 3, 3, 100, 100,
             [
                 0, -23.999999999999972, -2,
@@ -170,21 +173,6 @@ class MyVehicle extends CGFobject {
         this.scene.popMatrix();
 
 
-        //Helice
-        this.scene.pushMatrix();
-        this.scene.translate(0, 14, 0);
-        this.scene.scale(1,5,1);
-        this.scene.rotate(Math.PI/2, 1, 0, 0);
-        this.cylinder.display();
-        this.scene.popMatrix();
-
-        this.scene.pushMatrix();
-        this.scene.translate(0, 14.5, 0);
-        this.scene.scale(3,1,3);
-        this.scene.rotate(Math.PI/2, 1, 0, 0);
-        this.cylinder.display();
-        this.scene.popMatrix();
-
 
 
         //Apoios
@@ -242,6 +230,8 @@ class MyVehicle extends CGFobject {
         this.scene.popMatrix();
 
 
+        this.scene.pushMatrix();
+        this.scene.rotate(this.angle, 0, 1, 0);
         //Helice
         this.scene.pushMatrix();
         this.scene.translate(0, 14, 0);
@@ -258,5 +248,29 @@ class MyVehicle extends CGFobject {
         this.scene.translate(0, 0, -0.5);
         this.cylinder.display();
         this.scene.popMatrix();
+        
+
+        //Helice
+        this.scene.pushMatrix();
+        this.scene.translate(0, 14, 0);
+        this.scene.scale(1,5,1);
+        this.scene.rotate(Math.PI/2, 1, 0, 0);
+        this.cylinder.display();
+        this.scene.popMatrix();
+
+        //Helice
+        this.scene.pushMatrix();
+        this.scene.translate(0, 14.5, 0);
+        this.scene.scale(3,1,3);
+        this.scene.rotate(Math.PI/2, 1, 0, 0);
+        this.cylinder.display();
+        this.scene.popMatrix();
+        this.scene.popMatrix();
+    }
+
+
+    update(dt){
+        this.angle -= (dt * 0.005);
+        this.angle %= 2*Math.PI;
     }
 };
