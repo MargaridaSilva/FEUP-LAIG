@@ -98,7 +98,7 @@
 			</materials>
 			<texture id="none" />
 			<children>
-				<primitiveref id="cylinder2" />
+				<primitiveref id="terrain" />
 			</children>
 		</component>
 
