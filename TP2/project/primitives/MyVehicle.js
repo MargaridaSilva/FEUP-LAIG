@@ -1,5 +1,5 @@
 class MyVehicle extends CGFobject {
-
+    
     constructor(scene) {
         super(scene);
 
@@ -166,7 +166,8 @@ class MyVehicle extends CGFobject {
     updateCoords() {
 
     }
-
+ 
+    
     display() {
 
         
