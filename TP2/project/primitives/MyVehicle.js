@@ -171,7 +171,6 @@ class MyVehicle extends CGFobject {
 
         
         this.scene.scale(0.1, 0.1, 0.1);
-        
         this.scene.pushMatrix();
         this.scene.rotate(-Math.PI / 2, 1, 0, 0);
         this.partPatch1.display();

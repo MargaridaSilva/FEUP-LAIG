@@ -33,13 +33,16 @@ class LinearAnimation extends Animation {
 	}
 
 	update(dt) {
-		if (this.t < this.span) {
-			this.t += dt;
-
+		let newTime = this.t + dt;
+		if (newTime < this.span) {
+			this.t = newTime;
 			this.currentSpeed = this.getSpeed();
 			this.position = this.position.add(this.currentSpeed.mult(dt));
 		}
-		else return 0;
+		else {
+			this.position = this.points[this.points.length - 1];
+			return 0;
+		}
 	}
 
 	apply() {
