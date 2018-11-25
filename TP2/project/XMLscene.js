@@ -242,7 +242,7 @@ class XMLscene extends CGFscene {
             let comp = this.graph.components[key];
             if (comp.animations != undefined && comp.animations.length > 0) {
                 let index = comp.activeAnimation;
-                let ret = comp.animations[index].update(this.dt);
+                let ret = comp.animations[index].update(dt);
                 if (ret != undefined && (comp.activeAnimation + 1) < comp.animations.length)
                     comp.activeAnimation++;
 

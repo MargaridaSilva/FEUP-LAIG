@@ -69,6 +69,10 @@
 			<controlpoint xx="0" yy="0" zz="0"/>
 			<controlpoint xx="1" yy="1" zz="1"/>
 		</linear>
+		<linear id="flyUp" span="5">
+			<controlpoint xx="0" yy="0" zz="0"/>
+			<controlpoint xx="0" yy="70" zz="0"/>
+		</linear>
 		<circular id="exampleCircular" span="1" center="0 0 0" radius="1" startang="0" rotang="90"/>
 	</animations>
 	<primitives>
@@ -123,7 +127,7 @@
 
 		<component id="water">
 			<transformation>
-				<scale x="50" y="50" z="50" />
+				<scale x="100" y="100" z="100" />
 			</transformation>
 			<materials>
 				<material id="inherit" />
@@ -136,9 +140,13 @@
 
 		<component id="vehicle">
 			<transformation>
-				<translate x="0" y="10" z="0" />
+				<translate x="9" y="4" z="0" />
+				<rotate axis="y" angle="-135" />
 				<scale x="0.1" y="0.1" z="0.1" />
 			</transformation>
+			<animations>
+				<animationref id="flyUp" />
+			</animations>
 			<materials>
 				<material id="white" />
 			</materials>
