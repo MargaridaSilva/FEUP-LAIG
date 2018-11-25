@@ -1,4 +1,17 @@
+/**
+    * MyWater
+    * @constructor
+*/
 class MyWater extends CGFobject{
+    /**
+     * Constructs an object of type MyWater
+     * @param {CGFscene} scene 
+     * @param {CGFtexture} texture 
+     * @param {CGFtexture} heightmap 
+     * @param {Number} parts 
+     * @param {Number} heightscale 
+     * @param {number} texscale 
+     */
     constructor(scene, texture, heightmap, parts, heightscale, texscale){
         super(scene);
         this.water = new MyPlane(scene, parts, parts);        
@@ -9,6 +22,9 @@ class MyWater extends CGFobject{
         this.shader.setUniformsValues({uWaterTexture: 1, uHeightScale: heightscale, uTexScale: texscale, uTimeFactor: this.time});
         
     }
+    /**
+    * Displays water with appropriate shaders
+    */
 
     display(){
         this.scene.pushMatrix();
@@ -22,7 +38,9 @@ class MyWater extends CGFobject{
 
         this.scene.popMatrix();
     }
-
+    /**
+    * Displays shaders state according with time
+    */
     update(dT){
         this.time += dT;
         this.shader.setUniformsValues({uTimeFactor: this.time});

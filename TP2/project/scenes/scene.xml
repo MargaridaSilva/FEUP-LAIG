@@ -1,5 +1,9 @@
 <yas>
+	<!-- _________________ SCENE ___________________ -->
+
 	<scene root="scene" axis_length="30" />
+
+	<!-- _________________ VIEWS ___________________ -->
 
 	<views default="global">
 		<perspective id="global" near="0.1" far="500" angle="35">
@@ -12,10 +16,14 @@
 		</perspective>
 	</views>
 
+	<!-- ________________ AMBIENT __________________ -->
+
 	<ambient>
 		<ambient r="0.2" g="0.2" b="0.2" a="1" />
 		<background r="0.05" g="0.05" b="0.1" a="1" />
 	</ambient>
+
+	<!-- _________________ LIGHTS ___________________ -->
 
 	<lights>
 		<omni id="light1" enabled="1">
@@ -40,6 +48,8 @@
 		</omni>
 	</lights>
 
+	<!-- ________________ TEXTURES ___________________ -->
+
 	<textures>
 		<texture id="terrain_h" file="scenes/images/elevation-map.jpg" />
 		<texture id="terrain_t" file="scenes/images/texture-map.jpg" />
@@ -48,6 +58,8 @@
 		<texture id="helicopter" file="scenes/images/texture.jpeg" />
 		<texture id="sky" file="scenes/images/Sky.jpg" />
 	</textures>
+
+	<!-- ________________ MATERIALS __________________ -->
 
 	<materials>
 		<material id="white" shininess="0.5">
@@ -64,14 +76,9 @@
 			<specular r="0.1" g="0.1" b="0.1" a="1" />
 		</material>
 
-		<material id="steel" shininess="0.1">
-			<emission r="0" g="0" b="0" a="0" />
-			<ambient r="0" g="0" b="0" a="1" />
-			<diffuse r="0.56" g="0.56" b="0.56" a="1" />
-			<specular r="0.65" g="0.65" b="0.65" a="1" />
-		</material>
-
 	</materials>
+
+	<!-- ______________ TRANSFORMATIONS _______________ -->
 
 	<transformations>
 		<transformation id="base">
@@ -79,6 +86,7 @@
 		</transformation>
 	</transformations>
 
+	<!-- ________________ ANIMATIONS __________________ -->
 	<animations>
 		<linear id="flyTakeOff" span="5">
 			<controlpoint xx="0" yy="0" zz="0"/>
@@ -93,28 +101,40 @@
 		</linear>
 	</animations>
 
+	<!-- ________________ PRIMITIVES __________________ -->
+
 	<primitives>
-		<primitive id="rectangle">
-			<rectangle x1="0" y1="0" x2 ="1" y2="1" />
-		</primitive>
+
+		<!-- Vehicle  -->
 		<primitive id="vehicle">
 			<vehicle />
 		</primitive>
+
+		<!-- Terrain -->
 		<primitive id="terrain">
 			<terrain idtexture="terrain_t" idheightmap="terrain_h" parts="100" heightscale="0.3"/>
 		</primitive>
 
+		<!-- Water -->
 		<primitive id="water">
 			<water idtexture="water_t" idwavemap="water_h" parts="100" heightscale="0.01" texscale="15" />
 		</primitive>
 
+		<!-- Cylinder -->
 		<primitive id="cylinder2">
 			<cylinder2 base = "2.0" top = "2.0" height = "2.0" slices = "20" stacks = "5"/>
 		</primitive>
+
+		<!-- Sky -->
 		<primitive id="skydome">
 			<sphere radius="50" slices="60" stacks="60" />
 		</primitive>
+
 	</primitives>
+
+	<!-- ________________ COMPONENTS __________________ -->
+
+	<!-- _________ ROOT _________ -->
 
 	<components>
 		<component id="scene">
@@ -136,6 +156,7 @@
 			</children>
 		</component>
 
+		<!-- _____ TERRAIN ______ -->
 
 		<component id="terrain">
 			<transformation>
@@ -149,6 +170,8 @@
 				<primitiveref id="terrain" />
 			</children>
 		</component>
+	
+		<!-- _______ WATER _______ -->
 
 		<component id="water">
 			<transformation>
@@ -163,6 +186,8 @@
 				<primitiveref id="water" />
 			</children>
 		</component>
+
+		<!-- ______ VEHICLE ______ -->
 
 		<component id="vehicle">
 			<transformation>
@@ -183,6 +208,8 @@
 				<primitiveref id="vehicle" />
 			</children>
 		</component>
+
+		<!-- ________ SKY _______ -->
 
 		<component id="skydome">
 			<transformation>

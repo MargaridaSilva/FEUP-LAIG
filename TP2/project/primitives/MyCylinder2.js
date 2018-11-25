@@ -1,5 +1,17 @@
+/**
+ * MyCylinder2
+ * @constructor
+ */
 class MyCylinder2 extends CGFobject{
-    
+    /**
+     * 
+     * @param {CGFscene} scene the scene where it will be
+     * @param {Number} base the radius of the cylinder's base
+     * @param {Number} top the radius of the cylinder's top
+     * @param {Number} height the height of the cylinder
+     * @param {Number} slices number of angle divisions at x0y plane
+     * @param {Number} stacks number of divisions at zz axis
+     */
     constructor(scene, base, top, height, slices, stacks){
         super(scene);
         this.height = height;
@@ -16,7 +28,9 @@ class MyCylinder2 extends CGFobject{
 
     }
 
-
+    /**
+     * Creates cylinders top control points and a NURB with them
+     */
     createCylinderTop(){
         let t = this.top;
         let b = this.base;
@@ -39,6 +53,10 @@ class MyCylinder2 extends CGFobject{
         return obj;
     }
 
+    /**
+     * Creates cylinders bottom control points and a NURB with them
+     */
+
     createCylinderBottom(){
         let t = this.top;
         let b = this.base;
@@ -60,6 +78,10 @@ class MyCylinder2 extends CGFobject{
         return obj;
     }
 
+    /**
+     * Displays cylinder (both top and bottom NURBS)
+     */
+    
     display(){
         this.baseCover.display();
         this.cylinderTop.display();
