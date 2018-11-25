@@ -76,6 +76,12 @@
 			<specular r="0.1" g="0.1" b="0.1" a="1" />
 		</material>
 
+		<material id="steel" shininess="0.1">
+			<emission r="0" g="0" b="0" a="0" />
+			<ambient r="0" g="0" b="0" a="1" />
+			<diffuse r="0.56" g="0.56" b="0.56" a="1" />
+			<specular r="0.65" g="0.65" b="0.65" a="1" />
+		</material>
 	</materials>
 
 	<!-- ______________ TRANSFORMATIONS _______________ -->
@@ -170,7 +176,7 @@
 				<primitiveref id="terrain" />
 			</children>
 		</component>
-	
+
 		<!-- _______ WATER _______ -->
 
 		<component id="water">
