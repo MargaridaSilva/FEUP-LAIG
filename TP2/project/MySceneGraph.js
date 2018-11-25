@@ -1470,7 +1470,6 @@ class MySceneGraph {
 
         if (node.animations != undefined && node.animations.length > 0){
             node.animations[node.activeAnimation].apply();
-            // console.log(node.animations[node.activeAnimation]);
         }
 
         let info = this.adaptTextureAndMaterial(idNode);

@@ -26,6 +26,7 @@ class LinearAnimation extends Animation {
 		}
 
 		this.position = [0, 0, 0];
+		this.currentSpeed = [0, 0, 0];
 		this.t = 0;
 		this.currentPath = 0;
 
@@ -35,14 +36,17 @@ class LinearAnimation extends Animation {
 		if (this.t < this.span) {
 			this.t += dt;
 
-			let speed = this.getSpeed();
-			this.position = this.position.add(speed.mult(dt));
+			this.currentSpeed = this.getSpeed();
+			this.position = this.position.add(this.currentSpeed.mult(dt));
 		}
 
 	}
 
 	apply() {
+		let angle = Math.atan2(1, 0) -  Math.atan2(this.currentSpeed[2], this.currentSpeed[0]);
+
 		this.scene.translate(this.position[0], this.position[1], this.position[2]);
+		this.scene.rotate(angle, 0, 1, 0);
 	}
 
 
