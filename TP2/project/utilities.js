@@ -44,11 +44,11 @@ Array.prototype.norm = function () {
 Array.prototype.minus = function (array2) {
 
     if(this.size != array2.size) return undefined;
-
     let x = this.map(function (item, index) {
         return item - array2[index];
     })
     return x;
+    
 }
 
 
@@ -61,7 +61,13 @@ Array.prototype.add = function (array2) {
     })
     return x;
 }
+Array.prototype.mult = function (constant) {
 
+    let x = this.map(function (item) {
+        return item * constant;
+    })
+    return x;
+}
 
 Array.prototype.div = function (constant) {
 

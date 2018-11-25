@@ -783,7 +783,7 @@ class MySceneGraph {
                 for (let j = 0; j < grandchildren.length; j++) {
                     if (grandchildren[j].nodeName == "controlpoint") {
                         controlpoint = this.parseFields(grandchildren[j], ["all", ["xx", "ff", 0], ["yy", "ff", 0], ["zz", "ff", 0]], "animations > linear animation id =" + animationId);
-                        controlpoints.push(controlpoint);
+                        controlpoints.push([controlpoint.xx, controlpoint.yy, controlpoint.zz]);
                     }
                     else this.onXMLMinorError("inappropriate tag <" + grandchildren[j].nodeName + "> in linear animation id = " + animationId + " was ignored");
                 }
@@ -802,6 +802,8 @@ class MySceneGraph {
                     return "ID must be unique for each primitive (conflict: ID = " + animationId + ")";
 
                 circularAnimation = this.parseFields(children[i], ["single", ["span", "ff", 0], ["center", "ff", 0], ["radius", "ff", 0], ["startang", "ff", 0], ["rotang", "ff", 0]], "animations > circular animation id =" + animationId);
+                //TO FIX
+                circularAnimation.center = [0, 0, 0];
                 this.circularAnimations[animationId] = circularAnimation;
             }
             else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in animations node was ignored");
@@ -1274,7 +1276,9 @@ class MySceneGraph {
                     this.components[id].animations.push(animation);
                 }
                 else if (this.circularAnimations.hasOwnProperty(animationId)){
-
+                    let anim = this.circularAnimations[animationId];
+                    let animation = new CircularAnimation(this.scene, anim.center, anim.radius, anim.startang, anim.rotang, anim.span);
+                    this.components[id].animations.push(animation);
                 }
                 else return "animation ID not found for in component id = " + id;
             }
