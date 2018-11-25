@@ -15,23 +15,21 @@ class CircularAnimation extends Animation {
 
 	}
 
-	config(angle){
-		let initAngle = this.angle0 - angle;
-		this.scene.rotate(initAngle, 0, 1, 0);
-	}
-
 	update(dt) {
 		if (this.t < this.span) {
 			this.t += dt;
 			this.currentAngle += this.omega * dt;
 		}
-		else return this.currentAngle;
+		else return 0;
 	}
 
 	apply() {
 		this.scene.translate(this.center[0], this.center[1], this.center[2]);
 		this.scene.rotate(this.currentAngle, 0, 1, 0);
-		this.scene.translate(0, 0, this.radius);
-		this.scene.translate(-this.center[0], -this.center[1], -this.center[2]);
+		this.scene.translate(this.radius, 0, 0);
+
+		if(this.omega > 0){
+			this.scene.rotate(Math.PI, 0, 1, 0);
+		}
 	}
 }

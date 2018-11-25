@@ -81,16 +81,16 @@
 	</transformations>
 
 	<animations>
-		<linear id="exampleLinear" span="1">
+		<linear id="flyTakeOff" span="5">
 			<controlpoint xx="0" yy="0" zz="0"/>
-			<controlpoint xx="1" yy="1" zz="1"/>
+			<controlpoint xx="0" yy="20" zz="0"/>
 		</linear>
-		<linear id="fly" span="20">
-			<controlpoint xx="9" yy="4" zz="0"/>
-			<controlpoint xx="9" yy="70" zz="0"/>
-			<controlpoint xx="100" yy="70" zz="-100"/>
+		<circular id="flyAround1" span="5" center="-10 20 0" radius="10" startang="0" rotang="-180"/>
+		<circular id="flyAround2" span="5" center="-30 20 0" radius="10" startang="0" rotang="270"/>
+		<linear id="flyDesc" span="5">
+			<controlpoint xx="-30" yy="20" zz="10"/>
+			<controlpoint xx="0" yy="0" zz="0"/>
 		</linear>
-		<circular id="exampleCircular" span="5" center="0 0 0" radius="100" startang="0" rotang="-90"/>
 	</animations>
 
 	<primitives>
@@ -112,7 +112,7 @@
 			<cylinder2 base = "2.0" top = "2.0" height = "2.0" slices = "20" stacks = "5"/>
 		</primitive>
 		<primitive id="skydome">
-			<sphere radius="70" slices="60" stacks="60" />
+			<sphere radius="50" slices="60" stacks="60" />
 		</primitive>
 	</primitives>
 
@@ -125,6 +125,7 @@
 			</animations>
 			<materials>
 				<material id="white" />
+				<material id="black" />
 			</materials>
 			<texture id="none" />
 			<children>
@@ -151,7 +152,7 @@
 
 		<component id="water">
 			<transformation>
-				<scale x="150" y="150" z="150" />
+				<scale x="100" y="100" z="100" />
 			</transformation>
 			<materials>
 				<material id="inherit" />
@@ -164,11 +165,13 @@
 
 		<component id="vehicle">
 			<transformation>
-				<translate x="9" y="4" z="0"/>
-				<scale x="0.1" y="0.1" z="0.1" />
+				<translate x="10" y="4.6" z="0"/>
 			</transformation>
 			<animations>
-				<animationref id="fly" />
+				<animationref id="flyTakeOff" />
+				<animationref id="flyAround1" />
+				<animationref id="flyAround2" />
+				<animationref id="flyDesc" />
 			</animations>
 			<materials>
 				<material id="inherit" />

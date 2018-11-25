@@ -53,18 +53,18 @@ class MySceneGraph {
 
         this.primitiveParse = {
             "rectangle": this.parseRectangle,
-            "triangle" : this.parseTriangle,
+            "triangle": this.parseTriangle,
             "sphere": this.parseSphere,
             "cylinder": this.parseCylinder,
             "torus": this.parseTorus,
-            "plane":this.parsePlane,
+            "plane": this.parsePlane,
             "patch": this.parsePatch,
             "vehicle": this.parseVehicle,
             "cylinder2": this.parseCylinder2,
             "terrain": this.parseTerrain,
             "water": this.parseWater
         }
-        
+
         this.values = [];
         this.deg2rad = Math.PI / 180;
 
@@ -772,10 +772,10 @@ class MySceneGraph {
 
                 if (this.linearAnimations.hasOwnProperty(animationId))
                     return "ID must be unique for each primitive (conflict: ID = " + animationId + ")";
-                
+
                 let span = this.reader.getString(children[i], 'span');
                 if (span == null)
-                        return "no span defined for linear animation id = " + animationId;
+                    return "no span defined for linear animation id = " + animationId;
 
                 let grandchildren = children[i].children;
                 let controlpoint, controlpoints = [];
@@ -792,7 +792,8 @@ class MySceneGraph {
 
                 this.linearAnimations[animationId] = {
                     span: span,
-                    points: controlpoints};
+                    points: controlpoints
+                };
 
             }
             else if (children[i].nodeName == "circular") {
@@ -801,9 +802,11 @@ class MySceneGraph {
                 if (this.circularAnimations.hasOwnProperty(animationId))
                     return "ID must be unique for each primitive (conflict: ID = " + animationId + ")";
 
-                circularAnimation = this.parseFields(children[i], ["single", ["span", "ff", 0], ["center", "ff", 0], ["radius", "ff", 0], ["startang", "ff", 0], ["rotang", "ff", 0]], "animations > circular animation id =" + animationId);
-                //TO FIX
-                circularAnimation.center = [0, 0, 0];
+                circularAnimation = this.parseFields(children[i], ["single", ["span", "ff", 0], ["center", "ss", 0], ["radius", "ff", 0], ["startang", "ff", 0], ["rotang", "ff", 0]], "animations > circular animation id =" + animationId);
+                let res = circularAnimation.center.split(" ");
+                circularAnimation.center = res.map(function(item) {
+                    return parseFloat(item);
+                });
                 this.circularAnimations[animationId] = circularAnimation;
             }
             else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in animations node was ignored");
@@ -849,7 +852,7 @@ class MySceneGraph {
                 error = this.primitiveFunction(children[i], primitiveId);
                 if (error != null)
                     return error;
-                
+
             }
             else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in <primitives> block was ignored")
         }
@@ -983,7 +986,7 @@ class MySceneGraph {
         //INFO
         let info;
         info = this.parseFields(waterNode, ["all", ["parts", "ii", 1], ["heightscale", "ff", 1], ["texscale", "ff", 1]], "primitives > water id = " + primitiveId);
- 
+
         this.primitives[primitiveId] = new MyWater(this.scene, this.textures[idtexture], this.textures[idwavemap], info.parts, info.heightscale, info.texscale);
     }
 
@@ -1275,7 +1278,7 @@ class MySceneGraph {
                     let animation = new LinearAnimation(this.scene, points, span);
                     this.components[id].animations.push(animation);
                 }
-                else if (this.circularAnimations.hasOwnProperty(animationId)){
+                else if (this.circularAnimations.hasOwnProperty(animationId)) {
                     let anim = this.circularAnimations[animationId];
                     let animation = new CircularAnimation(this.scene, anim.center, anim.radius, anim.startang, anim.rotang, anim.span);
                     this.components[id].animations.push(animation);
@@ -1468,7 +1471,7 @@ class MySceneGraph {
         if (node.transformation != undefined)
             this.scene.multMatrix(node.transformation);
 
-        if (node.animations != undefined && node.animations.length > 0){
+        if (node.animations != undefined && node.animations.length > 0) {
             node.animations[node.activeAnimation].apply();
         }
 
@@ -1552,6 +1555,22 @@ class MySceneGraph {
             s: s,
             t: t
         };
+    }
+
+    update(dt) {
+        this.primitives.water.update(dt);
+        this.primitives.vehicle.update(dt);
+
+        for (let key in this.components) {
+            let comp = this.components[key];
+            if (comp.animations != undefined && comp.animations.length > 0) {
+                let index = comp.activeAnimation;
+                let ret = comp.animations[index].update(dt);
+                if (ret == 0 && comp.activeAnimation < comp.animations.length - 1) {
+                    comp.activeAnimation++;
+                }
+            }
+        }
     }
 
 }

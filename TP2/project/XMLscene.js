@@ -233,21 +233,6 @@ class XMLscene extends CGFscene {
         let dt = currTime - this.lastTime;
         this.lastTime = currTime;
 
-        this.graph.primitives.water.update(dt);
-        this.graph.primitives.vehicle.update(dt);
-
-        for (let key in this.graph.components) {
-            let comp = this.graph.components[key];
-            if (comp.animations != undefined && comp.animations.length > 0) {
-                let index = comp.activeAnimation;
-                let ret = comp.animations[index].update(dt);
-                if (ret != undefined && (comp.activeAnimation + 1) < comp.animations.length){
-                    comp.activeAnimation++;
-                    comp.animations[comp.activeAnimation].config(ret);
-                }
-                    
-
-            }
-        }
+        this.graph.update(dt);
     }
 }
