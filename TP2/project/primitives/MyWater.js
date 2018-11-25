@@ -6,8 +6,7 @@ class MyWater extends CGFobject{
         this.texture = texture;
         this.time = 0;
         this.shader = new CGFshader(this.scene.gl, "shaders/water_vert.glsl", "shaders/water_frag.glsl");
-        this.normal = new CGFtexture(scene, "scenes/images/normal.jpg");
-        this.shader.setUniformsValues({uWaterTexture: 1, uNormalTexture: 2, uHeightScale: heightscale, uTexScale: texscale, uTimeFactor: this.time});
+        this.shader.setUniformsValues({uWaterTexture: 1, uHeightScale: heightscale, uTexScale: texscale, uTimeFactor: this.time});
         
     }
 
@@ -16,7 +15,6 @@ class MyWater extends CGFobject{
 
         this.heightmap.bind(0);
         this.texture.bind(1);
-        this.normal.bind(2);
         
         this.scene.setActiveShader(this.shader);
         this.water.display();
