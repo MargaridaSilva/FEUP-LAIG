@@ -1,11 +1,22 @@
+/**
+ * class MyVehicle
+ * @constructos
+ */
 class MyVehicle extends CGFobject {
     
+    /**
+     * Creates a MyVehicle type of object
+     * @param {CGFscene} scene 
+     */
     constructor(scene) {
         super(scene);
 
         this.currentTime = 0;
         this.angle = 0;
 
+        //-------- Helicopter Cabin ---------
+
+        //First Octant
         this.partPatch1 = new MyPatch(this.scene, 3, 3, 100, 100,
             [
                 0, -23.999999999999972, -2,
@@ -22,6 +33,7 @@ class MyVehicle extends CGFobject {
             ]
         );
 
+        //Second Octant
         this.partPatch2 = new MyPatch(this.scene, 3, 3, 100, 100,
             [
                 0, -12.000000000000009, 7.9999999999999964,
@@ -38,6 +50,7 @@ class MyVehicle extends CGFobject {
             ]
         );
 
+        //Third Octant
         this.partPatch3 = new MyPatch(this.scene, 3, 3, 100, 100,
             [
                 0, -23.999999999999972, -2,
@@ -54,6 +67,7 @@ class MyVehicle extends CGFobject {
             ]
         );
 
+        //Fourth Octant
         this.partPatch4 = new MyPatch(this.scene, 3, 3, 100, 100,
 
             [
@@ -71,6 +85,7 @@ class MyVehicle extends CGFobject {
             ]
         );
 
+        //Fifth Octant
         this.partPatch5 = new MyPatch(this.scene, 3, 3, 100, 100,
             [
                 0, -23.999999999999972, -2,
@@ -87,6 +102,7 @@ class MyVehicle extends CGFobject {
             ]
         );
 
+        //Sixth Octant
         this.partPatch6 = new MyPatch(this.scene, 3, 3, 100, 100,
             [
                 -6, -10, 2,
@@ -103,6 +119,7 @@ class MyVehicle extends CGFobject {
             ]
         );
 
+        //Seventh Octant
         this.partPatch7 = new MyPatch(this.scene, 3, 3, 100, 100,
 
             [
@@ -120,6 +137,7 @@ class MyVehicle extends CGFobject {
             ]
         );
 
+        //Eighth Octant
         this.partPatch8 = new MyPatch(this.scene, 3, 3, 100, 100,
             [
                 0, -23.999999999999972, -2,
@@ -137,11 +155,13 @@ class MyVehicle extends CGFobject {
         );
 
 
+        // Lateral Wing
+
+
         let b = 1;
         let t = 0.5;
         let h = 1;
         let c = 0.1;
-
 
         this.lateralWing = new MyPatch(this.scene, 9, 2, 100, 100,
             [
