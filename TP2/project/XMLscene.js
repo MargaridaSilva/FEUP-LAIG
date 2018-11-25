@@ -241,8 +241,11 @@ class XMLscene extends CGFscene {
             if (comp.animations != undefined && comp.animations.length > 0) {
                 let index = comp.activeAnimation;
                 let ret = comp.animations[index].update(dt);
-                if (ret != undefined && (comp.activeAnimation + 1) < comp.animations.length)
+                if (ret != undefined && (comp.activeAnimation + 1) < comp.animations.length){
                     comp.activeAnimation++;
+                    comp.animations[comp.activeAnimation].config(ret);
+                }
+                    
 
             }
         }

@@ -1,9 +1,8 @@
 class CircularAnimation extends Animation {
 
 	constructor(scene, center, radius, angle0, angle, span) {
-		super();
-		this.scene = scene;
-		this.center = center,
+		super(scene);
+		this.center = center;
 		this.radius = radius;
 		this.angle0 = angle0;
 		this.angle = angle;
@@ -16,19 +15,23 @@ class CircularAnimation extends Animation {
 
 	}
 
+	config(angle){
+		let initAngle = this.angle0 - angle;
+		this.scene.rotate(initAngle, 0, 1, 0);
+	}
+
 	update(dt) {
 		if (this.t < this.span) {
 			this.t += dt;
 			this.currentAngle += this.omega * dt;
 		}
 		else return this.currentAngle;
-		console.log(this.omega);
 	}
 
 	apply() {
 		this.scene.translate(this.center[0], this.center[1], this.center[2]);
 		this.scene.rotate(this.currentAngle, 0, 1, 0);
-		this.scene.translate(this.radius, 0, 0);
+		this.scene.translate(0, 0, this.radius);
 		this.scene.translate(-this.center[0], -this.center[1], -this.center[2]);
 	}
 }

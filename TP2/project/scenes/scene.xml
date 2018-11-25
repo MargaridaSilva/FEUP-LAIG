@@ -121,6 +121,8 @@
 			<transformation>
 				<transformationref id="base" />
 			</transformation>
+			<animations>
+			</animations>
 			<materials>
 				<material id="white" />
 			</materials>
@@ -166,7 +168,7 @@
 				<scale x="0.1" y="0.1" z="0.1" />
 			</transformation>
 			<animations>
-				<animationref id="exampleCircular" />
+				<animationref id="fly" />
 			</animations>
 			<materials>
 				<material id="inherit" />

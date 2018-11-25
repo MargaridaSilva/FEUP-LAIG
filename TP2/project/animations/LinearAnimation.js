@@ -32,6 +32,10 @@ class LinearAnimation extends Animation {
 
 	}
 
+	config(angle){
+		this.angle = angle;
+	}
+
 	update(dt) {
 		if (this.t < this.span) {
 			this.t += dt;
@@ -39,6 +43,7 @@ class LinearAnimation extends Animation {
 			this.currentSpeed = this.getSpeed();
 			this.position = this.position.add(this.currentSpeed.mult(dt));
 		}
+		else return this.angle;
 
 	}
 
@@ -62,6 +67,7 @@ class LinearAnimation extends Animation {
 
 		for (let i = 0; i < this.points.length - 1; i++) {
 			let vec = this.points[i + 1].minus(this.points[i]);
+
 			direction[i] = {
 				vec: vec,
 				norm: vec.norm()
