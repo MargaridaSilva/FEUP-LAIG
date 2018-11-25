@@ -143,7 +143,7 @@ vec4 heightMapData(){
 // varying vec3 normal;
 void main() {
 
-	vTextureCoord = (aTextureCoord + vec2(0, -uTimeFactor*0.000005)) * uTexScale;
+	vTextureCoord = (aTextureCoord + vec2(0, -uTimeFactor*0.000001)) * uTexScale;
 
 	vec4 heightMapData = heightMapData();
 	vec3 normal = heightMapData.xyz;

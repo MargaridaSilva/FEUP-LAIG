@@ -39,8 +39,6 @@ class XMLscene extends CGFscene {
         this.gl.enable(this.gl.DEPTH_TEST);
         this.gl.enable(this.gl.CULL_FACE);
         this.gl.depthFunc(this.gl.LEQUAL);
-
-        this.vehicle = new MyVehicle(this);
     }
 
     /**

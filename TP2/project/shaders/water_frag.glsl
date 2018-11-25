@@ -10,6 +10,10 @@ varying vec3 vEye;
 uniform sampler2D uWaterTexture;
 varying vec3 normal;
 
+vec3 exposure(vec3 color, float relative_fstop) {
+   return color * pow(2.0,relative_fstop);
+}
+
 void main() {
 
 	// vec3 nnormal = normalize(normal);
@@ -24,5 +28,5 @@ void main() {
 	
 
 	
-	gl_FragColor = vec4(waterTextureColor, 1);
+	gl_FragColor = vec4(exposure(waterTextureColor, 0.7), 1);
 }
