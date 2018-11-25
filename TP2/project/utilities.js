@@ -1,3 +1,5 @@
+const SEC_TO_MSEC = 1000;
+const DEG_TO_RAD = Math.PI/180;
 
 Array.prototype.peek = function () {
     return this[this.length - 1];
@@ -24,9 +26,6 @@ isPowerOfTwo = function(x)
 {
     return (x & (x - 1)) == 0;
 }
-
-const SEC_TO_MSEC = 1000;
-const DEG_TO_RAD = Math.PI/180;
 
 Array.prototype.norm = function () {
 

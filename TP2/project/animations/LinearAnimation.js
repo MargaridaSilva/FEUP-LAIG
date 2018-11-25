@@ -3,7 +3,7 @@ class LinearAnimation extends Animation {
 	constructor(scene, points, span) {
 		super(scene);
 		this.points = points;
-		this.span = span * 1000;
+		this.span = span * SEC_TO_MSEC;
 		this.startPosition = [0,0,0];
         this.position = this.startPosition;
 
