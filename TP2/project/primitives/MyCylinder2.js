@@ -10,6 +10,9 @@ class MyCylinder2 extends CGFobject{
 
         this.cylinderTop = this.createCylinderTop();
         this.cylindeBottom = this.createCylinderBottom();
+        
+        this.baseCover = new MyCylinderBase(scene, slices, this.base);
+        this.topCover = new MyCylinderBase(scene, slices, this.top);
 
     }
 
@@ -58,8 +61,12 @@ class MyCylinder2 extends CGFobject{
     }
 
     display(){
+        this.baseCover.display();
         this.cylinderTop.display();
         this.cylindeBottom.display();
+
+        this.scene.translate(0, 0, this.height);
+        this.topCover.display();
     }
 
     updateCoords(){

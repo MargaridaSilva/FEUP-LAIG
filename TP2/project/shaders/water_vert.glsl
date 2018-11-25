@@ -139,19 +139,19 @@ vec4 heightMapData(){
 	return bump;
 }
 
-uniform sampler2D uNormalTexture;
-varying vec3 normal;
+// uniform sampler2D uNormalTexture;
+// varying vec3 normal;
 void main() {
 
-	vTextureCoord = (aTextureCoord + vec2(0, -uTimeFactor*0.00001)) * uTexScale;
+	vTextureCoord = (aTextureCoord + vec2(0, -uTimeFactor*0.000005)) * uTexScale;
 
 	vec4 heightMapData = heightMapData();
-	// vec3 normal = heightMapData.xyz;
-	normal = texture2D(uNormalTexture, vTextureCoord).rgb;
+	vec3 normal = heightMapData.xyz;
+	// normal = texture2D(uNormalTexture, vTextureCoord).rgb;
 	float height = heightMapData.w;
 
-	// vec3 offset = aVertexNormal*height*uHeightScale;
-    vec3 offset = vec3(0,0,0);
+	vec3 offset = aVertexNormal*height*uHeightScale;
+    // vec3 offset = vec3(0,0,0);
 
     // Transformed Vertex position
     vec4 vertex = uMVMatrix * vec4(aVertexPosition+offset, 1.0);

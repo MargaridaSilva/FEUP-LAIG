@@ -31,8 +31,9 @@
 	<textures>
 		<texture id="terrain_h" file="scenes/images/island-height.jpg" />
 		<texture id="terrain_t" file="scenes/images/island.jpg" />
-		<texture id="water_h" file="scenes/images/water-height.jpg" />
-		<texture id="water_t" file="scenes/images/texture.jpg" />
+		<texture id="water_h" file="scenes/images/water-height.jpeg" />
+		<texture id="water_t" file="scenes/images/water-texture.jpg" />
+		<texture id="helicopter" file="scenes/images/texture.jpeg" />
 
 	</textures>
 	<materials>
@@ -40,8 +41,23 @@
 			<emission r="0" g="0" b="0" a="0" />
 			<ambient r="0.2" g="0.2" b="0.2" a="1" />
 			<diffuse r="1" g="1" b="1" a="1" />
+			<specular r="0.5" g="0.5" b="0.5" a="1" />
+		</material>
+
+		<material id="black" shininess="0.5">
+			<emission r="0" g="0" b="0" a="0" />
+			<ambient r="0" g="0" b="0" a="1" />
+			<diffuse r="0.1" g="0.1" b="0.1" a="1" />
 			<specular r="0.1" g="0.1" b="0.1" a="1" />
 		</material>
+
+		<material id="steel" shininess="0.1">
+			<emission r="0" g="0" b="0" a="0" />
+			<ambient r="0" g="0" b="0" a="1" />
+			<diffuse r="0.56" g="0.56" b="0.56" a="1" />
+			<specular r="0.65" g="0.65" b="0.65" a="1" />
+		</material>
+
 	</materials>
 	<transformations>
 		<transformation id="base">
@@ -49,7 +65,7 @@
 		</transformation>
 	</transformations>
 	<animations>
-		<linear id="exampleLinear" span="0">
+		<linear id="exampleLinear" span="1">
 			<controlpoint xx="0" yy="0" zz="0"/>
 			<controlpoint xx="1" yy="1" zz="1"/>
 		</linear>
@@ -67,7 +83,7 @@
 		</primitive>
 
 		<primitive id="water">
-			<water idtexture="water_t" idwavemap="water_h" parts="100" heightscale="0.015" texscale="5" />
+			<water idtexture="water_t" idwavemap="water_h" parts="100" heightscale="0.015" texscale="6" />
 		</primitive>
 
 		<primitive id="cylinder2">
@@ -83,9 +99,6 @@
 			<transformation>
 				<transformationref id="base" />
 			</transformation>
-			<animations>
-				<animationref id= "exampleLinear"/>
-			</animations>
 			<materials>
 				<material id="white" />
 			</materials>
@@ -131,9 +144,9 @@
 				<scale x="0.1" y="0.1" z="0.1" />
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="white" />
 			</materials>
-			<texture id="none" />
+			<texture id="none" lenght_s="1" lenght_t="1"/>
 			<children>
 				<primitiveref id="vehicle" />
 			</children>
