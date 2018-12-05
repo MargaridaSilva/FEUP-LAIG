@@ -22,7 +22,7 @@ class CircularAnimation extends Animation {
 			this.currentAngle += this.omega * dt;
 		}
 		else{
-			this.currentAngle = this.angle0 + this.angle;
+			this.currentAngle = (this.angle0 + this.angle)*DEG_TO_RAD;
 			return 0;
 		}
 	}

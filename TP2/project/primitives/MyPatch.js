@@ -8,7 +8,7 @@ class MyPatch extends CGFobject{
         this.npartsU = npartsU;
         this.npartsV = npartsV;
         this.vertexList = vertexList;
-
+        
         this.patch = this.createNurb();
     }
 
@@ -48,4 +48,7 @@ class MyPatch extends CGFobject{
         return controlvertexes;
     }
 
+    updateCoords(){
+        
+    }
 }

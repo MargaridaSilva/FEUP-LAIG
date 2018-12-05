@@ -7,7 +7,7 @@
 
 	<views default="global">
 		<perspective id="global" near="0.1" far="500" angle="35">
-			<from x="50" y="50" z="50" />
+			<from x="10" y="10" z="10" />
 			<to x="0" y="0" z="0" />
 		</perspective>
 		<perspective id="close" near="0.1" far="500" angle="35">
@@ -27,22 +27,8 @@
 
 	<lights>
 		<omni id="light1" enabled="1">
-			<location x="0" y="600" z="0" w="1" />
-			<ambient r="0.3" g="0.3" b="0.3" a="1" />
-			<diffuse r="1.0" g="1.0" b="1.0" a="1" />
-			<specular r="1.0" g="1.0" b="1.0" a="1" />
-		</omni>
-
-		<omni id="light2" enabled="1">
-			<location x="1000" y="1000" z="1000" w="1" />
-			<ambient r="0.3" g="0.3" b="0.3" a="1" />
-			<diffuse r="1.0" g="1.0" b="1.0" a="1" />
-			<specular r="1.0" g="1.0" b="1.0" a="1" />
-		</omni>
-
-		<omni id="light3" enabled="1">
-			<location x="-1000" y="1000" z="-1000" w="1" />
-			<ambient r="0.3" g="0.3" b="0.3" a="1" />
+			<location x="10" y="-10" z="10" w="1" />
+			<ambient r="1" g="1" b="1" a="1" />
 			<diffuse r="1.0" g="1.0" b="1.0" a="1" />
 			<specular r="1.0" g="1.0" b="1.0" a="1" />
 		</omni>
@@ -64,7 +50,7 @@
 	<materials>
 		<material id="white" shininess="0.5">
 			<emission r="0" g="0" b="0" a="0" />
-			<ambient r="0.2" g="0.2" b="0.2" a="1" />
+			<ambient r="0.5" g="0.5" b="0.5" a="1" />
 			<diffuse r="0.7" g="0.7" b="0.7" a="1" />
 			<specular r="0.8" g="0.8" b="0.8" a="1" />
 		</material>
@@ -89,22 +75,19 @@
 	<transformations>
 		<transformation id="base">
 			<translate x="0" y="0" z="0" />
+			<!-- <scale x="10" y="10" z="10" /> -->
 		</transformation>
 	</transformations>
 
 	<!-- ________________ ANIMATIONS __________________ -->
 	<animations>
-		<linear id="flyTakeOff" span="5">
+		<linear id="anima_l" span="5">
 			<controlpoint xx="0" yy="0" zz="0"/>
-			<controlpoint xx="0" yy="10" zz="0"/>
+			<controlpoint xx="10" yy="0" zz="0"/>
+			<controlpoint xx="10" yy="0" zz="10"/>
+			<controlpoint xx="0" yy="0" zz="10"/>
 		</linear>
-		<circular id="flyAround1" span="5" center="-10 10 0" radius="10" startang="0" rotang="-180"/>
-		<circular id="flyAround2" span="5" center="-30 10 0" radius="10" startang="0" rotang="270"/>
-		<linear id="flyDesc" span="10">
-			<controlpoint xx="-30" yy="10" zz="10"/>
-			<controlpoint xx="-20" yy="10" zz="0"/>
-			<controlpoint xx="0" yy="0" zz="0"/>
-		</linear>
+		<circular id="anima_c" span="5" center="0 10 0" radius="10" startang="-90" rotang="180"/>
 	</animations>
 
 	<!-- ________________ PRIMITIVES __________________ -->
@@ -128,7 +111,7 @@
 
 		<!-- Cylinder -->
 		<primitive id="cylinder2">
-			<cylinder2 base = "2.0" top = "2.0" height = "2.0" slices = "20" stacks = "5"/>
+			<cylinder2 base = "2.0" top = "2.0" height = "2.0" slices = "4" stacks = "5"/>
 		</primitive>
 
 		<!-- Sky -->
@@ -136,6 +119,19 @@
 			<sphere radius="50" slices="60" stacks="60" />
 		</primitive>
 
+		<primitive id="nurb">
+			<patch npointsU="2" npointsV="4" npartsU="15" npartsV="10">
+				<controlpoint xx=" 2" yy="0" zz="0" />
+				<controlpoint xx=" 2" yy="0" zz="-2.66" />
+				<controlpoint xx="-2" yy="0" zz="-2.66" />
+				<controlpoint xx="-2" yy="0" zz="0" />
+
+				<controlpoint xx="0" yy="-2" zz="0" />
+				<controlpoint xx="0" yy="-2" zz="0" />
+				<controlpoint xx="0" yy="-2" zz="0" />
+				<controlpoint xx="0" yy="-2" zz="0" />
+			</patch>
+		</primitive>
 	</primitives>
 
 	<!-- ________________ COMPONENTS __________________ -->
@@ -150,86 +146,75 @@
 			<animations>
 			</animations>
 			<materials>
-				<material id="white" />
+				<material id="white"/>
+			</materials>
+			<texture id="none" />
+			<children>
+				<componentref id="comp1" />
+				<componentref id="comp4" />
+			</children>
+		</component>
+
+		<component id="comp1">
+			<transformation>
+				<translate x="-4" y="0" z="0" />
+			</transformation>
+			<animations>
+			</animations>
+			<materials>
+				<material id="black"/>
+			</materials>
+			<texture id="none" />
+			<children>
+				<componentref id="comp2" />
+				<componentref id="comp3" />
+			</children>
+		</component>
+
+		<component id="comp2">
+			<transformation>
+				<translate x="-2" y="0" z="0" />
+			</transformation>
+			<animations>
+			</animations>
+			<materials>
 				<material id="black" />
 			</materials>
 			<texture id="none" />
 			<children>
-				<componentref id="terrain" />
-				<componentref id="water" />
-				<componentref id="vehicle"/>
-				<componentref id="skydome" />
+				<primitiveref id="nurb" />
 			</children>
 		</component>
 
-		<!-- _____ TERRAIN ______ -->
-
-		<component id="terrain">
+		<component id="comp3">
 			<transformation>
-				<scale x="50" y="50" z="50" />
-			</transformation>
-			<materials>
-				<material id="inherit" />
-			</materials>
-			<texture id="none" />
-			<children>
-				<primitiveref id="terrain" />
-			</children>
-		</component>
-
-		<!-- _______ WATER _______ -->
-
-		<component id="water">
-			<transformation>
-				<translate x="0" y="1.5" z="0" />
-				<scale x="100" y="100" z="100" />
-			</transformation>
-			<materials>
-				<material id="inherit" />
-			</materials>
-			<texture id="none" />
-			<children>
-				<primitiveref id="water" />
-			</children>
-		</component>
-
-		<!-- ______ VEHICLE ______ -->
-
-		<component id="vehicle">
-			<transformation>
-				<translate x="10" y="4.6" z="0"/>
+				<translate x="2" y="0" z="0" />
 			</transformation>
 			<animations>
-				<animationref id="flyTakeOff" />
-				<animationref id="flyAround1" />
-				<animationref id="flyAround2" />
-				<animationref id="flyDesc" />
-				<!-- <animationref id="test" /> -->
+			</animations>
+			<materials>
+				<material id="white" />
+			</materials>
+			<texture id="none" />
+			<children>
+				<primitiveref id="nurb" />
+			</children>
+		</component>
+
+
+		<component id="comp4">
+			<transformation>
+				<translate x="2" y="0" z="0" />
+			</transformation>
+			<animations>
 			</animations>
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="helicopter" length_s="1" length_t="1"/>
+			<texture id="none" />
 			<children>
-				<primitiveref id="vehicle" />
+				<primitiveref id="nurb" />
 			</children>
 		</component>
-
-		<!-- ________ SKY _______ -->
-
-		<component id="skydome">
-			<transformation>
-				<scale x="-1" y="1" z="1" />
-				<rotate axis="x" angle="-90" />
-			</transformation>
-			<materials>
-				<material id="inherit" />
-			</materials>
-			<texture id="sky" length_s="1" length_t="1"/>
-			<children>
-				<primitiveref id="skydome" />
-			</children>
-		</component>
-
 	</components>
 </yas>

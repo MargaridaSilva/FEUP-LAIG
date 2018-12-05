@@ -679,7 +679,7 @@ class MySceneGraph {
         material.setSpecular(specular.r, specular.g, specular.b, specular.a);
         material.setShininess(info.shininess);
 
-
+        
         this.materials[materialId] = material;
 
     }
@@ -804,7 +804,7 @@ class MySceneGraph {
 
                 circularAnimation = this.parseFields(children[i], ["single", ["span", "ff", 0], ["center", "ss", 0], ["radius", "ff", 0], ["startang", "ff", 0], ["rotang", "ff", 0]], "animations > circular animation id =" + animationId);
                 let res = circularAnimation.center.split(" ");
-                circularAnimation.center = res.map(function(item) {
+                circularAnimation.center = res.map(function (item) {
                     return parseFloat(item);
                 });
                 this.circularAnimations[animationId] = circularAnimation;
@@ -915,22 +915,22 @@ class MySceneGraph {
     parsePatch(patchNode, primitiveId) {
         //INFO
         let info;
-        info = this.parseFields(planeNode, ["all", ["npartsU", "ii", 1], ["npartsV", "ff", 1]], "primitives > patch id = " + primitiveId);
+        info = this.parseFields(patchNode, ["all", ["npointsU", "ii", 1], ["npointsV", "ii", 1], ["npartsU", "ii", 1], ["npartsV", "ii", 1]], "primitives > patch id = " + primitiveId);
 
         let children = patchNode.children;
         let controlpoint, controlpoints = [];
 
         for (let j = 0; j < children.length; j++) {
             if (children[j].nodeName == "controlpoint") {
-                controlpoint = this.parseFields(children[j], ["all", ["xx", "ff", 0], ["yy", "ff", 0], ["zz", "ff", 0]], "primitives > patch id =" + animationId);
-                controlpoints.push(controlpoint);
+                controlpoint = this.parseFields(children[j], ["all", ["xx", "ff", 0], ["yy", "ff", 0], ["zz", "ff", 0]], "primitives > patch id =" + primitiveId);
+                controlpoints.push(controlpoint.xx, controlpoint.yy, controlpoint.zz);
             }
             else this.onXMLMinorError("inappropriate tag <" + children[j].nodeName + "> in patch  id = " + primitiveId + " was ignored");
         }
         if (controlpoints.length < 2)
             return "Unsufficient controlpoints for patch id =" + animationId;
 
-        this.primitives[primitiveId] = new MyPatch(this.scene, info.npartsU, info.npartsV, controlpoints);
+        this.primitives[primitiveId] = new MyPatch(this.scene, info.npointsU, info.npointsV, info.npartsU, info.npartsV, controlpoints);
     }
 
     parseVehicle(vehicleNode, primitiveId) {
