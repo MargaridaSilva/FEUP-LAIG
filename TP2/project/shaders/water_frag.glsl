@@ -19,5 +19,5 @@ void main() {
 	vec3 waterTextureColor = texture2D(uWaterTexture, vTextureCoord).xyz;
 	vec3 color = vFinalColor.xyz * waterTextureColor;
 	
-	gl_FragColor = vec4(exposure(color, 0.5), 1);
+	gl_FragColor = vec4(exposure(color, 0.6), 1);
 }
