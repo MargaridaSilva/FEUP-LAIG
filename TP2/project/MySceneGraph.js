@@ -1044,6 +1044,11 @@ class MySceneGraph {
             }
         }
 
+        this.materialStack.push(this.rootMaterial);
+        this.textureStack.push(this.rootTexture);
+        this.sStack.push(this.rootTS);
+        this.tStack.push(this.rootTT);
+
         this.log("Parsed Components");
 
     }
@@ -1452,15 +1457,7 @@ class MySceneGraph {
      * Displays the scene, processing each node, starting in the root node.
      */
     displayScene() {
-        this.materialStack.push(this.rootMaterial);
-        this.textureStack.push(this.rootTexture);
-        this.sStack.push(this.rootTS);
-        this.tStack.push(this.rootTT);
         this.displayRecursive(this.values.scene.root);
-        this.sStack.pop();
-        this.tStack.pop();
-        this.materialStack.pop();
-        this.textureStack.pop();
     }
 
 
