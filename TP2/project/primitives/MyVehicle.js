@@ -216,15 +216,6 @@ class MyVehicle extends CGFobject {
         this.cone2.display();
         this.scene.popMatrix();
 
-
-
-
-
-
-
-      
-
-
         //Estabilizadores
         this.scene.pushMatrix();
         this.scene.translate(0.5, 6.5, -35);
@@ -292,8 +283,6 @@ class MyVehicle extends CGFobject {
 
         this.scene.popMatrix();
 
-
-
         //Apoios
 
         this.scene.graph.materials.steel.apply();
@@ -345,12 +334,8 @@ class MyVehicle extends CGFobject {
         this.scene.scale(0.4, 0.4, 20);
         this.cylinder.display();
         this.scene.popMatrix();
-
-
-
     }
-
-
+    
     update(dt) {
         this.angle -= (dt * 0.005);
         this.angle %= 2 * Math.PI;
