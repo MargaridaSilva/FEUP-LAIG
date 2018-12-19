@@ -3,8 +3,8 @@
 :- use_module(library(http/http_path)).
 :- use_module(library(http/http_client)).
 :- use_module(library(http/http_server_files)).
-
 :- use_module(library(lists)).
+:- consult('virus_wars.pl').
 
 :- http_handler(root(game), prepReplyStringToJSON, []).						% Predicate to handle requests on server/game (for Prolog Game Logic)
 :- http_handler(pub(.), serve_files_in_directory(pub), [prefix]).			% Serve files in /pub as requested (for WebGL Game Interface)
@@ -41,13 +41,44 @@ writeJSON([Prop|PT], [Val|VT]):-
 	writeJSON(PT, VT).
 
 processString([_Par=Val], R):-
-        term_string(List, Val),									% Convert Parameter String to Prolog List
-		R = [_NB, _NP, _M],										% Variables for Response
+        term_string([C|Tail], Val),								% Convert Parameter String to Prolog List
+		response(C, R),											% Variables for Response
 		append(List, R, ListR),									% Add extra Vars to Request
 		Term =.. ListR,											% Create Term from ListR
 		Term.													% Call the Term
 
+response('play', [_NB]).
+response('moveUser', [_MT, _POS, _NT, _NP, _W]).
+response('moveComputer', [_MT, _POS, _NT, _NP, _W]).
+response('checkWinner', [_B, _W]).
+
 %---------------------------------------------
+
+play(Dim, Board) :- Board = [].
+
+moveUser(Move, Board, Turn, Player, MoveType, Pos, NewTurn, NewPlayer) :-
+	retractall(visited(_)),
+	retractall(valid(_)),
+	valid_move(Board, Player, Move), !,
+	Pos = Move,
+	getSymbol(Board, Move, Symbol), 
+	getMoveType(Symbol, MoveType),
+	NextPlayer(Player, NewPlayer, Turn, NewTurn).
+
+
+
+moveUser(Move, Board, Turn, Player, MoveType, Pos, NewTurn, NewPlayer) :-
+	MoveType = "invalid",
+	Pos = -1,
+	NewTurn = -1, 
+	NewPlayer = -1.
+
+getMoveType('empty', 'mov').
+getMoveType(_, 'zom').
+
+checkWinner(Board, Winner) :-
+	gameOver(Board, 0, Winner).
+
 
 play(Player, Board, Play, NextPlayer, NewBoard, Message):-		% Example play predicate
 	% Game Logic
