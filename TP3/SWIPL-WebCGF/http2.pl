@@ -47,12 +47,14 @@ processString([_Par=Val], R):-
 		Term =.. ListR,											% Create Term from ListR
 		Term.													% Call the Term
 
+response('hello', [_T]).
 response('play', [_NB]).
 response('moveUser', [_MT, _POS, _NT, _NP, _W]).
 response('moveComputer', [_MT, _POS, _NT, _NP, _W]).
 response('checkWinner', [_B, _W]).
 
 %---------------------------------------------
+hello('hello', 'there').
 
 play(Dim, Board) :- Board = [].
 
@@ -65,13 +67,7 @@ moveUser(Move, Board, Turn, Player, MoveType, Pos, NewTurn, NewPlayer) :-
 	getMoveType(Symbol, MoveType),
 	NextPlayer(Player, NewPlayer, Turn, NewTurn).
 
-
-
-moveUser(Move, Board, Turn, Player, MoveType, Pos, NewTurn, NewPlayer) :-
-	MoveType = "invalid",
-	Pos = -1,
-	NewTurn = -1, 
-	NewPlayer = -1.
+moveUser(Move, Board, Turn, Player, "invalid", -1, -1, -1).
 
 getMoveType('empty', 'mov').
 getMoveType(_, 'zom').

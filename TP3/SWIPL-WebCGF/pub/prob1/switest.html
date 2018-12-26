@@ -9,12 +9,7 @@
 		
 		<div id="content">
 			<div id="params">
-				<input type="text" id="board" value="[[1,1,1],[0,0,0],[2,2,2]]"/>
-				<br/>
-				<input type="text" id="player" value="1"/>
-				<br/>
-				<input type="text" id="play" value="1-1"/>
-				<br/>
+				<input type="text" id="action" value=""/>
 				<button type="button" id="search" onClick="makeRequest();" >Send</button>
 			</div>
 			<div id="reply"></div>
@@ -36,12 +31,9 @@
 			function makeRequest()
 			{
 				// Get Parameter Values
-				var v_board = document.querySelector("#board").value;
-				var v_player = document.querySelector("#player").value;
-				var v_play = document.querySelector("#play").value;
+				var requestString = document.querySelector("#action").value;
 				
 				// Compose Request String
-				var requestString = "[play," + v_player + "," + v_board + "," + v_play + "]";
 				postGameRequest(requestString, handleReply);
 				
 			}
@@ -50,9 +42,7 @@
 			function handleReply(data){;
 				console.log(data.target.response);
 				response=JSON.parse(data.target.response);
-				document.querySelector("#reply").innerHTML=response.message;		// Access message and show
-				document.querySelector("#board").value=response.newBoard;			// Access new Board
-				document.querySelector("#player").value=response.newPlayer;			// Access new Player
+				document.querySelector("#action").innerHTML=response;		// Access message and show
 			}
 			
 		</script>
