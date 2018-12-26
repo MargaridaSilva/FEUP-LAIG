@@ -146,13 +146,7 @@ valid_move(Board, Player, Move) :-
 %	Check if a position is in a valid chain of zombies for Player
 
 % checkMoveChain(_, [Row, Col], _) :-
-% 	visited([Row, Col])
-		retractall(visited(_)),
-		retractall(valid(_)),
-		(valid_move(Board, Player, Move) , ! ; write('[Invalid Move]\n\n'), fail),
-		makeMove(Board, Player, Move, NewBoard).
-		
-,
+% 	visited([Row, Col]),
 % 	valid([Row, Col]),!.
 
 checkMoveChain(Player, [Row, Col], Board) :- 
