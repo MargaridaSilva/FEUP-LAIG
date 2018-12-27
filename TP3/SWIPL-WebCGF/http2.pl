@@ -20,18 +20,17 @@ server(Port) :- http_server(http_dispatch, [port(Port)]).		% Start server on por
 prepReplyStringToJSON(Request) :- 
 		member(method(post), Request), !,						% if POST
         http_read_data(Request, Data, []),						% Retrieve POST Data
-		processString(Data, Reply),								% Call processing predicate
+		processString(Data, Fields, Reply),						% Call processing predicate
 		format('Content-type: application/json~n~n'),			% Reply will be JSON
-		formatAsJSON(Reply).									% Send Reply as JSON
+		formatAsJSON(Fields, Reply).							% Send Reply as JSON
 
 prepReplyStringToJSON(_Request) :-								% Fallback for non-POST Requests
 		format('Content-type: text/plain~n~n'),					% Start preparing reply - reply type
 		write('Can only handle POST Requests'),					% Standard Reply
 		format('~n').											% End Reply
 
-formatAsJSON(Reply):-
+formatAsJSON(Fields, Reply):-
 		write('{'),												% Start JSON Object
-		Fields = [newPlayer, newBoard, message],				% Response Field Names
 		writeJSON(Fields, Reply).								% Format content as JSON 
 		
 writeJSON([Prop], [Val]):-
@@ -42,34 +41,56 @@ writeJSON([Prop|PT], [Val|VT]):-
 	write('":"'), write(Val), write('", '),						% Separator for next element
 	writeJSON(PT, VT).
 
-processString([_Par=Val], R):-
+processString([_Par=Val], Fields, R):-
         term_string([C|Tail], Val),									% Convert Parameter String to Prolog List
-		response(C, R),											% Variables for Response
-		append([C, C|Tail], R, ListR),									% Add extra Vars to Request
+		fields(C, Fields),	
+		response(C, R),										% Variables for Response
+		append([C|Tail], R, ListR),									% Add extra Vars to Request
 		Term =.. ListR,											% Create Term from ListR
-		Term.
-															% Call the Term
-response('play', R) :- R = [_NB, _NP, _M].
+		Term.													% Call the Term
+
+response('play', R) :- R = [_NB].
+response('moveUser', R) :- R = [_MT, _P, _NB, _NT, _NP].
+response('moveComputer', R) :- R = [_MT, _P, _NB, _NT, _NP].
+response('checkWinner', R) :- R = [_W].
+
+fields('play', [newBoard]).
+fields('moveUser', [moveType, position, newBoard, newTurn, newPlayer]).
+fields('moveComputer', [moveType, position, newBoard, newTurn, newPlayer]).
+fields('checkWinner', [winner]).
+
 %---------------------------------------------
 
+play(Dim, Board) :-
+	createBoard(BoardCells, Dim),
+	Board = BoardCells-Dim.
 
-
-play(Pred, Player, Board, Play, NextPlayer, NewBoard, Message):-		% Example play predicate
-	% Game Logic
-	Board=[[_|A]|B], NewBoard=[[Play|A]|B],						% Example - changes [1,1] to Play
-	next(Player, NextPlayer),									% Change Player
-	Message = Pred.									% Add some message (Game Over / Invalid Move / ...)
-	
-next(1,0).
-next(0,1).
-
-moveUser(Move, Board, Turn, Player, MoveType, Pos, NewTurn, NewPlayer) :-
+moveUser(Move, Board, Turn, Player, MoveType, Pos, NewBoard, NewTurn, NewPlayer) :-
 	retractall(visited(_)),
 	retractall(valid(_)),
 	valid_move(Board, Player, Move), !,
 	Pos = Move,
 	getSymbol(Board, Move, Symbol), 
 	getMoveType(Symbol, MoveType),
+	makeMove(Board, Player, Move, NewBoard),
 	nextPlayer(Player, NewPlayer, Turn, NewTurn).
 
-:- server(8081).
+moveUser(_, Board, _, _, "invalid", -1, Board, -1, -1).
+
+moveComputer(Board, Turn, Player, AI, MoveType, Pos, NewBoard, NewTurn, NewPlayer) :-
+	choose_move(Board, Player-Turn, AI, Pos),
+	getSymbol(Board, Pos, Symbol), 
+	getMoveType(Symbol, MoveType),
+	makeMove(Board, Player, Pos, NewBoard),
+	nextPlayer(Player, NewPlayer, Turn, NewTurn).
+
+getMoveType('empty', 'mov').
+getMoveType(_, 'zom').
+
+checkWinner(Board, Winner) :-
+	game_over(Board, 0, Winner).
+
+checkWinner(_, -1).
+
+:- set_random(seed(111)).
+:- server(8083).
