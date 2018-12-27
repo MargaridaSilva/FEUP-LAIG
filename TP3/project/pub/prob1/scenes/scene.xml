@@ -1,0 +1,108 @@
+<yas>
+	<!-- _________________ SCENE ___________________ -->
+
+	<scene root="scene" axis_length="30" />
+
+	<!-- _________________ VIEWS ___________________ -->
+
+	<views default="global">
+		<perspective id="global" near="0.1" far="500" angle="35">
+			<from x="0" y="15" z="15" />
+			<to x="0" y="0" z="0" />
+		</perspective>
+		<perspective id="top" near="0.1" far="500" angle="35">
+			<from x="0" y="20" z="0.1" />
+			<to x="0" y="0" z="0" />
+		</perspective>
+	</views>
+
+	<!-- ________________ AMBIENT __________________ -->
+
+	<ambient>
+		<ambient r="0.2" g="0.2" b="0.2" a="1" />
+		<background r="0.05" g="0.05" b="0.1" a="1" />
+	</ambient>
+
+	<!-- _________________ LIGHTS ___________________ -->
+
+	<lights>
+		<omni id="light1" enabled="1">
+			<location x="0" y="60" z="0" w="1" />
+			<ambient r="0.1" g="0.1" b="0.1" a="1" />
+			<diffuse r="1.0" g="1.0" b="1.0" a="1" />
+			<specular r="1.0" g="1.0" b="1.0" a="1" />
+		</omni>
+		<omni id="light2" enabled="1">
+			<location x="0" y="0" z="0" w="1" />
+			<ambient r="1" g="1" b="1" a="1" />
+			<diffuse r="1.0" g="1.0" b="1.0" a="1" />
+			<specular r="1.0" g="1.0" b="1.0" a="1" />
+		</omni>
+	</lights>
+
+	<!-- ________________ TEXTURES ___________________ -->
+
+	<textures>
+		<texture id="warning" file="scenes/images/warning.jpg" />
+	</textures>
+
+	<!-- ________________ MATERIALS __________________ -->
+
+	<materials>
+
+		<material id="white" shininess="120">
+			<emission r="0" g="0" b="0" a="0" />
+			<ambient r="0.1" g="0.1" b="0.1" a="1" />
+			<diffuse r="1.0" g="1.0" b="1.0" a="1" />
+			<specular r="1.0" g="1.0" b="1.0" a="1" />
+		</material>
+
+		<material id="black" shininess="120">
+			<emission r="0" g="0" b="0" a="0" />
+			<ambient r="0.1" g="0.1" b="0.1" a="1" />
+			<diffuse r="0.0" g="0.0" b="0.0" a="1" />
+			<specular r="1.0" g="1.0" b="1.0" a="1" />
+>
+		</material>
+	</materials>
+
+	<!-- ______________ TRANSFORMATIONS _______________ -->
+
+	<transformations>
+		<transformation id="base">
+			<translate x="0" y="0" z="0" />
+		</transformation>
+	</transformations>
+
+	<!-- ________________ ANIMATIONS __________________ -->
+	<animations>
+	</animations>
+
+	<!-- ________________ PRIMITIVES __________________ -->
+
+	<primitives>
+
+	</primitives>
+
+	<!-- ________________ COMPONENTS __________________ -->
+
+	<!-- _________ ROOT _________ -->
+
+	<components>
+		<component id="scene">
+			<transformation>
+				<transformationref id="base" />
+			</transformation>
+			<animations>
+			</animations>
+			<materials>
+				<material id="white" />
+				<material id="black" />
+			</materials>
+			<texture id="none" />
+			<children>
+			</children>
+		</component>
+
+	</components>
+</yas>
