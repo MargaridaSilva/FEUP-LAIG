@@ -33,7 +33,9 @@ class MyCell extends CGFobject {
         this.scene.translate(col, 0, row);
         this.scene.registerForPick(this.id, this.object);
 
-        this.object.display();
+        if(this.scene.pickMode == true){
+            this.object.display();
+        }
 
         if(this.piece != undefined){
             this.piece.setId(this.id);

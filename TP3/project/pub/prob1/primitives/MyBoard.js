@@ -10,6 +10,15 @@ class MyBoard extends CGFobject {
 
         this.initCells();
         MyPiece.initPieces(this.scene);
+
+        this.material = new CGFappearance(this.scene);
+        this.material.setSpecular(1, 1, 1, 1);
+        this.material.setAmbient(1, 1, 1, 1);
+        this.material.setDiffuse(0, 0, 0, 1);
+        this.texture = new CGFtexture(this.scene, "scenes/images/board2.png"); 
+        this.material.setTexture(this.texture);
+
+        this.quad = new MyQuad(this.scene, -1, -1, 1, 1);
     }
 
     initCells(){
@@ -32,6 +41,14 @@ class MyBoard extends CGFobject {
                 this.cells[row][col].display();
             }
         }
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+        this.material.apply();
+        this.scene.translate(0, -0.01, 0);
+        this.scene.scale(this.dim/2, 1, this.dim/2);
+        this.scene.rotate(-Math.PI/2, 1, 0, 0);
+        this.quad.display();
         this.scene.popMatrix();
     }
 

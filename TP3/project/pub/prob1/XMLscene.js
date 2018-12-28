@@ -49,7 +49,7 @@ class XMLscene extends CGFscene {
         this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
     
 
-        this.game = new MyGame(this, 8, 1);
+        this.game = new MyGame(this, 9, 1);
         console.log(this.game.getBoardProlog());
 
         this.setPickEnabled(true);
@@ -100,6 +100,7 @@ class XMLscene extends CGFscene {
 
         this.camera = this.cameras[this.graph.views_default];
         this.interface.setActiveCamera(this.camera);
+        this.cameraAnimation = new CameraAnimation(this.camera);
     }
 
     /**
@@ -188,7 +189,7 @@ class XMLscene extends CGFscene {
             realisticPieces: false,
             highlightTiles: false,
             graphIndex: 0,
-            perspective: 0,
+            camera: 0,
             turnTime: 0,
             gameMode: 0,
             difficulty: 0,
@@ -242,12 +243,23 @@ class XMLscene extends CGFscene {
         return null;
     }
 
+
+    changeCamera(){
+        let global = Array.prototype.slice.call(this.cameras['global'].position, 0, -1);
+        let player1 = Array.prototype.slice.call(this.cameras['Player1'].position, 0, -1);
+        let player2 = Array.prototype.slice.call(this.cameras['Player2'].position, 0, -1);
+
+        switch(this.interfaceValues.camera){
+            case '0': this.cameraAnimation.animate(global,  [0, 0, 0]); break;
+            case '1': this.cameraAnimation.animate(player1, [0, 0, 0]); break;
+            case '2': this.cameraAnimation.animate(player2, [0, 0, 0]); break;
+            default: break;
+        }
+    }
     /**
      * Displays the scene.
      */
     display() {
-
-
         // this.logPicking();
         let pickedElements = this.pickedElementsFunc();
 
@@ -304,6 +316,14 @@ class XMLscene extends CGFscene {
             this.scoreboard.display();
             this.popMatrix();
 
+
+            this.pushMatrix();
+            this.translate(0, -2, 0)
+            this.rotate(-Math.PI/2, 1, 0, 0);
+            this.scoreboard.display();
+            this.popMatrix();
+
+
             // this.pushMatrix();
             // this.material.apply();
             // this.rotate(-Math.PI/2, 1, 0, 0);
@@ -332,5 +352,7 @@ class XMLscene extends CGFscene {
         this.graph.update(dt);
 
         this.scoreboard.update(dt);
+
+        this.cameraAnimation.update(dt);
     }
 }

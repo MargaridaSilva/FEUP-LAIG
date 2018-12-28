@@ -42,7 +42,7 @@ Array.prototype.norm = function () {
 
 Array.prototype.minus = function (array2) {
 
-    if(this.size != array2.size) return undefined;
+    if(this.length != array2.length) return undefined;
     let x = this.map(function (item, index) {
         return item - array2[index];
     })
@@ -50,10 +50,21 @@ Array.prototype.minus = function (array2) {
     
 }
 
+Array.prototype.dot = function (array2) {
+
+    if(this.length != array2.length) return undefined;
+    let x = 0;
+    
+    for(let i = 0; i < this.length; i++){
+        x += this[i] * array2[i];
+    }
+    return x;
+    
+}
 
 Array.prototype.add = function (array2) {
 
-    if(this.size != array2.size) return undefined;
+    if(this.length != array2.length) return undefined;
 
     let x = this.map(function (item, index) {
         return item + array2[index];

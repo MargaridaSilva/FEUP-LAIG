@@ -5,13 +5,25 @@
 
 	<!-- _________________ VIEWS ___________________ -->
 
-	<views default="global">
+	<views default="current">
+		<perspective id="current" near="0.1" far="500" angle="35">
+			<from x="15" y="15" z="0" />
+			<to x="0" y="0" z="0" />
+		</perspective>
 		<perspective id="global" near="0.1" far="500" angle="35">
-			<from x="0" y="15" z="15" />
+			<from x="15" y="15" z="0" />
 			<to x="0" y="0" z="0" />
 		</perspective>
 		<perspective id="top" near="0.1" far="500" angle="35">
 			<from x="0" y="20" z="0.1" />
+			<to x="0" y="0" z="0" />
+		</perspective>
+		<perspective id="Player1" near="0.1" far="500" angle="35">
+			<from x="5" y="15" z="15" />
+			<to x="0" y="0" z="0" />
+		</perspective>
+		<perspective id="Player2" near="0.1" far="500" angle="35">
+			<from x="5" y="15" z="-15" />
 			<to x="0" y="0" z="0" />
 		</perspective>
 	</views>

@@ -82,7 +82,7 @@ class MyInterface extends CGFinterface {
     addGameButtons(filenames) {
         let options = this.gui.addFolder('Scenario');
         options.open();
-        
+
         var self = this;
         let obj = {};
         
@@ -97,11 +97,12 @@ class MyInterface extends CGFinterface {
         let cameraGroup = this.gui.addFolder('Camera settings');
         cameraGroup.open();
 
-        cameraGroup.add(this.scene.interfaceValues, 'perspective', {
-            'Player 1': 0,
-            'Player 2': 1
-        }).name('Perspective').onChange(function (v) {
-            self.scene.changePerspective();
+        cameraGroup.add(this.scene.interfaceValues, 'camera', {
+            'Global' : 0,
+            'Player 1': 1,
+            'Player 2': 2
+        }).name('Camera').onChange(function (v) {
+            self.scene.changeCamera();
         });
 
         let optionsGroup = this.gui.addFolder("Game Properties");
