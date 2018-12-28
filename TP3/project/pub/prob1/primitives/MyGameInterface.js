@@ -7,6 +7,7 @@ class MyGameInterface{
 		request.onload = function(data) {
 			let response=JSON.parse(data.target.response);
 			game.updateBoard(response.newBoard);
+			game.dispatchComputerMoves();
 		}
 		request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
 		request.send('requestString='+encodeURIComponent(requestString));
@@ -29,6 +30,7 @@ class MyGameInterface{
 
 	moveComputer(Board, Turn, Player, AI, game){
 		let requestString="[moveComputer,"+Board+","+Turn+","+Player+","+AI+"]";
+		console.log(requestString);
 		let request = new XMLHttpRequest();
 		request.open('POST', '../../game', true);
 		request.onload = function(data) {

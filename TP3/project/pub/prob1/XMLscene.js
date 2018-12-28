@@ -184,6 +184,8 @@ class XMLscene extends CGFscene {
         var ambient = this.graph.ambient.ambient;
         this.setGlobalAmbientLight(ambient.r, ambient.g, ambient.b, ambient.a);
 
+        let game = this.game;
+
         this.interfaceValues = {
             realisticPieces: false,
             highlightTiles: false,
@@ -193,8 +195,8 @@ class XMLscene extends CGFscene {
             gameMode: 0,
             difficulty: 0,
             player: 0,
-
-            startGame: function(){},
+            boardDim:5,
+            startGame: function(){game.start(this.boardDim, this.player, this.gameMode, this.difficulty)},
             undoMove: function(){},
             watchMovie: function(){},
 
