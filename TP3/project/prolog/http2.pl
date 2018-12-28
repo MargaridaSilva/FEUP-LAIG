@@ -75,7 +75,7 @@ moveUser(Move, Board, Turn, Player, MoveType, Pos, NewBoard, NewTurn, NewPlayer)
 	makeMove(Board, Player, Move, NewBoard),
 	nextPlayer(Player, NewPlayer, Turn, NewTurn).
 
-moveUser(_, Board, _, _, "invalid", -1, Board, -1, -1).
+moveUser(_, Board, Turn, Player, "invalid", -1, Board, Turn, Player).
 
 moveComputer(Board, Turn, Player, AI, MoveType, Pos, NewBoard, NewTurn, NewPlayer) :-
 	choose_move(Board, Player-Turn, AI, Pos),
@@ -93,4 +93,4 @@ checkWinner(Board, Winner) :-
 checkWinner(_, -1).
 
 :- set_random(seed(111)).
-:- server(8083).
+:- server(8081).

@@ -3,6 +3,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>SWI Prolog HTTP Server Test</title>
+		<script src="GameInterface.js"></script>
 	</head>
 	<body>
 		<h1>SWI HTTP Test</h1>
@@ -50,8 +51,9 @@
 				//let requestString = "[moveComputer,[cell(1,1,empty),cell(1,2,empty),cell(2,1,empty),cell(2,2,empty),cell(2,3,empty),cell(3,2,empty),cell(3,3,empty),cell(3,1,bAliv),cell(1,3,rAliv)]-[3,3],1,1,1]";
 				/* TEST CHECK WINNER */
 				//let requestString="[checkWinner, [cell(1,1,empty),cell(1,2,empty),cell(2,1,empty),cell(2,3,empty),cell(3,2,empty),cell(3,3,empty),cell(1,3,rAliv),cell(2,2,rAliv),cell(3,1,rDead)]-[3,3]]";
-				postGameRequest(requestString, handleReply);
+				//postGameRequest(requestString, handleReply);
 				
+				console.log(play(3, 4));
 			}
 			
 			//Handle the JSON Reply

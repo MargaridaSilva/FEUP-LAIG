@@ -93,4 +93,4 @@ checkWinner(Board, Winner) :-
 checkWinner(_, -1).
 
 :- set_random(seed(111)).
-:- server(8083).
+:- server(8081).
