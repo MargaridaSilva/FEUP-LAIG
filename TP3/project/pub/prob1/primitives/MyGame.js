@@ -34,6 +34,11 @@ class MyGame extends CGFobject {
         this.turn = newTurn;
         this.currentPlayer = newPlayer;
         this.logic.checkWinner(this.boardPL, this);
+
+        if(moveType == 'mov'){
+            let moveStruct = this.parseMove(move);
+            this.board.movePieceToCell(moveStruct.row, moveStruct.col);
+        }
     }
 
     updateState(winner) {
@@ -50,13 +55,12 @@ class MyGame extends CGFobject {
     }
 
     handlePicking(pickedElements){
-        let move = this.convertCellNumToRowAndCol(pickedElements[0][1]);
-
-        this.logic.moveUser(move, this.boardPL, this.turn, this.currentPlayer, this);
+        if(pickedElements[0][1] != undefined){
+            let move = this.convertCellNumToRowAndCol(pickedElements[0][1]);
+            this.logic.moveUser(move, this.boardPL, this.turn, this.currentPlayer, this);
+        }
         
-        //this.printGameState();
-        
-        this.board.handlePicking(pickedElements);
+        // this.printGameState();
     }
 
     convertCellNumToRowAndCol(num){
@@ -66,6 +70,15 @@ class MyGame extends CGFobject {
             row++;
         else col = this.dim;
         return [row, col];
+    }
+
+    parseMove(movestr){
+        let move = movestr.slice(1,-1).split(',');
+        return {
+            row: Number(move[0]), 
+            col: Number(move[1])
+        };
+
     }
 
     printGameState(){

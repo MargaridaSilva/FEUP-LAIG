@@ -1,6 +1,6 @@
 /**
-* MyInterface class, creating a GUI interface.
-*/
+ * MyInterface class, creating a GUI interface.
+ */
 class MyInterface extends CGFinterface {
     /**
      * @constructor
@@ -44,9 +44,9 @@ class MyInterface extends CGFinterface {
     }
 
     /**
-    * Adds a folder containing the IDs of the views passed as parameter.
-    * @param {array} views
-    */
+     * Adds a folder containing the IDs of the views passed as parameter.
+     * @param {array} views
+     */
     addViewsGroup(views) {
 
         for (var key in views) {
@@ -57,17 +57,17 @@ class MyInterface extends CGFinterface {
 
         var scene = this.scene;
 
-        this.gui.add(this.scene.interfaceValues, 'view', this.scene.viewValues).onChange(function(view){
+        this.gui.add(this.scene.interfaceValues, 'view', this.scene.viewValues).onChange(function (view) {
             scene.camera = scene.cameras[view];
             scene.interface.setActiveCamera(scene.camera);
         });
     }
 
     /**
-	 * initKeys
-	 */
+     * initKeys
+     */
     initKeys() {
-        this.processKeyboard = function () { };
+        this.processKeyboard = function () {};
         this.activeKeys = {};
     }
 
@@ -78,5 +78,56 @@ class MyInterface extends CGFinterface {
     };
     isKeyPressed(keyCode) {
         return this.activeKeys[keyCode] || false;
+    }
+    addGameButtons(filenames) {
+        let options = this.gui.addFolder('Scenario');
+        options.open();
+        
+        var self = this;
+        let obj = {};
+        
+        for (let id in filenames){
+            obj[filenames[id]] = id;
+        }
+
+        options.add(this.scene.interfaceValues, 'graphIndex', obj).name('Scenario').onChange(function (v) {
+            self.scene.onGraphLoaded();
+        });
+
+        let cameraGroup = this.gui.addFolder('Camera settings');
+        cameraGroup.open();
+
+        cameraGroup.add(this.scene.interfaceValues, 'perspective', {
+            'Player 1': 0,
+            'Player 2': 1
+        }).name('Perspective').onChange(function (v) {
+            self.scene.changePerspective();
+        });
+
+        let optionsGroup = this.gui.addFolder("Game Properties");
+        optionsGroup.open();
+
+        optionsGroup.add(this.scene.interfaceValues, 'turnTime', 30, 300).name('Turn Timeout');
+        optionsGroup.add(this.scene.interfaceValues, 'gameMode', {
+            'Single Player': 0,
+            'Multiplayer': 1,
+            'AI vs AI': 2
+        }).name('Game Mode');
+        optionsGroup.add(this.scene.interfaceValues, 'difficulty', {
+            'Easy': 0,
+            'Medium': 1,
+            'Hard': 2
+        }).name('Difficulty');
+        optionsGroup.add(this.scene.interfaceValues, 'player', {
+            'Player 1': 0,
+            'Player 2': 1
+        }).name('Player');
+
+        let gameActionsGroup = this.gui.addFolder('Game Actions');
+        gameActionsGroup.open();
+
+        gameActionsGroup.add(this.scene.interfaceValues, 'startGame').name('Start game');
+        gameActionsGroup.add(this.scene.interfaceValues, 'undoMove').name('Undo move');
+        gameActionsGroup.add(this.scene.interfaceValues, 'watchMovie').name('Watch movie');
     }
 }

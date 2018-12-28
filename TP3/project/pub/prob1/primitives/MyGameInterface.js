@@ -19,6 +19,7 @@ class MyGameInterface{
 		request.open('POST', '../../game', true);
 		request.onload = function(data) {
 			let response=JSON.parse(data.target.response);
+			console.log(response);
 			game.updateWithMovement(response.moveType,response.position, response.newBoard, response.newTurn, response.newPlayer);
 			
 		}

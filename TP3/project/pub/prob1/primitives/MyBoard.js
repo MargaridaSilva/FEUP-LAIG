@@ -13,9 +13,10 @@ class MyBoard extends CGFobject {
     }
 
     initCells(){
-        for(let i = 0; i < this.dim; i++){
-            for(let j = 0; j < this.dim; j++){
-                this.cells.push(new MyCell(this.scene, i, j, this.div, j*this.dim + i + 1));
+        for(let row = 0; row < this.dim; row++){
+            this.cells[row] = [];
+            for(let col = 0; col < this.dim; col++){
+                this.cells[row][col] = new MyCell(this.scene, row, col, this.div, row*this.dim + col + 1);
             }
         }
     }
@@ -26,9 +27,11 @@ class MyBoard extends CGFobject {
         this.scene.translate(0.5, 0, 0.5);
 
         // draw objects
-        this.cells.forEach(function(cell){
-           cell.display();
-        });
+        for(let row = 0; row < this.dim; row++){
+            for(let col = 0; col < this.dim; col++){
+                this.cells[row][col].display();
+            }
+        }
         this.scene.popMatrix();
     }
 
@@ -37,6 +40,7 @@ class MyBoard extends CGFobject {
     }
 
     toString(){
+        //Not working yet
         let board = "[ ";
 
         this.cells.forEach(function(cell){
@@ -54,5 +58,9 @@ class MyBoard extends CGFobject {
         this.cells.forEach(function(cell){
             cell.handlePicking(pickedElements);
         });
+    }
+
+    movePieceToCell(row, col){
+        this.cells[row - 1][col - 1].changeState();
     }
 }

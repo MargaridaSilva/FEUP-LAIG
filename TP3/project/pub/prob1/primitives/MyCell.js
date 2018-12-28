@@ -1,8 +1,8 @@
 class MyCell extends CGFobject {
 
-    constructor(scene, x, y, div, id){
+    constructor(scene, row, col, div, id){
         super(scene);
-        this.pos = {x: x, y: y};
+        this.pos = {row: row, col: col};
         this.state = 'empty';
         this.object = new MyPlane(scene, div, div);
         this.id = id;
@@ -17,11 +17,11 @@ class MyCell extends CGFobject {
     display(){        
         this.piece = MyPiece.pieces[this.state];
 
-        let x = this.pos.x;
-        let y = this.pos.y;
+        let row = this.pos.row;
+        let col = this.pos.col;
 
 
-        if((x + y) % 2){
+        if((row + col) % 2){
             this.scene.graph.materials.white.apply();
         }
         else{
@@ -30,7 +30,7 @@ class MyCell extends CGFobject {
 
         this.scene.pushMatrix();
 
-        this.scene.translate(x, 0, y);
+        this.scene.translate(col, 0, row);
         this.scene.registerForPick(this.id, this.object);
 
         this.object.display();
@@ -44,28 +44,18 @@ class MyCell extends CGFobject {
     }
 
     toString(){
-        return `cell(${this.pos.x}, ${this.pos.y}, ${this.state})`;
+        return `cell(${this.pos.row}, ${this.pos.col}, ${this.state})`;
     }
 
     updateCoords(s, t){
     }
 
-    handlePicking(pickedElements){
-
-
-        for(let i = 0; i < pickedElements.length; i++){
-            let element = pickedElements[i];
-            let id = element[1];
-
-            if(id == this.id){
-                console.log("Change state");
-                if(this.state == 'empty')
-                    this.state = 'bAliv';
-                else{
-                    this.state = 'empty';
-                }
-                
-            }
+    changeState(){
+        console.log("Change state");
+        if(this.state == 'empty')
+            this.state = 'bAliv';
+        else{
+            this.state = 'empty';
         }
 
     }

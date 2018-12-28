@@ -32,13 +32,22 @@ class XMLscene extends CGFscene {
         this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
         this.axis = new CGFaxis(this);
 
-        this.enableTextures(true);
+        // this.enableTextures(true);
+        // this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
+        // this.gl.clearDepth(100.0);
+        // this.gl.enable(this.gl.DEPTH_TEST);
+        // this.gl.enable(this.gl.CULL_FACE);
+        // this.gl.depthFunc(this.gl.LEQUAL);
 
-        this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
+        this.enableTextures(true);
         this.gl.clearDepth(100.0);
         this.gl.enable(this.gl.DEPTH_TEST);
         this.gl.enable(this.gl.CULL_FACE);
         this.gl.depthFunc(this.gl.LEQUAL);
+        this.gl.enable(this.gl.BLEND);
+        this.gl.blendEquation(this.gl.FUNC_ADD);
+        this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
+    
 
         this.game = new MyGame(this, 8, 1);
         console.log(this.game.getBoardProlog());
@@ -50,6 +59,15 @@ class XMLscene extends CGFscene {
         this.scoreboard.setCountdownTime(10000);
         this.scoreboard.incrementScorePlayer1();
         this.scoreboard.incrementScorePlayer2();
+
+
+        this.quad = new MyQuad(this, -1, -1, 1, 1);
+        this.material = new CGFappearance(this);
+        this.material.setSpecular(1, 1, 1, 1);
+        this.material.setAmbient(1, 1, 1, 1);
+        this.material.setDiffuse(0, 0, 0, 1);
+        this.texture = new CGFtexture(this, "scenes/images/board3.png"); 
+        this.material.setTexture(this.texture);
     }
 
     /**
@@ -167,6 +185,19 @@ class XMLscene extends CGFscene {
         this.setGlobalAmbientLight(ambient.r, ambient.g, ambient.b, ambient.a);
 
         this.interfaceValues = {
+            realisticPieces: false,
+            highlightTiles: false,
+            graphIndex: 0,
+            perspective: 0,
+            turnTime: 0,
+            gameMode: 0,
+            difficulty: 0,
+            player: 0,
+
+            startGame: function(){},
+            undoMove: function(){},
+            watchMovie: function(){},
+
             view: this.graph.views_default
         }
 
@@ -179,6 +210,7 @@ class XMLscene extends CGFscene {
         // Adds lights group.
         this.interface.addLightsGroup(Array.prototype.merge(this.graph.omniLights, this.graph.spotLights));
         this.interface.addViewsGroup(Array.prototype.merge(this.graph.perspectiveViews, this.graph.orthoViews));
+        this.interface.addGameButtons();
 
         this.sceneInited = true;
     }
@@ -266,13 +298,17 @@ class XMLscene extends CGFscene {
 
             this.pushMatrix();
             this.translate(-5, 0, 0);
-            // this.rotate(Math.PI/4, 0, 1, 0);
-            // this.translate(-4, 0, -5);
-            this.rotate(Math.PI/4, 0, 1, 0);
+            this.rotate(Math.PI/2, 0, 1, 0);
             this.scale(0.4, 0.4, 0.4);
             this.translate(0, 2, 0);
             this.scoreboard.display();
             this.popMatrix();
+
+            // this.pushMatrix();
+            // this.material.apply();
+            // this.rotate(-Math.PI/2, 1, 0, 0);
+            // this.quad.display();
+            // this.popMatrix();
 
         }
         else {
