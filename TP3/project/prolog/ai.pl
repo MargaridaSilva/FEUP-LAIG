@@ -9,13 +9,12 @@ ai(Board, Player, Lvl, Move) :-
 %   Generate move and its value acording to the board, the active player, the player whose move is to be maximized, and the level of difficulty
 
 minimax(Board, Player-_, MaxPlayer, _, Val, 0) :-
-    value(Board, Player, MaxPlayer, Val).
+    value(Board, Player, MaxPlayer, Val), !.
 
 minimax(Board, Player-Turn, MaxPlayer, BestNextMove, Val, Lvl) :-
     Lvl1 is Lvl - 1,
     valid_moves(Board, Player, MovesList),
-    best(Board, MovesList, Player-Turn, MaxPlayer, BestNextMove, Val, Lvl1),
-    !.
+    best(Board, MovesList, Player-Turn, MaxPlayer, BestNextMove, Val, Lvl1), !.
 
 minimax(_, Player-_, MaxPlayer, _, Val, _) :-
     value_no_moves(_, Player, MaxPlayer, Val).

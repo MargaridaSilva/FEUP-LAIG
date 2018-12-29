@@ -78,7 +78,7 @@ moveUser(Move, Board, Turn, Player, MoveType, Pos, NewBoard, NewTurn, NewPlayer)
 moveUser(_, Board, Turn, Player, "invalid", -1, Board, Turn, Player).
 
 moveComputer(Board, Turn, Player, AI, MoveType, Pos, NewBoard, NewTurn, NewPlayer) :-
-	choose_move(Board, Player-Turn, AI, Pos),
+	ai(Board, Player-Turn, AI, Pos),
 	getSymbol(Board, Pos, Symbol), 
 	getMoveType(Symbol, MoveType),
 	makeMove(Board, Player, Pos, NewBoard),

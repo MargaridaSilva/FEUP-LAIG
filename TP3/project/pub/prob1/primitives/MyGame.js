@@ -38,7 +38,6 @@ class MyGame extends CGFobject {
     }
 
     dispatchComputerMoves(){
-        console.log("heeeeeeeeeeeere");
         if (this.playersType[this.currentPlayer] == 'computer'){
             this.logic.moveComputer(this.boardPL, this.turn, this.currentPlayer, this.AI, this);
         }
