@@ -50,7 +50,7 @@ class XMLscene extends CGFscene {
     
 
         this.game = new MyGame(this, 9, 1);
-        console.log(this.game.getBoardProlog());
+        console.log(this.game.getPrologBoard());
 
         this.setPickEnabled(true);
 
@@ -196,9 +196,9 @@ class XMLscene extends CGFscene {
             gameMode: 0,
             difficulty: 0,
             player: 0,
-            boardDim:5,
+            boardDim: 9,
             startGame: function(){game.start(this.boardDim, this.player, this.gameMode, this.difficulty)},
-            undoMove: function(){},
+            undoMove: function(){game.backToPreviousState()},
             watchMovie: function(){},
 
             view: this.graph.views_default
@@ -266,7 +266,7 @@ class XMLscene extends CGFscene {
         let pickedElements = this.pickedElementsFunc();
 
         if(pickedElements){
-            console.log("PIck")
+            console.log("Pick")
             this.game.handlePicking(pickedElements);
         }
         this.pickResults.splice(0,this.pickResults.length);

@@ -12,7 +12,10 @@ class MyCell extends CGFobject {
     setState(newState){
         this.state = newState;
     }
-  
+
+    getState(){
+        return this.state;
+    }
     
     display(){        
         this.piece = MyPiece.pieces[this.state];
@@ -46,19 +49,36 @@ class MyCell extends CGFobject {
     }
 
     toString(){
-        return `cell(${this.pos.row}, ${this.pos.col}, ${this.state})`;
+        return `cell(${this.pos.row+1},${this.pos.col+1},${this.state})`;
     }
 
     updateCoords(s, t){
     }
 
-    changeState(){
+    changeState(player){
         console.log("Change state");
-        if(this.state == 'empty')
-            this.state = 'bAliv';
-        else{
-            this.state = 'empty';
+        if (player == 0){
+            if (this.state == 'empty')
+                this.state = 'bAliv';
+            else if (this.state == 'bAliv')
+                this.state = 'empty';
+            else this.state = 'rDead';
         }
+        else {
+            if (this.state == 'empty')
+                this.state = 'rAliv';
+            else if (this.state == 'rAliv')
+                this.state = 'empty';
+            else this.state = 'bDead';
+        }
+    }
 
+    revertState(){
+        if (this.state == 'bAliv' || this.state == 'rAliv')
+            this.state = 'empty';
+        if (this.state == 'bDead')
+            this.state = 'bAliv';
+        if (this.state == 'rDead')
+            this.state = 'rAliv';
     }
 }

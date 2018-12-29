@@ -28,6 +28,9 @@ class MyBoard extends CGFobject {
                 this.cells[row][col] = new MyCell(this.scene, row, col, this.div, row*this.dim + col + 1);
             }
         }
+        console.log(this.dim);
+        this.cells[this.dim-1][0].changeState(0);
+        this.cells[0][this.dim-1].changeState(1);
     }
 
     display(){        
@@ -77,7 +80,12 @@ class MyBoard extends CGFobject {
         });
     }
 
-    movePieceToCell(row, col){
-        this.cells[row - 1][col - 1].changeState();
+    movePieceToCell(row, col, player){
+        this.cells[row -1 ][col -1].changeState(player);
+    }
+
+    revertStateAt(row, col){
+        console.log(parseInt(row) - 1);
+        return this.cells[parseInt(row) - 1][parseInt(col) - 1].revertState();
     }
 }

@@ -8,6 +8,7 @@ class MyGameInterface{
 			let response=JSON.parse(data.target.response);
 			game.updateBoard(response.newBoard);
 			game.dispatchComputerMoves();
+			console.log(response);
 		}
 		request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
 		request.send('requestString='+encodeURIComponent(requestString));
@@ -20,8 +21,8 @@ class MyGameInterface{
 		request.open('POST', '../../game', true);
 		request.onload = function(data) {
 			let response=JSON.parse(data.target.response);
-			console.log(response);
-			game.updateWithMovement(response.moveType,response.position, response.newBoard, response.newTurn, response.newPlayer);
+			//console.log(response);
+			game.updateWithMovement(response.moveType,response.position, response.newTurn, response.newPlayer);
 			
 		}
 		request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
@@ -35,7 +36,8 @@ class MyGameInterface{
 		request.open('POST', '../../game', true);
 		request.onload = function(data) {
 			let response=JSON.parse(data.target.response);
-			game.updateWithMovement(response.moveType,response.position, response.newBoard, response.newTurn, response.newPlayer);
+			game.updateWithMovement(response.moveType,response.position, response.newTurn, response.newPlayer);
+			console.log(response);
 		}
 		request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
 		request.send('requestString='+encodeURIComponent(requestString));
@@ -47,7 +49,7 @@ class MyGameInterface{
 		request.open('POST', '../../game', true);
 		request.onload = function(data) {
 			let response=JSON.parse(data.target.response);
-			game.updateState(response.winenr);
+			game.updateWinner(response.winenr);
 		}
 		request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
 		request.send('requestString='+encodeURIComponent(requestString));

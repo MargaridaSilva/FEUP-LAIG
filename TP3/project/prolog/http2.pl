@@ -50,13 +50,13 @@ processString([_Par=Val], Fields, R):-
 		Term.													% Call the Term
 
 response('play', R) :- R = [_NB].
-response('moveUser', R) :- R = [_MT, _P, _NB, _NT, _NP].
-response('moveComputer', R) :- R = [_MT, _P, _NB, _NT, _NP].
+response('moveUser', R) :- R = [_MT, _P, _NT, _NP].
+response('moveComputer', R) :- R = [_MT, _P,  _NT, _NP].
 response('checkWinner', R) :- R = [_W].
 
 fields('play', [newBoard]).
-fields('moveUser', [moveType, position, newBoard, newTurn, newPlayer]).
-fields('moveComputer', [moveType, position, newBoard, newTurn, newPlayer]).
+fields('moveUser', [moveType, position,newTurn, newPlayer]).
+fields('moveComputer', [moveType, position,  newTurn, newPlayer]).
 fields('checkWinner', [winner]).
 
 %---------------------------------------------
@@ -65,23 +65,23 @@ play(Dim, Board) :-
 	createBoard(BoardCells, Dim),
 	Board = BoardCells-Dim.
 
-moveUser(Move, Board, Turn, Player, MoveType, Pos, NewBoard, NewTurn, NewPlayer) :-
+moveUser(Move, Board, Turn, Player, MoveType, Pos, NewTurn, NewPlayer) :-
 	retractall(visited(_)),
 	retractall(valid(_)),
 	valid_move(Board, Player, Move), !,
 	Pos = Move,
 	getSymbol(Board, Move, Symbol), 
 	getMoveType(Symbol, MoveType),
-	makeMove(Board, Player, Move, NewBoard),
+	makeMove(Board, Player, Move, _),
 	nextPlayer(Player, NewPlayer, Turn, NewTurn).
 
-moveUser(_, Board, Turn, Player, "invalid", -1, Board, Turn, Player).
+moveUser(_, _, Turn, Player, "invalid", -1, Turn, Player).
 
-moveComputer(Board, Turn, Player, AI, MoveType, Pos, NewBoard, NewTurn, NewPlayer) :-
+moveComputer(Board, Turn, Player, AI, MoveType, Pos, NewTurn, NewPlayer) :-
 	ai(Board, Player-Turn, AI, Pos),
 	getSymbol(Board, Pos, Symbol), 
 	getMoveType(Symbol, MoveType),
-	makeMove(Board, Player, Pos, NewBoard),
+	makeMove(Board, Player, Pos, _),
 	nextPlayer(Player, NewPlayer, Turn, NewTurn).
 
 getMoveType('empty', 'mov').
