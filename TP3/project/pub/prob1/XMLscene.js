@@ -49,9 +49,6 @@ class XMLscene extends CGFscene {
         this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
     
 
-        this.game = new MyGame(this, 9, 1);
-        console.log(this.game.getBoardProlog());
-
         this.setPickEnabled(true);
 
         this.scoreboard = new MyScoreboard(this);
@@ -177,6 +174,8 @@ class XMLscene extends CGFscene {
      * As loading is asynchronous, this may be called already after the application has started the run loop
      */
     onGraphLoaded() {
+        this.game = new MyGame(this, 9, 1);
+
         this.setUpdatePeriod(60);
         this.time = 0;
 
@@ -199,9 +198,9 @@ class XMLscene extends CGFscene {
             gameMode: 0,
             difficulty: 0,
             player: 0,
-            boardDim:5,
+            boardDim: 9,
             startGame: function(){game.start(this.boardDim, this.player, this.gameMode, this.difficulty)},
-            undoMove: function(){},
+            undoMove: function(){game.backToPreviousState()},
             watchMovie: function(){},
 
             view: this.graph.views_default
@@ -269,7 +268,7 @@ class XMLscene extends CGFscene {
         let pickedElements = this.pickedElementsFunc();
 
         if(pickedElements){
-            console.log("PIck")
+            console.log("Pick")
             this.game.handlePicking(pickedElements);
         }
         this.pickResults.splice(0,this.pickResults.length);
@@ -292,8 +291,6 @@ class XMLscene extends CGFscene {
         this.pushMatrix();
 
         if (this.sceneInited) {
-            // Draw axis
-            this.axis.display();
             var i = 0;
             for (var key in this.lightValues) {
                 if (this.lightValues.hasOwnProperty(key)) {
@@ -361,5 +358,7 @@ class XMLscene extends CGFscene {
         this.scoreboard.update(dt);
 
         this.cameraAnimation.update(dt);
+
+        this.game.update(dt);
     }
 }

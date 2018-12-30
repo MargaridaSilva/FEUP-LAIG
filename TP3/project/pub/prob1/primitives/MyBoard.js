@@ -19,6 +19,16 @@ class MyBoard extends CGFobject {
         this.material.setTexture(this.texture);
 
         this.quad = new MyQuad(this.scene, -1, -1, 1, 1);
+
+        let middle = Math.floor(this.dim/2);
+
+        this.piecesHolder = {
+            bAliv: new MyMovingPiece(this.scene, this.dim + 1,  middle - 1, 'bAliv'),
+            bDead: new MyMovingPiece(this.scene, this.dim + 1,  middle + 1, 'bDead'),
+
+            rAliv: new MyMovingPiece(this.scene, -2, middle - 1, 'rAliv'),
+            rDead: new MyMovingPiece(this.scene, -2, middle + 1, 'rDead')
+        };
     }
 
     initCells(){
@@ -28,6 +38,9 @@ class MyBoard extends CGFobject {
                 this.cells[row][col] = new MyCell(this.scene, row, col, this.div, row*this.dim + col + 1);
             }
         }
+        console.log(this.dim);
+        this.cells[this.dim-1][0].changeState('bAliv');
+        this.cells[0][this.dim-1].changeState('rAliv');
     }
 
     display(){        
@@ -41,6 +54,12 @@ class MyBoard extends CGFobject {
                 this.cells[row][col].display();
             }
         }
+
+        this.piecesHolder.rAliv.display();
+        this.piecesHolder.rDead.display();
+        this.piecesHolder.bAliv.display();
+        this.piecesHolder.bDead.display();
+
         this.scene.popMatrix();
 
         this.scene.pushMatrix();
@@ -73,12 +92,27 @@ class MyBoard extends CGFobject {
     }
 
     handlePicking(pickedElements){
+        console("Picking");
         this.cells.forEach(function(cell){
             cell.handlePicking(pickedElements);
         });
     }
 
-    movePieceToCell(row, col){
-        this.cells[row - 1][col - 1].changeState();
+    movePieceToCell(row, col, symbol){
+        this.piecesHolder[symbol].move(this.cells[row][col]);
+    }
+
+    revertStateAt(row, col){
+        console.log(parseInt(row) - 1);
+        return this.cells[parseInt(row) - 1][parseInt(col) - 1].revertState();
+    }
+
+    update(dt){
+        this.piecesHolder.rAliv.update(dt);
+        this.piecesHolder.rDead.update(dt);
+        this.piecesHolder.bAliv.update(dt);
+        this.piecesHolder.bDead.update(dt);
+
+        this.movementOccuring = !(this.piecesHolder.rAliv.end && this.piecesHolder.rDead.end && this.piecesHolder.bAliv.end  && this.piecesHolder.bDead.end);
     }
 }

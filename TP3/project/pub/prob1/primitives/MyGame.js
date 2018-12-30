@@ -2,133 +2,123 @@ class MyGame extends CGFobject {
 
     constructor(scene, dim, div){
         super(scene);
+        /*Visual elements*/
         this.board = new MyBoard(this.scene, dim, div);
+        this.pieceHolder = [new PieceHolder(this.scene), new PieceHolder(this.scene)];
+
         this.div = div;
         this.isOver=false;
-        this.moveStack = [];
         /* Game Properties */
         this.dim = -1;
         this.numTurns = 3;
-        this.turn=this.numTurns;
         this.AI = -1;
-        this.currentPlayer = -1;
         this.playersType= [];
         this.playersTypes = [["user","computer"], ["user","user"], ["computer","computer"]];
         this.logic = new MyGameInterface();
-        this.pieceHolder = [new PieceHolder(this.scene), new PieceHolder(this.scene)];
+        /* Game State */
+        this.state = [];
+        this.stateStack = [];
+
+
     }
 
     update(dt){
+        this.board.update(dt);
+        this.dispatchComputerMoves();
     }
 
     display(){
         this.board.display();
 
-        let rAliv = MyPiece.pieces['rAliv'];
-        let rDead = MyPiece.pieces['rDead'];
-
-        let bAliv = MyPiece.pieces['bAliv'];
-        let bDead = MyPiece.pieces['bDead'];
-
         this.scene.pushMatrix();
             this.scene.translate(0, 0, 6);
-
-            this.scene.pushMatrix();
-            this.scene.translate(-1, 0, 0);
-            rDead.display();
-            this.scene.popMatrix();
-
-            this.scene.pushMatrix();
-            this.scene.translate(1, 0, 0);
-            rAliv.display();
-            this.scene.popMatrix();
-
             this.scene.pushMatrix();
             this.scene.scale(2, 2, 2);
             this.pieceHolder[0].display();
             this.scene.popMatrix();
-
         this.scene.popMatrix();
 
         this.scene.pushMatrix();
             this.scene.translate(0, 0, -6);
-
-            this.scene.pushMatrix();
-            this.scene.translate(-1, 0, 0);
-            bDead.display();
-            this.scene.popMatrix();
-
-            this.scene.pushMatrix();
-            this.scene.translate(1, 0, 0);
-            bAliv.display();
-            this.scene.popMatrix();
-
             this.scene.pushMatrix();
             this.scene.scale(2, 2, 2);
             this.pieceHolder[1].display();
             this.scene.popMatrix();
-
         this.scene.popMatrix();
+
     }
 
 
     updateCoords(s, t){
     }
 
+    updateState(currentPlayer, turn, move, moveType, end, winner){
+        if (moveType != "invalid"){
+            this.stateStack.push(this.state);
+            let moveParsed = JSON.parse(move);
+            this.state = {
+            'currentPlayer':currentPlayer,
+            'turn':turn,
+            'move':moveParsed,
+            'moveType':moveType,
+            'end':end,
+            'winner':winner
+            }
+        }
+        
+    }
+
     start(dim, currentPlayer, playersType, AI){
         this.dim = dim;
-        this.currentPlayer = currentPlayer;
+        this.updateState(currentPlayer, this.numTurns, null, null, false, null);
+
         this.playersType = this.playersTypes[playersType];
         this.AI = parseInt(AI) + 1;
         this.printGameState();
-        this.board = new MyBoard(this.scene, dim, this.div);
+
+        //this.board = new MyBoard(this.scene, dim, dim);
         this.logic.start(this.dim, this.dim, this);
     }
 
     dispatchComputerMoves(){
-        console.log("heeeeeeeeeeeere");
-        if (this.playersType[this.currentPlayer] == 'computer'){
-            this.logic.moveComputer(this.boardPL, this.turn, this.currentPlayer, this.AI, this);
+        if (this.playersType[this.state.currentPlayer] == 'computer' && !this.board.movementOccuring){
+            this.logic.moveComputer(this.getPrologBoard(), this.state.turn, this.state.currentPlayer, this.AI, this);
         }
     }
 
     updateBoard(newBoard){
-        this.boardPL = newBoard;
+        this.state.boardPL = newBoard;
     }
 
-    updateWithMovement(moveType, move, newBoard, newTurn, newPlayer) {
-        this.moveStack.push([moveType, move]);
-        this.boardPL = newBoard;
-        this.turn = newTurn;
-        this.currentPlayer = newPlayer;
-        this.logic.checkWinner(this.boardPL, this);
+    updateWithMovement(moveType, move, newTurn, newPlayer, currentSymbol) {
+        let previousPlayer = this.state.currentPlayer;
+        this.updateState(newPlayer, newTurn, move, moveType, false, null);
+        this.logic.checkWinner(this.getPrologBoard(), this);
 
-        if(moveType == 'mov'){
+        if(moveType == 'mov' || moveType == 'zom'){
             let moveStruct = this.parseMove(move);
-            this.board.movePieceToCell(moveStruct.row, moveStruct.col);
+            this.board.movePieceToCell(moveStruct.row - 1, moveStruct.col - 1, currentSymbol);
         }
-
-        this.dispatchComputerMoves();
     }
 
-    updateState(winner) {
+    updateWinner(winner) {
         if (winner != -1){
-            this.isOver = true;
-            this.winner = winner;
+            this.state.isOver = true;
+            this.state.winner = winner;
         }
     }
 
-    getBoardProlog(){
-        let prologBoard = this.board.toString() + "-" +  this.dim;
-        console.log(prologBoard);
+    getPrologBoard(){
+        let prologBoard = this.board.toString() + "-[" + this.dim + "," + this.dim +"]";
+        return prologBoard;
     }
 
     handlePicking(pickedElements){
         let picked = pickedElements[0][1];
-        console.log(this.playersType[this.currentPlayer]);
-        if(picked != undefined && this.playersType[this.currentPlayer] == 'user'){
+        let playerType = this.playersType[this.state.currentPlayer];
+        if(picked != undefined && playerType == 'user' && !this.board.movementOccuring){
             let move = this.convertCellNumToRowAndCol(pickedElements[0][1]);
-            this.logic.moveUser(move, this.boardPL, this.turn, this.currentPlayer, this);
+            this.logic.moveUser(move, this.getPrologBoard(), this.state.turn, this.state.currentPlayer, this);
         }
         
         // this.printGameState();
@@ -154,12 +144,27 @@ class MyGame extends CGFobject {
 
     printGameState(){
         console.log("Board Dimension: " + this.dim);
-        console.log("Current Player: " + this.currentPlayer);
-        console.log("Turn: "+ this.turn);
-        console.log("Is Over?: "+ this.isOver);
-        console.log("Board: "+ this.boardPL);
+        console.log("Current Player: " + this.state.currentPlayer);
+        console.log("Turn: "+ this.state.turn);
+        console.log("Is Over?: "+ this.state.isOver);
+        console.log("Board: "+ this.state.boardPL);
         console.log("AI: "+ this.AI);
         console.log("Players Type: " + this.playersType);
 
+    }
+
+    backToPreviousState(){
+        if (this.stateStack.length > 1){
+            let playerType;
+            do {
+            let move = this.state.move;   
+            this.board.revertStateAt(move[0], move[1]);    
+            this.state = this.stateStack.peek();
+            this.stateStack.pop();
+            console.log(this.stateStack);
+            playerType = this.playersType[this.state.currentPlayer];
+            console.log(playerType);
+            } while(playerType == "computer");
+        }
     }
 }

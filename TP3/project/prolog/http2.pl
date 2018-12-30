@@ -50,13 +50,13 @@ processString([_Par=Val], Fields, R):-
 		Term.													% Call the Term
 
 response('play', R) :- R = [_NB].
-response('moveUser', R) :- R = [_MT, _P, _NB, _NT, _NP].
-response('moveComputer', R) :- R = [_MT, _P, _NB, _NT, _NP].
+response('moveUser', R) :- R = [_MT, _P, _NT, _NP, _S].
+response('moveComputer', R) :- R = [_MT, _P,  _NT, _NP, _S].
 response('checkWinner', R) :- R = [_W].
 
 fields('play', [newBoard]).
-fields('moveUser', [moveType, position, newBoard, newTurn, newPlayer]).
-fields('moveComputer', [moveType, position, newBoard, newTurn, newPlayer]).
+fields('moveUser', [moveType, position,newTurn, newPlayer, symbol]).
+fields('moveComputer', [moveType, position,  newTurn, newPlayer, symbol]).
 fields('checkWinner', [winner]).
 
 %---------------------------------------------
@@ -65,7 +65,7 @@ play(Dim, Board) :-
 	createBoard(BoardCells, Dim),
 	Board = BoardCells-Dim.
 
-moveUser(Move, Board, Turn, Player, MoveType, Pos, NewBoard, NewTurn, NewPlayer) :-
+moveUser(Move, Board, Turn, Player, MoveType, Pos, NewTurn, NewPlayer, NewSymbol) :-
 	retractall(visited(_)),
 	retractall(valid(_)),
 	valid_move(Board, Player, Move), !,
@@ -73,16 +73,19 @@ moveUser(Move, Board, Turn, Player, MoveType, Pos, NewBoard, NewTurn, NewPlayer)
 	getSymbol(Board, Move, Symbol), 
 	getMoveType(Symbol, MoveType),
 	makeMove(Board, Player, Move, NewBoard),
-	nextPlayer(Player, NewPlayer, Turn, NewTurn).
+	nextPlayer(Player, NewPlayer, Turn, NewTurn),
+	getSymbol(NewBoard, Move, NewSymbol).
 
-moveUser(_, Board, Turn, Player, "invalid", -1, Board, Turn, Player).
+moveUser(Move, Board, Turn, Player, "invalid", -1, Turn, Player, NewSymbol) :-
+	getSymbol(Board, Move, NewSymbol).
 
-moveComputer(Board, Turn, Player, AI, MoveType, Pos, NewBoard, NewTurn, NewPlayer) :-
-	choose_move(Board, Player-Turn, AI, Pos),
+moveComputer(Board, Turn, Player, AI, MoveType, Pos, NewTurn, NewPlayer, NewSymbol) :-
+	ai(Board, Player-Turn, AI, Pos),
 	getSymbol(Board, Pos, Symbol), 
 	getMoveType(Symbol, MoveType),
 	makeMove(Board, Player, Pos, NewBoard),
-	nextPlayer(Player, NewPlayer, Turn, NewTurn).
+	nextPlayer(Player, NewPlayer, Turn, NewTurn),
+	getSymbol(NewBoard, Pos, NewSymbol).
 
 getMoveType('empty', 'mov').
 getMoveType(_, 'zom').

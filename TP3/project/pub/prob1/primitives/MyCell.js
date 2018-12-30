@@ -6,13 +6,15 @@ class MyCell extends CGFobject {
         this.state = 'empty';
         this.object = new MyPlane(scene, div, div);
         this.id = id;
-
     }
 
     setState(newState){
         this.state = newState;
     }
-  
+
+    getState(){
+        return this.state;
+    }
     
     display(){        
         this.piece = MyPiece.pieces[this.state];
@@ -46,19 +48,22 @@ class MyCell extends CGFobject {
     }
 
     toString(){
-        return `cell(${this.pos.row}, ${this.pos.col}, ${this.state})`;
+        return `cell(${this.pos.row+1},${this.pos.col+1},${this.state})`;
     }
 
     updateCoords(s, t){
     }
 
-    changeState(){
-        console.log("Change state");
-        if(this.state == 'empty')
-            this.state = 'bAliv';
-        else{
-            this.state = 'empty';
-        }
+    changeState(state){
+        this.state = state;
+    }
 
+    revertState(){
+        if (this.state == 'bAliv' || this.state == 'rAliv')
+            this.state = 'empty';
+        if (this.state == 'bDead')
+            this.state = 'bAliv';
+        if (this.state == 'rDead')
+            this.state = 'rAliv';
     }
 }

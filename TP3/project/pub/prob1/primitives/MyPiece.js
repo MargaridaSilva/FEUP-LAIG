@@ -1,22 +1,23 @@
 
 class MyPiece extends CGFobject {
 
-    constructor(scene, object){
+    constructor(scene, object, type){
         super(scene);
         this.object = object;
         this.id = 0;
+        this.material = this.scene.graph.materials[type];
     }
 
     static initPieces(scene){
-        MyPiece.pieces['bAliv'] =  new MyPiece(scene, new MySphere(scene, 0.3, 10, 10));
-        MyPiece.pieces['bDead'] =  new MyPiece(scene, new MySphere(scene, 0.3, 10, 10));
-        MyPiece.pieces['rAliv'] =  new MyPiece(scene, new MySphere(scene, 0.3, 10, 10));
-        MyPiece.pieces['rDead'] =  new MyPiece(scene, new MySphere(scene, 0.3, 10, 10));
+        MyPiece.pieces['bAliv'] =  new MyPiece(scene, new MySphere(scene, 0.3, 10, 10), 'bAliv');
+        MyPiece.pieces['bDead'] =  new MyPiece(scene, new MySphere(scene, 0.3, 10, 10), 'bDead');
+        MyPiece.pieces['rAliv'] =  new MyPiece(scene, new MySphere(scene, 0.3, 10, 10), 'rAliv');
+        MyPiece.pieces['rDead'] =  new MyPiece(scene, new MySphere(scene, 0.3, 10, 10), 'rDead');
 
     }
 
     display(){        
-        this.scene.graph.materials.white.apply();
+        this.material.apply();
         this.scene.pushMatrix();
         this.scene.translate(0, 0.3, 0);
         this.scene.registerForPick(this.id, this.object);
