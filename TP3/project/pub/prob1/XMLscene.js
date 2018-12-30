@@ -68,6 +68,9 @@ class XMLscene extends CGFscene {
         this.material.setDiffuse(0, 0, 0, 1);
         this.texture = new CGFtexture(this, "scenes/images/board3.png"); 
         this.material.setTexture(this.texture);
+
+
+        this.pieceHolder = new PieceHolder(this);
     }
 
     /**
@@ -310,6 +313,8 @@ class XMLscene extends CGFscene {
             // this.graph.displayScene();
             this.game.display();
 
+            // this.pieceHolder.display();
+
             this.pushMatrix();
             this.translate(-5, 0, 0);
             this.rotate(Math.PI/2, 0, 1, 0);
@@ -319,11 +324,11 @@ class XMLscene extends CGFscene {
             this.popMatrix();
 
 
-            this.pushMatrix();
-            this.translate(0, -2, 0)
-            this.rotate(-Math.PI/2, 1, 0, 0);
-            this.scoreboard.display();
-            this.popMatrix();
+            // this.pushMatrix();
+            // this.translate(0, -2, 0)
+            // this.rotate(-Math.PI/2, 1, 0, 0);
+            // this.scoreboard.display();
+            // this.popMatrix();
 
 
             // this.pushMatrix();

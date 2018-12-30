@@ -57,12 +57,13 @@ class MyBoard extends CGFobject {
     }
 
     toString(){
-        //Not working yet
         let board = "[ ";
 
-        this.cells.forEach(function(cell){
-            board += cell.toString() + ', ';
-        });
+        for(let row = 0; row < this.dim; row++){
+            for(let col = 0; col < this.dim; col++){
+                board += this.cells[row][col].toString() + ', ';
+            }
+        }
 
         board = board.substr(0, board.length - ', '.length);
 

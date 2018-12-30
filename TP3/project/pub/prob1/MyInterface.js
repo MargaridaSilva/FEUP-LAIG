@@ -98,7 +98,7 @@ class MyInterface extends CGFinterface {
         cameraGroup.open();
 
         cameraGroup.add(this.scene.interfaceValues, 'camera', {
-            'Global' : 0,
+            'Global'  : 0,
             'Player 1': 1,
             'Player 2': 2
         }).name('Camera').onChange(function (v) {

@@ -15,14 +15,62 @@ class MyGame extends CGFobject {
         this.playersType= [];
         this.playersTypes = [["user","computer"], ["user","user"], ["computer","computer"]];
         this.logic = new MyGameInterface();
+        this.pieceHolder = [new PieceHolder(this.scene), new PieceHolder(this.scene)];
     }
 
     update(dt){
-
     }
+
     display(){
         this.board.display();
+
+        let rAliv = MyPiece.pieces['rAliv'];
+        let rDead = MyPiece.pieces['rDead'];
+
+        let bAliv = MyPiece.pieces['bAliv'];
+        let bDead = MyPiece.pieces['bDead'];
+
+        this.scene.pushMatrix();
+            this.scene.translate(0, 0, 6);
+
+            this.scene.pushMatrix();
+            this.scene.translate(-1, 0, 0);
+            rDead.display();
+            this.scene.popMatrix();
+
+            this.scene.pushMatrix();
+            this.scene.translate(1, 0, 0);
+            rAliv.display();
+            this.scene.popMatrix();
+
+            this.scene.pushMatrix();
+            this.scene.scale(2, 2, 2);
+            this.pieceHolder[0].display();
+            this.scene.popMatrix();
+
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+            this.scene.translate(0, 0, -6);
+
+            this.scene.pushMatrix();
+            this.scene.translate(-1, 0, 0);
+            bDead.display();
+            this.scene.popMatrix();
+
+            this.scene.pushMatrix();
+            this.scene.translate(1, 0, 0);
+            bAliv.display();
+            this.scene.popMatrix();
+
+            this.scene.pushMatrix();
+            this.scene.scale(2, 2, 2);
+            this.pieceHolder[1].display();
+            this.scene.popMatrix();
+
+        this.scene.popMatrix();
     }
+
 
     updateCoords(s, t){
     }
