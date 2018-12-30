@@ -15,16 +15,6 @@ class CameraAnimation {
     easeInOutCubic(t) {
         return t<.5 ? 3*4*t*t : (2*t-2)*(2*t-2)+4*(t-1)*(2*t-2);
     }
-    easeInOutQuart(t) {
-        return t<.5 ? 4*8*t*t*t : -8*t*t*t-24*(t-1)*t*t;
-    }
-    easeInOutQuad(t){
-        return t<.5 ? 2*2*t : 4-4*t;
-    }
-
-    easeInOutQuint(t){
-        return t<.5 ? 80*t*t*t*t : 16*t*t*t*t + 64*(t - 1)*t*t*t;
-    }
 
     animate(finalPos, centerPos){
 
