@@ -1,4 +1,4 @@
-class MyGameInterface{
+class GameInterface{
 
 	start(Row, Col, game){
 		let requestString="[play, ["+Row+","+Col+"]]";

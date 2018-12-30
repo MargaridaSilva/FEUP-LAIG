@@ -1,4 +1,4 @@
-class MyBoard extends CGFobject {
+class Board extends CGFobject {
 
     constructor(scene, dim, div){
         super(scene);
@@ -9,7 +9,7 @@ class MyBoard extends CGFobject {
         this.pieces = [];
 
         this.initCells();
-        MyPiece.initPieces(this.scene);
+        Piece.initPieces(this.scene);
 
         this.material = new CGFappearance(this.scene);
         this.material.setSpecular(1, 1, 1, 1);
@@ -23,11 +23,11 @@ class MyBoard extends CGFobject {
         let middle = Math.floor(this.dim/2);
 
         this.piecesHolder = {
-            bAliv: new MyMovingPiece(this.scene, this.dim + 1,  middle - 1, 'bAliv'),
-            bDead: new MyMovingPiece(this.scene, this.dim + 1,  middle + 1, 'bDead'),
+            bAliv: new MovingPiece(this.scene, this.dim + 1,  middle - 1, 'bAliv'),
+            bDead: new MovingPiece(this.scene, this.dim + 1,  middle + 1, 'bDead'),
 
-            rAliv: new MyMovingPiece(this.scene, -2, middle - 1, 'rAliv'),
-            rDead: new MyMovingPiece(this.scene, -2, middle + 1, 'rDead')
+            rAliv: new MovingPiece(this.scene, -2, middle - 1, 'rAliv'),
+            rDead: new MovingPiece(this.scene, -2, middle + 1, 'rDead')
         };
     }
 
@@ -35,7 +35,7 @@ class MyBoard extends CGFobject {
         for(let row = 0; row < this.dim; row++){
             this.cells[row] = [];
             for(let col = 0; col < this.dim; col++){
-                this.cells[row][col] = new MyCell(this.scene, row, col, this.div, row*this.dim + col + 1);
+                this.cells[row][col] = new Cell(this.scene, row, col, this.div, row*this.dim + col + 1);
             }
         }
         console.log(this.dim);

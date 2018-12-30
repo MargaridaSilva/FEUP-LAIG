@@ -1,4 +1,4 @@
-class MyCell extends CGFobject {
+class Cell extends CGFobject {
 
     constructor(scene, row, col, div, id){
         super(scene);
@@ -17,7 +17,7 @@ class MyCell extends CGFobject {
     }
     
     display(){        
-        this.piece = MyPiece.pieces[this.state];
+        this.piece = Piece.pieces[this.state];
 
         let row = this.pos.row;
         let col = this.pos.col;

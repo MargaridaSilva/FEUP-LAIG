@@ -1,9 +1,9 @@
-class MyGame extends CGFobject {
+class Game extends CGFobject {
 
     constructor(scene, dim, div){
         super(scene);
         /*Visual elements*/
-        this.board = new MyBoard(this.scene, dim, div);
+        this.board = new Board(this.scene, dim, div);
         this.pieceHolder = [new PieceHolder(this.scene), new PieceHolder(this.scene)];
 
         this.div = div;
@@ -14,7 +14,7 @@ class MyGame extends CGFobject {
         this.AI = -1;
         this.playersType= [];
         this.playersTypes = [["user","computer"], ["user","user"], ["computer","computer"]];
-        this.logic = new MyGameInterface();
+        this.logic = new GameInterface();
         /* Game State */
         this.state = [];
         this.stateStack = [];
@@ -28,7 +28,7 @@ class MyGame extends CGFobject {
         this.AI = parseInt(AI) + 1;
         this.printGameState();
 
-        //this.board = new MyBoard(this.scene, dim, dim);
+        //this.board = new Board(this.scene, dim, dim);
         this.logic.start(this.dim, this.dim, this);
     }
 

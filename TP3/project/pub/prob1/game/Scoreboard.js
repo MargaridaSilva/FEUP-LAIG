@@ -1,4 +1,4 @@
-class MyScoreboard extends CGFobject {
+class Scoreboard extends CGFobject {
 
     constructor(scene){
         super(scene);

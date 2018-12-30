@@ -1,5 +1,4 @@
-
-class MyPiece extends CGFobject {
+class Piece extends CGFobject {
 
     constructor(scene, object, type){
         super(scene);
@@ -9,10 +8,10 @@ class MyPiece extends CGFobject {
     }
 
     static initPieces(scene){
-        MyPiece.pieces['bAliv'] =  new MyPiece(scene, new MySphere(scene, 0.3, 10, 10), 'bAliv');
-        MyPiece.pieces['bDead'] =  new MyPiece(scene, new MySphere(scene, 0.3, 10, 10), 'bDead');
-        MyPiece.pieces['rAliv'] =  new MyPiece(scene, new MySphere(scene, 0.3, 10, 10), 'rAliv');
-        MyPiece.pieces['rDead'] =  new MyPiece(scene, new MySphere(scene, 0.3, 10, 10), 'rDead');
+        Piece.pieces['bAliv'] =  new Piece(scene, new MySphere(scene, 0.3, 10, 10), 'bAliv');
+        Piece.pieces['bDead'] =  new Piece(scene, new MySphere(scene, 0.3, 10, 10), 'bDead');
+        Piece.pieces['rAliv'] =  new Piece(scene, new MySphere(scene, 0.3, 10, 10), 'rAliv');
+        Piece.pieces['rDead'] =  new Piece(scene, new MySphere(scene, 0.3, 10, 10), 'rDead');
 
     }
 
@@ -35,4 +34,4 @@ class MyPiece extends CGFobject {
     updateCoords(s, t){
     }
 }
-MyPiece.pieces = [];
+Piece.pieces = [];

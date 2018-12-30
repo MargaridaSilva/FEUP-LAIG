@@ -1,4 +1,4 @@
-class MyMovingPiece extends CGFobject {
+class MovingPiece extends CGFobject {
 
     constructor(scene, row, col, state){
         super(scene);
@@ -16,7 +16,7 @@ class MyMovingPiece extends CGFobject {
     }
     
     display(){        
-        this.piece = MyPiece.pieces[this.state];
+        this.piece = Piece.pieces[this.state];
 
         let row = this.pos[0];
         let col = this.pos[1];

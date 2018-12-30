@@ -51,7 +51,7 @@ class XMLscene extends CGFscene {
 
         this.setPickEnabled(true);
 
-        this.scoreboard = new MyScoreboard(this);
+        this.scoreboard = new Scoreboard(this);
 
         this.scoreboard.setCountdownTime(10000);
         this.scoreboard.incrementScorePlayer1();
@@ -174,7 +174,7 @@ class XMLscene extends CGFscene {
      * As loading is asynchronous, this may be called already after the application has started the run loop
      */
     onGraphLoaded() {
-        this.game = new MyGame(this, 9, 1);
+        this.game = new Game(this, 9, 1);
 
         this.setUpdatePeriod(60);
         this.time = 0;
