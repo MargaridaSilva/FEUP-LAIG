@@ -2,33 +2,35 @@ class Game extends CGFobject {
 
     constructor(scene, dim, div){
         super(scene);
-        /*Visual elements*/
+        /* Visual elements */
+        this.div = div;
         this.board = new Board(this.scene, dim, div);
         this.pieceHolder = [new PieceHolder(this.scene), new PieceHolder(this.scene)];
 
-        this.div = div;
-        this.isOver=false;
         /* Game Properties */
-        this.dim = -1;
+        this.dim = dim;
         this.numTurns = 3;
-        this.AI = -1;
         this.playersType= [];
         this.playersTypes = [["user","computer"], ["user","user"], ["computer","computer"]];
         this.logic = new GameInterface();
+
         /* Game State */
         this.state = [];
         this.stateStack = [];
     }
 
     start(dim, currentPlayer, playersType, AI){
+        /* Game Properties */
         this.dim = dim;
-        this.updateState(currentPlayer, this.numTurns, null, null, false, null);
-
-        this.playersType = this.playersTypes[playersType];
+        this.board = new Board(this.scene, this.dim, this.div);
         this.AI = parseInt(AI) + 1;
+        this.playersType = this.playersTypes[playersType];
+
+        /* Game State */
+        this.updateState(currentPlayer, this.numTurns, null, null, false, null);
         this.printGameState();
 
-        //this.board = new Board(this.scene, dim, dim);
+        /* Game Logic */
         this.logic.start(this.dim, this.dim, this);
     }
 
@@ -41,7 +43,7 @@ class Game extends CGFobject {
                 'turn':turn,
                 'move':moveParsed,
                 'moveType':moveType,
-                'end':end,
+                'isOver':end,
                 'winner':winner
             }
         }
@@ -93,7 +95,7 @@ class Game extends CGFobject {
 
 
     backToPreviousState(){
-        if (this.stateStack.length > 1){
+        if (this.stateStack.length > 0){
             let playerType;
             do {
                 let move = this.state.move;   
