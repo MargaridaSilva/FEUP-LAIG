@@ -18,9 +18,12 @@ class Game extends CGFobject {
         /* Game State */
         this.state = [];
         this.stateStack = [];
+        this.gameStart = false;
     }
 
     start(dim, currentPlayer, playersType, AI){
+        this.gameStart = true;
+
         this.dim = dim;
         this.updateState(currentPlayer, this.numTurns, null, null, false, null);
 
@@ -28,7 +31,6 @@ class Game extends CGFobject {
         this.AI = parseInt(AI) + 1;
         this.printGameState();
 
-        //this.board = new Board(this.scene, dim, dim);
         this.logic.start(this.dim, this.dim, this);
     }
 
@@ -50,6 +52,10 @@ class Game extends CGFobject {
 
     /*Update functions */
 
+    initBoard(newBoard) {
+        this.board.initCellsState(newBoard);
+    }
+
     updateBoard(newBoard){
         this.state.boardPL = newBoard;
     }
@@ -62,13 +68,13 @@ class Game extends CGFobject {
     }
 
     updateWithMovement(moveType, move, newTurn, newPlayer, currentSymbol) {
-        let previousPlayer = this.state.currentPlayer;
-        this.updateState(newPlayer, newTurn, move, moveType, false, null);
+        this.previousPlayer = this.state.currentPlayer;
+        this.updateState(parseInt(newPlayer), parseInt(newTurn), move, moveType, false, null);
         this.logic.checkWinner(this.getPrologBoard(), this);
 
         if(moveType == 'mov' || moveType == 'zom'){
             let moveStruct = this.parseMove(move);
-            this.board.movePieceToCell(moveStruct.row - 1, moveStruct.col - 1, currentSymbol);
+            this.board.movePieceToCell(moveStruct.row, moveStruct.col, currentSymbol);
         }
     }
 
@@ -77,7 +83,7 @@ class Game extends CGFobject {
         let picked = pickedElements[0][1];
         let playerType = this.playersType[this.state.currentPlayer];
 
-        if(picked != undefined && playerType == 'user' && !this.board.movementOccuring){
+        if(picked != undefined && playerType == 'user' && !this.isMoving()){
             let move = this.convertCellNumToRowAndCol(pickedElements[0][1]);
             this.logic.moveUser(move, this.getPrologBoard(), this.state.turn, this.state.currentPlayer, this);
         }
@@ -86,7 +92,7 @@ class Game extends CGFobject {
 
 
     dispatchComputerMoves(){
-        if (this.playersType[this.state.currentPlayer] == 'computer' && !this.board.movementOccuring){
+        if (this.playersType[this.state.currentPlayer] == 'computer' && !this.isMoving()){
             this.logic.moveComputer(this.getPrologBoard(), this.state.turn, this.state.currentPlayer, this.AI, this);
         }
     }
@@ -109,7 +115,23 @@ class Game extends CGFobject {
 
     update(dt){
         this.board.update(dt);
-        this.dispatchComputerMoves();
+
+        if(this.gameStart){
+            this.updateCamera();
+            this.dispatchComputerMoves();
+        }
+    }
+
+    updateCamera(){
+        let playerChanged = (this.previousPlayer != this.state.currentPlayer) || (this.state.currentPlayer + 1 != this.scene.interfaceValues.camera);
+        if(playerChanged && !this.isMoving() && this.scene.interfaceValues.automaticCamera){
+            this.scene.interface.changeCamera(this.state.currentPlayer + 1);
+            this.previousPlayer = this.state.currentPlayer;
+        }
+    }
+
+    isMoving(){
+        return !this.scene.cameraAnimation.end || this.board.movementOccuring;
     }
 
     display(){

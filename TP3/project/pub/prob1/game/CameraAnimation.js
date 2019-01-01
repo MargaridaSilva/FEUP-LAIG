@@ -5,6 +5,7 @@ class CameraAnimation {
         this.initialPos = [0, 0, 0];
         this.finalPos = [0, 0, 0];
         this.center = [0, 0, 0];
+        this.end = true;
         
         
         this.span = 2000;
@@ -17,7 +18,6 @@ class CameraAnimation {
     }
 
     animate(finalPos, centerPos){
-
         let initial = [this.camera.position[0], 0, this.camera.position[2]];
         let final = [finalPos[0], 0, finalPos[2]];
         let center = [centerPos[0], 0, centerPos[2]];
@@ -29,12 +29,19 @@ class CameraAnimation {
 
         this.t = 0;
         this.w = ang / this.span;
+
+        this.end = false;
     }
 
     update(dt){
-        if(this.t < this.span){
-            this.t += dt;
-            this.camera.orbit(this.center, this.w  * this.easeInOutCubic(this.t/this.span) * dt);
+        if(!this.end){
+            if(this.t < this.span){
+                this.t += dt;
+                this.camera.orbit(this.center, this.w  * this.easeInOutCubic(this.t/this.span) * dt);
+            }
+            else{
+                this.end = true;
+            }
         }
     }
 }

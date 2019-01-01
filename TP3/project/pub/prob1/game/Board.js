@@ -23,34 +23,45 @@ class Board extends CGFobject {
         let middle = Math.floor(this.dim/2);
 
         this.piecesHolder = {
-            bAliv: new MovingPiece(this.scene, this.dim + 1,  middle - 1, 'bAliv'),
-            bDead: new MovingPiece(this.scene, this.dim + 1,  middle + 1, 'bDead'),
+            bAliv: new MovingPiece(this.scene, this.dim + 2,  middle, 'bAliv'),
+            bDead: new MovingPiece(this.scene, this.dim + 2,  middle + 2, 'bDead'),
 
-            rAliv: new MovingPiece(this.scene, -2, middle - 1, 'rAliv'),
-            rDead: new MovingPiece(this.scene, -2, middle + 1, 'rDead')
+            rAliv: new MovingPiece(this.scene, -1, middle, 'rAliv'),
+            rDead: new MovingPiece(this.scene, -1, middle + 2, 'rDead')
         };
     }
 
     initCells(){
-        for(let row = 0; row < this.dim; row++){
+        for(let row = 1; row <= this.dim; row++){
             this.cells[row] = [];
-            for(let col = 0; col < this.dim; col++){
-                this.cells[row][col] = new Cell(this.scene, row, col, this.div, row*this.dim + col + 1);
+            for(let col = 1; col <= this.dim; col++){
+                this.cells[row][col] = new Cell(this.scene, row, col, this.div, (row - 1)*this.dim + (col - 1) + 1);
             }
         }
-        console.log(this.dim);
-        this.cells[this.dim-1][0].changeState('bAliv');
-        this.cells[0][this.dim-1].changeState('rAliv');
+    }
+
+
+    initCellsState(board){
+        let noSpaceBoard = board.replace(/ +?/g, '');
+        let reg = /cell\((\d),(\d),(\w+)\)/g;
+        let match;
+
+        while (match = reg.exec(noSpaceBoard)) {
+            let row = parseInt(match[1]);
+            let col = parseInt(match[2]);
+            let state = match[3];
+            this.cells[row][col].changeState(state);
+        }
     }
 
     display(){        
         this.scene.pushMatrix();
         this.scene.translate(-this.dim/2, 0, -this.dim/2);
-        this.scene.translate(0.5, 0, 0.5);
+        this.scene.translate(-0.5, 0, -0.5);
 
         // draw objects
-        for(let row = 0; row < this.dim; row++){
-            for(let col = 0; col < this.dim; col++){
+        for(let row = 1; row <= this.dim; row++){
+            for(let col = 1; col <= this.dim; col++){
                 this.cells[row][col].display();
             }
         }
@@ -78,8 +89,8 @@ class Board extends CGFobject {
     toString(){
         let board = "[ ";
 
-        for(let row = 0; row < this.dim; row++){
-            for(let col = 0; col < this.dim; col++){
+        for(let row = 1; row <= this.dim; row++){
+            for(let col = 1; col <= this.dim; col++){
                 board += this.cells[row][col].toString() + ', ';
             }
         }
@@ -104,7 +115,7 @@ class Board extends CGFobject {
 
     revertStateAt(row, col){
         console.log(parseInt(row) - 1);
-        return this.cells[parseInt(row) - 1][parseInt(col) - 1].revertState();
+        return this.cells[parseInt(row)][parseInt(col)].revertState();
     }
 
     update(dt){

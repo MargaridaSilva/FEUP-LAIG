@@ -6,8 +6,7 @@ class GameInterface{
 		request.open('POST', '../../game', true);
 		request.onload = function(data) {
 			let response=JSON.parse(data.target.response);
-			game.updateBoard(response.newBoard);
-			game.dispatchComputerMoves();
+			game.initBoard(response.newBoard);
 			console.log(response);
 		}
 		request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');

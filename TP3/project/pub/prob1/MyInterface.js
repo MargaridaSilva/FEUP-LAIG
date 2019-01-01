@@ -105,6 +105,8 @@ class MyInterface extends CGFinterface {
             self.scene.changeCamera();
         });
 
+        cameraGroup.add(this.scene.interfaceValues, 'automaticCamera').name('Adjust camera to player');
+
         let optionsGroup = this.gui.addFolder("Game Properties");
         optionsGroup.open();
 
@@ -131,5 +133,9 @@ class MyInterface extends CGFinterface {
         gameActionsGroup.add(this.scene.interfaceValues, 'startGame').name('Start game');
         gameActionsGroup.add(this.scene.interfaceValues, 'undoMove').name('Undo move');
         gameActionsGroup.add(this.scene.interfaceValues, 'watchMovie').name('Watch movie');
+    }
+
+    changeCamera(value) {
+        this.gui.__folders["Camera settings"].__controllers[0].setValue(value);
     }
 }
