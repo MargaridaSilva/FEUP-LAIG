@@ -19,12 +19,11 @@ class Board extends CGFobject {
 
         let middle = Math.floor(this.dim / 2);
 
+        let middle = Math.round(this.dim/2);
+
         this.piecesHolder = {
             bAliv: new MovingPiece(this.scene, this.dim + 2, middle, 'bAliv'),
-            bDead: new MovingPiece(this.scene, this.dim + 2, middle + 2, 'bDead'),
-
             rAliv: new MovingPiece(this.scene, -1, middle, 'rAliv'),
-            rDead: new MovingPiece(this.scene, -1, middle + 2, 'rDead')
         };
     }
 
@@ -86,9 +85,8 @@ class Board extends CGFobject {
             }
         }
         this.piecesHolder.rAliv.display();
-        this.piecesHolder.rDead.display();
         this.piecesHolder.bAliv.display();
-        this.piecesHolder.bDead.display();
+
         this.scene.popMatrix();
 
 
@@ -132,7 +130,8 @@ class Board extends CGFobject {
         });
     }
 
-    movePieceToCell(row, col, symbol) {
+    movePieceToCell(row, col, symbol){
+        console.log(symbol);
         this.piecesHolder[symbol].move(this.cells[row][col]);
     }
 
@@ -143,10 +142,9 @@ class Board extends CGFobject {
 
     update(dt) {
         this.piecesHolder.rAliv.update(dt);
-        this.piecesHolder.rDead.update(dt);
         this.piecesHolder.bAliv.update(dt);
-        this.piecesHolder.bDead.update(dt);
 
-        this.movementOccuring = !(this.piecesHolder.rAliv.end && this.piecesHolder.rDead.end && this.piecesHolder.bAliv.end && this.piecesHolder.bDead.end);
+        Piece.updatePieces();
+        this.movementOccuring = !(this.piecesHolder.rAliv.end && this.piecesHolder.bAliv.end);
     }
 }

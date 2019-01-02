@@ -42,6 +42,7 @@ serialInclude([ '../lib/CGF.js',
                 'game/Scoreboard.js',
                 'game/PieceHolder.js',
                 'game/Virus.js',
+                'game/ZombingVirus.js',
 
                 'animations/Animation.js',
                 'animations/LinearAnimation.js',

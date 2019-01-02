@@ -8,16 +8,21 @@ class Piece extends CGFobject {
     }
 
     static initPieces(scene){
-        let virus = new Virus(scene);
-        Piece.pieces['bAliv'] =  new Piece(scene, virus, 'bAliv');
-        Piece.pieces['bDead'] =  new Piece(scene, virus, 'bDead');
-        Piece.pieces['rAliv'] =  new Piece(scene, virus, 'rAliv');
-        Piece.pieces['rDead'] =  new Piece(scene, virus, 'rDead');
+        Piece.pieces['bAliv'] =  new Piece(scene, new Virus(scene, false), 'blue');
+        Piece.pieces['bDead'] =  new Piece(scene, new Virus(scene, true), 'blue');
+        Piece.pieces['rAliv'] =  new Piece(scene, new Virus(scene, false), 'red');
+        Piece.pieces['rDead'] =  new Piece(scene, new Virus(scene, true), 'red');
 
+    }
+
+    static updatePieces(dt){
+        Piece.pieces['bDead'].update();
+        Piece.pieces['rDead'].update();
     }
 
     display(){        
         this.material.apply();
+
         this.scene.pushMatrix();
         this.scene.translate(0, 0.3, 0);
         this.scene.registerForPick(this.id, this.object);
@@ -33,6 +38,9 @@ class Piece extends CGFobject {
     }
 
     updateCoords(s, t){
+    }
+    update() {
+        this.object.update();
     }
 }
 Piece.pieces = [];

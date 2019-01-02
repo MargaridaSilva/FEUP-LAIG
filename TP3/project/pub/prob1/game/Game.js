@@ -32,7 +32,7 @@ class Game extends CGFobject {
         /* Game State */
         this.gameStart = true;
         this.updateState(currentPlayer, this.numTurns, null, null, false, null);
-        this.printGameState();
+        //this.printGameState();
 
         /* Game Logic */
         this.logic.start(this.dim, this.dim, this);
@@ -84,8 +84,10 @@ class Game extends CGFobject {
         this.updateState(parseInt(newPlayer), parseInt(newTurn), move, moveType, false, null);
         this.logic.checkWinner(this.getPrologBoard(), this);
 
-        if(moveType != 'invalid'){
-            this.updateMovement();
+        let symbol = (this.previousPlayer == 0? 'bAliv':'rAliv');
+        if(moveType == 'mov' || moveType == 'zom'){
+            let moveStruct = this.parseMove(move);
+            this.board.movePieceToCell(moveStruct.row, moveStruct.col, symbol);
         }
     }
 
@@ -153,7 +155,7 @@ class Game extends CGFobject {
 
     update(dt){
         this.board.update(dt);
-
+        
         if(this.gameStart){
             this.updateCamera();
 

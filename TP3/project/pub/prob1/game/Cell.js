@@ -54,7 +54,13 @@ class Cell extends CGFobject {
     }
 
     changeState(state){
-        this.state = state;
+        if (this.state == 'empty')
+            this.state = state;
+        else if (this.state == 'bAliv')
+            this.state = 'bDead';
+        else if (this.state == 'rAliv')
+            this.state = 'rAliv';
+        
     }
 
     revertState(){
