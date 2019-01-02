@@ -24,12 +24,14 @@ class Scoreboard extends CGFobject {
     
     initMaterial(){
         this.material = new CGFappearance(this.scene);
-        this.material.setAmbient(1, 1, 1, 1);
+        this.material.setAmbient(0.1, 0.1, 0.1, 1);
+        this.material.setDiffuse(0.5, 0.5, 0.5, 1);
+        this.material.setSpecular(0.5, 0.5, 0.5, 1);
 
         this.scoreBoardMaterial = new CGFappearance(this.scene);
-        this.scoreBoardMaterial.setAmbient(0, 0, 0, 1);
-        this.scoreBoardMaterial.setDiffuse(0, 0, 0, 1);
-        this.scoreBoardMaterial.setSpecular(0, 0, 0, 1);
+        this.scoreBoardMaterial.setAmbient(0.1, 0.1, 0.1, 1);
+        this.scoreBoardMaterial.setDiffuse(0.5, 0.5, 0.5, 1);
+        this.scoreBoardMaterial.setSpecular(0.5, 0.5, 0.5, 1);
     }
 
     initTextures(){

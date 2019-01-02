@@ -41,6 +41,10 @@ class CameraAnimation {
         this.end = false;
     }
 
+    getPostition(){
+        return this.camera.position;
+    }
+
     update(dt){
         if(!this.end){
             if(this.t < this.span){

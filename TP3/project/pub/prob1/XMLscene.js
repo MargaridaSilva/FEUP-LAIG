@@ -193,9 +193,7 @@ class XMLscene extends CGFscene {
             boardDim: 9,
             startGame: function(){game.start(this.boardDim, this.player, this.gameMode, this.difficulty)},
             undoMove: function(){game.backToPreviousState()},
-            watchMovie: function(){game.watchMovie()},
-
-            view: this.graph.views_default
+            watchMovie: function(){game.watchMovie()}
         }
 
         this.initCameras();
@@ -206,9 +204,7 @@ class XMLscene extends CGFscene {
 
         // Adds lights group.
         this.interface.addLightsGroup(Array.prototype.merge(this.graph.omniLights, this.graph.spotLights));
-        this.interface.addViewsGroup(Array.prototype.merge(this.graph.perspectiveViews, this.graph.orthoViews));
         this.interface.addGameButtons();
-
         this.sceneInited = true;
     }
 
@@ -283,22 +279,26 @@ class XMLscene extends CGFscene {
         this.pushMatrix();
 
         if (this.sceneInited) {
+            let position = this.cameraAnimation.getPostition();
+            this.lights[1].setPosition(position[0], position[1], position[2], position[3]);
+            this.lights[1].setVisible(false);
+
             var i = 0;
             for (var key in this.lightValues) {
                 if (this.lightValues.hasOwnProperty(key)) {
                     if (this.lightValues[key]) {
-                        this.lights[i].setVisible(true);
+                        // this.lights[i].setVisible(true);
                         this.lights[i].enable();
                     }
                     else {
-                        this.lights[i].setVisible(false);
+                        // this.lights[i].setVisible(false);
                         this.lights[i].disable();
                     }
                     this.lights[i].update();
                     i++;
                 }
             }
-
+            
             // this.graph.displayScene();
             this.game.display();
 

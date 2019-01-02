@@ -44,26 +44,6 @@ class MyInterface extends CGFinterface {
     }
 
     /**
-     * Adds a folder containing the IDs of the views passed as parameter.
-     * @param {array} views
-     */
-    addViewsGroup(views) {
-
-        for (var key in views) {
-            if (views.hasOwnProperty(key)) {
-                this.scene.viewValues.push(key);
-            }
-        }
-
-        var scene = this.scene;
-
-        this.gui.add(this.scene.interfaceValues, 'view', this.scene.viewValues).onChange(function (view) {
-            scene.camera = scene.cameras[view];
-            scene.interface.setActiveCamera(scene.camera);
-        });
-    }
-
-    /**
      * initKeys
      */
     initKeys() {

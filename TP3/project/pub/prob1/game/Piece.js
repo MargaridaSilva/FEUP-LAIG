@@ -8,10 +8,11 @@ class Piece extends CGFobject {
     }
 
     static initPieces(scene){
-        Piece.pieces['bAliv'] =  new Piece(scene, new Virus(scene), 'bAliv');
-        Piece.pieces['bDead'] =  new Piece(scene, new Virus(scene), 'bDead');
-        Piece.pieces['rAliv'] =  new Piece(scene, new Virus(scene), 'rAliv');
-        Piece.pieces['rDead'] =  new Piece(scene, new Virus(scene), 'rDead');
+        let virus = new Virus(scene);
+        Piece.pieces['bAliv'] =  new Piece(scene, virus, 'bAliv');
+        Piece.pieces['bDead'] =  new Piece(scene, virus, 'bDead');
+        Piece.pieces['rAliv'] =  new Piece(scene, virus, 'rAliv');
+        Piece.pieces['rDead'] =  new Piece(scene, virus, 'rDead');
 
     }
 

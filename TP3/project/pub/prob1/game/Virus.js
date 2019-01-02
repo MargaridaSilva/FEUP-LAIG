@@ -7,6 +7,7 @@ class Virus extends CGFobject {
     display(){
         this.scene.pushMatrix();
         this.scene.scale(this.scaleFactor, this.scaleFactor, this.scaleFactor);
+        this.scene.translate(15, 10, 0);
         this.virus.display();
         this.scene.popMatrix();
     }

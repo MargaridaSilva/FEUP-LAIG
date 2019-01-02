@@ -84,15 +84,15 @@ class Game extends CGFobject {
         this.updateState(parseInt(newPlayer), parseInt(newTurn), move, moveType, false, null);
         this.logic.checkWinner(this.getPrologBoard(), this);
 
-        this.updateMovement();
+        if(moveType != 'invalid'){
+            this.updateMovement();
+        }
     }
 
     updateMovement(){
-        if(this.state.moveType == 'mov' || this.state.moveType == 'zom'){
-            let move = this.state.move;
-            let currentSymbol = this.getSymbol(this.state.moveType, this.state.previousPlayer);
-            this.board.movePieceToCell(move[0], move[1], currentSymbol);
-        }
+        let move = this.state.move;
+        let currentSymbol = this.getSymbol(this.state.moveType, this.state.previousPlayer);
+        this.board.movePieceToCell(move[0], move[1], currentSymbol);
 
         if(this.state.moveTypemoveType == 'zom'){
             switch(this.state.currentPlayer){
@@ -135,13 +135,11 @@ class Game extends CGFobject {
         if (this.stateStack.length > 0){
             let playerType;
             do {
-                let move = this.state.move;   
-                this.board.revertStateAt(move[0], move[1]);    
+                let move = this.state.move;
+                this.board.revertStateAt(move[0], move[1]);
                 this.stateStack.pop();
                 this.state = this.stateStack.peek();
-                console.log(this.stateStack);
-                playerType = this.playersType[this.state.previousPlayer];
-                console.log(playerType);
+                playerType = this.playersType[this.state.currentPlayer];
             } while(playerType == "computer");
         }
     }
