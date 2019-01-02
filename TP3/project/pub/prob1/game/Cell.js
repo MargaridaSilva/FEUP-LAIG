@@ -48,7 +48,7 @@ class Cell extends CGFobject {
     }
 
     toString(){
-        return `cell(${this.pos.row+1},${this.pos.col+1},${this.state})`;
+        return `cell(${this.pos.row},${this.pos.col},${this.state})`;
     }
 
     updateCoords(s, t){

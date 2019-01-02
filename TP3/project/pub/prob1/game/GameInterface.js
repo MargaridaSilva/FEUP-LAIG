@@ -5,9 +5,9 @@ class GameInterface{
 		let request = new XMLHttpRequest();
 		request.open('POST', '../../game', true);
 		request.onload = function(data) {
+			console.log(data.target.response);
 			let response=JSON.parse(data.target.response);
-			game.updateBoard(response.newBoard);
-			game.dispatchComputerMoves();
+			game.initBoard(response.newBoard);
 			console.log(response);
 		}
 		request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
@@ -18,6 +18,7 @@ class GameInterface{
 		if(this.waiting) return;
 
 		let requestString="[moveUser,["+Move[0]+","+Move[1]+"],"+Board+","+Turn+","+Player+"]";
+
 		console.log(requestString);
 		let request = new XMLHttpRequest();
 		let self = this;

@@ -194,6 +194,7 @@ class XMLscene extends CGFscene {
             highlightTiles: false,
             graphIndex: 0,
             camera: 0,
+            automaticCamera: true,
             turnTime: 0,
             gameMode: 0,
             difficulty: 0,
@@ -253,10 +254,10 @@ class XMLscene extends CGFscene {
         let player1 = Array.prototype.slice.call(this.cameras['Player1'].position, 0, -1);
         let player2 = Array.prototype.slice.call(this.cameras['Player2'].position, 0, -1);
 
-        switch(this.interfaceValues.camera){
-            case '0': this.cameraAnimation.animate(global,  [0, 0, 0]); break;
-            case '1': this.cameraAnimation.animate(player1, [0, 0, 0]); break;
-            case '2': this.cameraAnimation.animate(player2, [0, 0, 0]); break;
+        switch(parseInt(this.interfaceValues.camera)){
+            case 0: this.cameraAnimation.animate(global,  [0, 0, 0]); break;
+            case 1: this.cameraAnimation.animate(player1, [0, 0, 0]); break;
+            case 2: this.cameraAnimation.animate(player2, [0, 0, 0]); break;
             default: break;
         }
     }

@@ -55,9 +55,9 @@ class MovingPiece extends CGFobject {
     update(dt){
         if(!this.end){
             if(this.t < this.span){
+                this.t += dt;
                 this.pos = this.pos.add(this.v.mult(dt).mult(this.easeInOutCubic(this.t/this.span)));
                 this.height += 0.01*(0.5 - this.t/this.span)*dt*this.easeInOutCubic(this.t/this.span);
-                this.t += dt;
             }
             else{
                 this.end = true;
