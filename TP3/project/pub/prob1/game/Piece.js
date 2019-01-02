@@ -8,10 +8,10 @@ class Piece extends CGFobject {
     }
 
     static initPieces(scene){
-        Piece.pieces['bAliv'] =  new Piece(scene, new MySphere(scene, 0.3, 10, 10), 'bAliv');
-        Piece.pieces['bDead'] =  new Piece(scene, new MySphere(scene, 0.3, 10, 10), 'bDead');
-        Piece.pieces['rAliv'] =  new Piece(scene, new MySphere(scene, 0.3, 10, 10), 'rAliv');
-        Piece.pieces['rDead'] =  new Piece(scene, new MySphere(scene, 0.3, 10, 10), 'rDead');
+        Piece.pieces['bAliv'] =  new Piece(scene, new Virus(scene), 'bAliv');
+        Piece.pieces['bDead'] =  new Piece(scene, new Virus(scene), 'bDead');
+        Piece.pieces['rAliv'] =  new Piece(scene, new Virus(scene), 'rAliv');
+        Piece.pieces['rDead'] =  new Piece(scene, new Virus(scene), 'rDead');
 
     }
 
