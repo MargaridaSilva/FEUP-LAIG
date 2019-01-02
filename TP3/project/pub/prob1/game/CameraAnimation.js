@@ -1,6 +1,7 @@
 class CameraAnimation {
 
-    constructor(camera){
+    constructor(scene, camera){
+        this.scene = scene;
         this.camera = camera;
         this.initialPos = [0, 0, 0];
         this.finalPos = [0, 0, 0];
@@ -18,6 +19,13 @@ class CameraAnimation {
     }
 
     animate(finalPos, centerPos){
+        if(this.scene.fastMode){
+            this.span = 500;
+        }
+        else{
+            this.span = 1600;
+        }
+
         let initial = [this.camera.position[0], 0, this.camera.position[2]];
         let final = [finalPos[0], 0, finalPos[2]];
         let center = [centerPos[0], 0, centerPos[2]];

@@ -44,7 +44,6 @@ class Cell extends CGFobject {
             this.piece.display();
         } 
         this.scene.popMatrix();
-
     }
 
     toString(){

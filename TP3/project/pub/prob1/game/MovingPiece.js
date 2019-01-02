@@ -38,6 +38,12 @@ class MovingPiece extends CGFobject {
     }
 
     move(cell){
+        if(this.scene.fastMode){
+            this.span = 500;
+        }
+        else{
+            this.span = 1100;
+        }
         this.cell = cell;
         let row = cell.pos.row;
         let col = cell.pos.col;

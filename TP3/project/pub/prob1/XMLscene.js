@@ -52,12 +52,6 @@ class XMLscene extends CGFscene {
         this.setPickEnabled(true);
 
         this.scoreboard = new Scoreboard(this);
-
-        this.scoreboard.setCountdownTime(10000);
-        this.scoreboard.incrementScorePlayer1();
-        this.scoreboard.incrementScorePlayer2();
-
-
         this.quad = new MyQuad(this, -1, -1, 1, 1);
         this.material = new CGFappearance(this);
         this.material.setSpecular(1, 1, 1, 1);
@@ -65,9 +59,6 @@ class XMLscene extends CGFscene {
         this.material.setDiffuse(0, 0, 0, 1);
         this.texture = new CGFtexture(this, "scenes/images/board3.png"); 
         this.material.setTexture(this.texture);
-
-
-        this.pieceHolder = new PieceHolder(this);
     }
 
     /**
@@ -100,7 +91,7 @@ class XMLscene extends CGFscene {
 
         this.camera = this.cameras[this.graph.views_default];
         this.interface.setActiveCamera(this.camera);
-        this.cameraAnimation = new CameraAnimation(this.camera);
+        this.cameraAnimation = new CameraAnimation(this, this.camera);
     }
 
     /**
@@ -202,7 +193,7 @@ class XMLscene extends CGFscene {
             boardDim: 9,
             startGame: function(){game.start(this.boardDim, this.player, this.gameMode, this.difficulty)},
             undoMove: function(){game.backToPreviousState()},
-            watchMovie: function(){},
+            watchMovie: function(){game.watchMovie()},
 
             view: this.graph.views_default
         }
@@ -310,8 +301,6 @@ class XMLscene extends CGFscene {
 
             // this.graph.displayScene();
             this.game.display();
-
-            // this.pieceHolder.display();
 
             this.pushMatrix();
             this.translate(-5, 0, 0);

@@ -6,6 +6,7 @@ class Game extends CGFobject {
         this.div = div;
         this.board = new Board(this.scene, dim, div);
         this.pieceHolder = [new PieceHolder(this.scene), new PieceHolder(this.scene)];
+        this.scoreboard = this.scene.scoreboard;
 
         /* Game Properties */
         this.dim = dim;
@@ -19,13 +20,14 @@ class Game extends CGFobject {
         this.stateStack = [];
         this.gameStart = false;
     }
-
-    start(dim, currentPlayer, playersType, AI){
+    start(dim, currentPlayer, gameMode, AI){
         /* Game Properties */
         this.dim = dim;
-        this.board = new Board(this.scene, this.dim, this.div);
+        this.firstPlayer = currentPlayer;
+        this.gameMode = gameMode;
         this.AI = parseInt(AI) + 1;
-        this.playersType = this.playersTypes[playersType];
+        this.board = new Board(this.scene, this.dim, this.div);
+        this.playersType = this.playersTypes[gameMode];
 
         /* Game State */
         this.gameStart = true;
@@ -34,20 +36,29 @@ class Game extends CGFobject {
 
         /* Game Logic */
         this.logic.start(this.dim, this.dim, this);
+
+        this.scoreboard.start();
     }
 
-    updateState(currentPlayer, turn, move, moveType, end, winner){
+    updateState(currentPlayer, turn, move, moveType, end, winner){      
+        //Need fix
+        if(currentPlayer != this.state.currentPlayer && !this.isMoving()){
+            this.scoreboard.setCountdownTime(15000);  
+        }
+        
         if (moveType != "invalid"){
-            this.stateStack.push(this.state);
+            let previousPlayer = this.state.currentPlayer;
             let moveParsed = JSON.parse(move);
             this.state = {
                 'currentPlayer':currentPlayer,
+                'previousPlayer': previousPlayer,
                 'turn':turn,
                 'move':moveParsed,
                 'moveType':moveType,
                 'isOver':end,
                 'winner':winner
             }
+            this.stateStack.push(this.state);
         }
         
     }
@@ -69,15 +80,35 @@ class Game extends CGFobject {
         }
     }
 
-    updateWithMovement(moveType, move, newTurn, newPlayer, currentSymbol) {
-        this.previousPlayer = this.state.currentPlayer;
+    updateWithMovement(moveType, move, newTurn, newPlayer) {
         this.updateState(parseInt(newPlayer), parseInt(newTurn), move, moveType, false, null);
         this.logic.checkWinner(this.getPrologBoard(), this);
 
-        if(moveType == 'mov' || moveType == 'zom'){
-            let moveStruct = this.parseMove(move);
-            this.board.movePieceToCell(moveStruct.row, moveStruct.col, currentSymbol);
+        this.updateMovement();
+    }
+
+    updateMovement(){
+        if(this.state.moveType == 'mov' || this.state.moveType == 'zom'){
+            let move = this.state.move;
+            let currentSymbol = this.getSymbol(this.state.moveType, this.state.previousPlayer);
+            this.board.movePieceToCell(move[0], move[1], currentSymbol);
         }
+
+        if(this.state.moveTypemoveType == 'zom'){
+            switch(this.state.currentPlayer){
+                case 0: this.scoreboard.incrementScorePlayer1(); break;
+                case 1: this.scoreboard.incrementScorePlayer2(); break;
+            }            
+        }
+    }
+
+    getSymbol(moveType, player){
+        let symbol = {
+            0: {mov: 'bAliv', zom: 'bDead'},
+            1: {mov: 'rAliv', zom: 'rDead'},
+        };
+
+        return symbol[player][moveType];
     }
 
     handlePicking(pickedElements){
@@ -106,13 +137,20 @@ class Game extends CGFobject {
             do {
                 let move = this.state.move;   
                 this.board.revertStateAt(move[0], move[1]);    
-                this.state = this.stateStack.peek();
                 this.stateStack.pop();
+                this.state = this.stateStack.peek();
                 console.log(this.stateStack);
-                playerType = this.playersType[this.state.currentPlayer];
+                playerType = this.playersType[this.state.previousPlayer];
                 console.log(playerType);
             } while(playerType == "computer");
         }
+    }
+
+    watchMovie(){
+        this.watchMovieMode = true;
+        this.scene.fastMode = true;
+        this.watchStack = this.stateStack.slice();
+        this.start(this.dim, this.firstPlayer, this.gameMode, this.AI);
     }
 
     update(dt){
@@ -120,16 +158,30 @@ class Game extends CGFobject {
 
         if(this.gameStart){
             this.updateCamera();
-            this.dispatchComputerMoves();
+
+            if(this.watchMovieMode && !this.isMoving()){
+                if(this.watchStack.length == 0){
+                    this.watchMovieMode = false;
+                    this.scene.fastMode = false;
+                }
+                else{
+                    let state = this.watchStack.shift();
+                    this.state = state;
+                    this.updateMovement();
+                }
+            }
+            else{
+                this.dispatchComputerMoves();
+            }
         }
     }
 
     updateCamera(){
-        let playerChanged = (this.previousPlayer != this.state.currentPlayer) || (this.state.currentPlayer + 1 != this.scene.interfaceValues.camera);
-        if(playerChanged && !this.isMoving() && this.scene.interfaceValues.automaticCamera){
+        if((this.state.currentPlayer + 1 != this.scene.interfaceValues.camera) && !this.isMoving() && this.scene.interfaceValues.automaticCamera){
             this.scene.interface.changeCamera(this.state.currentPlayer + 1);
-            this.previousPlayer = this.state.currentPlayer;
         }
+
+
     }
 
     isMoving(){
@@ -156,7 +208,6 @@ class Game extends CGFobject {
         this.scene.popMatrix();
     }
 
-
     /* Utilities */
 
     updateCoords(s, t){
@@ -174,15 +225,6 @@ class Game extends CGFobject {
             row++;
         else col = this.dim;
         return [row, col];
-    }
-
-    parseMove(movestr){
-        let move = movestr.slice(1,-1).split(',');
-        return {
-            row: Number(move[0]), 
-            col: Number(move[1])
-        };
-
     }
 
     printGameState(){

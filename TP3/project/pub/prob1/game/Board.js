@@ -21,7 +21,7 @@ class Board extends CGFobject {
         this.quad = new MyQuad(this.scene, -1, -1, 1, 1);
 
         let middle = Math.floor(this.dim/2);
-
+        
         this.piecesHolder = {
             bAliv: new MovingPiece(this.scene, this.dim + 2,  middle, 'bAliv'),
             bDead: new MovingPiece(this.scene, this.dim + 2,  middle + 2, 'bDead'),
