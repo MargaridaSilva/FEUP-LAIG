@@ -5,7 +5,7 @@
 
 	<!-- _________________ VIEWS ___________________ -->
 
-	<views default="global2">
+	<views default="global">
 		<perspective id="current" near="0.1" far="500" angle="35">
 			<from x="15" y="15" z="0" />
 			<to x="0" y="0" z="0" />
@@ -62,6 +62,9 @@
 	<textures>
 		<texture id="warning" file="scenes/images/warning.jpg" />
 		<texture id="wood" file="scenes/images/environments/wood.jpg" />
+		<texture id="floor" file="scenes/images/environments/homeFloor.jpg" />
+		<texture id="wall" file="scenes/images/environments/homeWall.jpg" />
+		<texture id="fur" file="scenes/images/environments/fur.jpg" />
 	</textures>
 
 	<!-- ________________ MATERIALS __________________ -->
@@ -110,6 +113,13 @@
 			<diffuse r="0.0" g="0.31" b="0.45" a="1" />
 			<specular r="0.0" g="0.31" b="0.45" a="1" />
 		</material>
+
+		<material id="softBlue" shininess="5">
+			<emission r="0" g="0" b="0" a="0" />
+			<ambient r="0.1" g="0.1" b="0.1" a="1" />
+			<diffuse r="0.71" g="0.81" b="0.81" a="1" />
+			<specular r="0.1" g="0.1" b="0.5" a="1" />
+		</material>
 	</materials>
 
 	<!-- ______________ TRANSFORMATIONS _______________ -->
@@ -127,9 +137,14 @@
 	<!-- ________________ PRIMITIVES __________________ -->
 
 	<primitives>
-		<primitive id="rectangle">
+		<primitive id="plane">
 			<plane npartsU = "10" npartsV = "10" />
 		</primitive>
+
+		<primitive id="quad">
+			<rectangle x1="0" y1="0" x2="1" y2="1" />
+		</primitive>
+
 		<primitive id="torus">
 			<torus inner="5" outer="4" slices="20" loops="50">
 			</torus>
@@ -155,6 +170,7 @@
 			<children>
 				<componentref id="table"/>
 				<componentref id="walls"/>
+				<componentref id="floor"/>
 				<componentref id="chairs"/>
 			</children>
 		</component>
@@ -170,12 +186,11 @@
 				<material id="white" />
 				<material id="black" />
 			</materials>
-			<texture id="none" />
+			<texture id="wall" />
 			<children>
 				<componentref id="wall1"/>
 				<componentref id="wall2"/>
 				<componentref id="wall3"/>
-				<componentref id="wall4"/>
 			</children>
 		</component>
 
@@ -191,16 +206,18 @@
 				<material id="white" />
 				<material id="black" />
 			</materials>
-			<texture id="none" />
+			<texture id="inherit" />
 			<children>
-				<primitiveref id="rectangle"/>
+				<primitiveref id="plane"/>
 			</children>
 		</component>
 
-		<component id="wall2">
+		<component id="floor">
 			<transformation>
-				<translate x="0" y="-20" z="0"/>
+				<translate x="-15" y="-20" z="30"/>
 				<scale x="30" y="1" z="60"/>
+				<rotate axis="x" angle="-90" />
+				
 			</transformation>
 			<animations>
 			</animations>
@@ -208,13 +225,13 @@
 				<material id="white" />
 				<material id="black" />
 			</materials>
-			<texture id="none" />
+			<texture id="floor" length_s = "0.1" length_t="0.2"/>
 			<children>
-				<primitiveref id="rectangle"/>
+				<primitiveref id="quad"/>
 			</children>
 		</component>
 
-		<component id="wall3">
+		<component id="wall2">
 			<transformation>
 				<translate x="0" y="0" z="30"/>
 				<rotate axis="x" angle="-90" />
@@ -226,13 +243,13 @@
 				<material id="white" />
 				<material id="black" />
 			</materials>
-			<texture id="none" />
+			<texture id="inherit" />
 			<children>
-				<primitiveref id="rectangle"/>
+				<primitiveref id="plane"/>
 			</children>
 		</component>
 
-		<component id="wall4">
+		<component id="wall3">
 			<transformation>
 				<translate x="0" y="0" z="-30"/>
 				<rotate axis="x" angle="90" />
@@ -244,9 +261,9 @@
 				<material id="white" />
 				<material id="black" />
 			</materials>
-			<texture id="none" />
+			<texture id="inherit" />
 			<children>
-				<primitiveref id="rectangle"/>
+				<primitiveref id="plane"/>
 			</children>
 		</component>
 
@@ -365,7 +382,7 @@
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="wood"/>
+			<texture id="fur"/>
 			<children>
 				<componentref id="leftChair" />
 				<componentref id="rightChair" />
@@ -379,7 +396,7 @@
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="wood"/>
+			<texture id="inherit"/>
 			<children>
 				<componentref id="chair"/>
 			</children>
@@ -393,7 +410,7 @@
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="wood"/>
+			<texture id="inherit"/>
 			<children>
 				<componentref id="chair"/>
 			</children>
@@ -406,9 +423,9 @@
 				<rotate axis="x" angle="-90" />
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="softBlue" />
 			</materials>
-			<texture id="wood"/>
+			<texture id="none"/>
 			<children>
 				<primitiveref id="torus" />
 			</children>
@@ -443,7 +460,7 @@
 			</materials>
 			<texture id="inherit" length_s="1.0" length_t="1.0" />
 			<children>
-				<rectangleref id="rec" />
+				<componentref id="rec" />
 			</children>
 		</component>
 
@@ -527,7 +544,7 @@
 			</materials>
 			<texture id="inherit" />
 			<children>
-				<primitiveref id="rectangle"/>
+				<primitiveref id="plane"/>
 			</children>
 		</component>
 	</components>
