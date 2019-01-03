@@ -25,6 +25,10 @@ class MyPlane extends CGFobject{
         return obj;
     }
 
+    updateCoords(s, t){
+
+    }
+
 
     display(){
         this.plane.display();

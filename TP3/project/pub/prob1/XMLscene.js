@@ -208,10 +208,12 @@ class XMLscene extends CGFscene {
         this.initLights();
 
         // Adds lights group.
-        this.interface.addLightsGroup(Array.prototype.merge(this.graph.omniLights, this.graph.spotLights));
         
-        if (!this.sceneInited)
-        this.interface.addGameButtons();
+        
+        if (!this.sceneInited){
+            this.interface.addGameButtons();
+            this.interface.addLightsGroup(Array.prototype.merge(this.graph.omniLights, this.graph.spotLights));
+        }
         
         this.sceneInited = true;
     }
@@ -245,6 +247,7 @@ class XMLscene extends CGFscene {
 
 
     changeCamera(){
+        console.log(this.cameras);
         let global = Array.prototype.slice.call(this.cameras['global'].position, 0, -1);
         let player1 = Array.prototype.slice.call(this.cameras['Player1'].position, 0, -1);
         let player2 = Array.prototype.slice.call(this.cameras['Player2'].position, 0, -1);
@@ -312,7 +315,6 @@ class XMLscene extends CGFscene {
                     i++;
                 }
             }
-            console.log(this.graph);
             this.graph.displayScene();
             this.game.display();
 
