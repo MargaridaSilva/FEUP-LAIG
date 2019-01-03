@@ -17,12 +17,13 @@ class MySceneGraph {
     /**
      * @constructor
      */
-    constructor(filename, scene) {
+    constructor(filename, scene, index) {
         this.loadedOk = null;
 
         // Establish bidirectional references between scene and graph.
         this.scene = scene;
-        scene.graph = this;
+        scene.graphs[index] = this;
+        this.index = index;
 
         this.nodes = [];
 
@@ -42,7 +43,7 @@ class MySceneGraph {
          * If any error occurs, the reader calls onXMLError on this object, with an error message
          */
 
-        this.reader.open('scenes/' + filename, this);
+        this.reader.open('scenes/environments/' + filename, this);
         /*
         Assincrono
         Não espera que o ficheiro seja carregado
@@ -94,7 +95,8 @@ class MySceneGraph {
         this.loadedOk = true;
 
         // As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
-        this.scene.onGraphLoaded();
+        if (this.index == this.scene.graphIndex)
+            this.scene.onGraphLoaded();
     }
 
 

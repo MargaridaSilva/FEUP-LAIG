@@ -71,8 +71,7 @@ main=function()
 
 	// create and load graph, and associate it to scene. 
 	// Check console for loading errors
-	var myGraph = new MySceneGraph(filename, myScene);
-	
+    var myGraphs = [new MySceneGraph(filename, myScene, 0), new MySceneGraph("scene1.xml", myScene, 1), new MySceneGraph(filename, myScene, 2)];
 	// start
     app.run();
 }

@@ -14,6 +14,8 @@ class XMLscene extends CGFscene {
         this.lightValues = {};
         this.viewValues = [];
         this.cameras = {};
+        this.graphs = [];
+        this.graphIndex = 0;
 
         this.lastTime = null;
         this.dt = null;
@@ -59,6 +61,7 @@ class XMLscene extends CGFscene {
         this.material.setDiffuse(0, 0, 0, 1);
         this.texture = new CGFtexture(this, "scenes/images/board3.png"); 
         this.material.setTexture(this.texture);
+
     }
 
     /**
@@ -165,6 +168,8 @@ class XMLscene extends CGFscene {
      * As loading is asynchronous, this may be called already after the application has started the run loop
      */
     onGraphLoaded() {
+        this.changeGraph(this.graphIndex);
+
         this.game = new Game(this, 9, 1);
 
         this.setUpdatePeriod(60);
@@ -183,7 +188,7 @@ class XMLscene extends CGFscene {
         this.interfaceValues = {
             realisticPieces: false,
             highlightTiles: false,
-            graphIndex: 0,
+            graphIndex: this.graphIndex,
             camera: 0,
             automaticCamera: true,
             turnTime: 0,
@@ -204,7 +209,10 @@ class XMLscene extends CGFscene {
 
         // Adds lights group.
         this.interface.addLightsGroup(Array.prototype.merge(this.graph.omniLights, this.graph.spotLights));
+        
+        if (!this.sceneInited)
         this.interface.addGameButtons();
+        
         this.sceneInited = true;
     }
 
@@ -248,6 +256,12 @@ class XMLscene extends CGFscene {
             default: break;
         }
     }
+
+    changeGraph(graphIndex){
+        this.graphIndex = graphIndex;
+        this.graph = this.graphs[this.graphIndex];
+    }
+
     /**
      * Displays the scene.
      */
@@ -298,8 +312,8 @@ class XMLscene extends CGFscene {
                     i++;
                 }
             }
-            
-            // this.graph.displayScene();
+            console.log(this.graph);
+            this.graph.displayScene();
             this.game.display();
 
             this.pushMatrix();

@@ -94,9 +94,9 @@
 
 		<material id="bAliv" shininess="120">
 			<emission r="0" g="0" b="0" a="0" />
-			<ambient r="0.1" g="0.1" b="0.1" a="1" />
-			<diffuse r="0" g="0.5" b="1.0" a="1" />
-			<specular r="0" g="0.5" b="1.0" a="1" />
+			<ambient r="0" g="0" b="0" a="0" />
+			<diffuse r="0" g="0" b="0" a="0" />
+			<specular r="0" g="0" b="0" a="0" />
 		</material>
 
 		<material id="bDead" shininess="120">
@@ -122,7 +122,9 @@
 	<!-- ________________ PRIMITIVES __________________ -->
 
 	<primitives>
-
+		<primitive id="rectangle">
+			<rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
+		</primitive>
 	</primitives>
 
 	<!-- ________________ COMPONENTS __________________ -->
@@ -142,8 +144,146 @@
 			</materials>
 			<texture id="none" />
 			<children>
+				<componentref id="table"/>
+			</children>
+		</component>
+		<!-- Table -->
+		<component id="table">
+			<transformation>
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit"/>
+			<children>
+				<componentref id="tableTop" />
+				<!--<componentref id="tableLegs" />-->
 			</children>
 		</component>
 
+		<component id="tableTop">
+			<transformation>
+				<translate x="0" y="-1" z="0"/>
+				<scale x="20" y="1" z ="20"/>
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit"/>
+			<children>
+				<componentref id="cube"/>
+			</children>
+		</component>
+
+		<component id="tableLegs">
+			<transformation>
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit"/>
+			<children>
+				<componentref id="cube"/>
+			</children>
+		</component>
+
+		<!-- Cube -->
+
+		<component id="cube">
+			<transformation>
+				<rotate axis="y" angle="-90" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" length_s="1.0" length_t="1.0" />
+			<children>
+				<componentref id="faceCube1" />
+				<componentref id="faceCube2" />
+				<componentref id="faceCube3" />
+				<componentref id="faceCube4" />
+				<componentref id="faceCube5" />
+				<componentref id="faceCube6" />
+			</children>
+		</component>
+
+		<component id="faceCube1">
+			<transformation>
+				<translate x="0" y="0" z="0.5" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" length_s="1.0" length_t="1.0" />
+			<children>
+				<primitiveref id="rectangle" />
+			</children>
+		</component>
+
+		<component id="faceCube2">
+			<transformation>
+				<translate x="0" y="0" z="-0.5" />
+				<rotate axis="y" angle="-180" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" length_s="1.0" length_t="1.0" />
+			<children>
+				<primitiveref id="rectangle" />
+			</children>
+		</component>
+		<component id="faceCube3">
+			<transformation>
+				<translate x="0.5" y="0" z="0" />
+				<rotate axis="y" angle="90" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" length_s="1.0" length_t="1.0" />
+			<children>
+				<primitiveref id="rectangle" />
+			</children>
+		</component>
+		<component id="faceCube4">
+			<transformation>
+				<translate x="-0.5" y="0" z="0" />
+				<rotate axis="y" angle="-90" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" length_s="1.0" length_t="1.0" />
+			<children>
+				<primitiveref id="rectangle" />
+			</children>
+		</component>
+		<component id="faceCube5">
+			<transformation>
+				<translate x="0" y="-0.5" z="0" />
+				<rotate axis="x" angle="90" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" length_s="1.0" length_t="1.0" />
+			<children>
+				<primitiveref id="rectangle" />
+			</children>
+		</component>
+		<component id="faceCube6">
+			<transformation>
+				<translate x="0" y="0.5" z="0" />
+				<rotate axis="x" angle="-90" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" length_s="1.0" length_t="1.0" />
+			<children>
+				<primitiveref id="rectangle" />
+			</children>
+		</component>
 	</components>
 </yas>

@@ -70,9 +70,19 @@ class MyInterface extends CGFinterface {
             obj[filenames[id]] = id;
         }
 
-        options.add(this.scene.interfaceValues, 'graphIndex', obj).name('Scenario').onChange(function (v) {
+        options.add(this.scene.interfaceValues, 'graphIndex', {
+            'Name 1': 0,
+            'Name 2': 1,
+            'Name 3': 2
+        }).name('Scenario').onChange(function (v) {
+            self.scene.changeGraph(v);
             self.scene.onGraphLoaded();
         });
+
+        /*options.add(this.scene.interfaceValues, 'graphIndex', obj).name('Scenario').onChange(function (v) {
+            self.scene.onGraphLoaded();
+        });
+        */
 
         let cameraGroup = this.gui.addFolder('Camera settings');
         cameraGroup.open();
