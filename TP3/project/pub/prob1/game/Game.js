@@ -91,8 +91,7 @@ class Game extends CGFobject {
 
     updateMovement(){
         let move = this.state.move;
-        let currentSymbol = this.getSymbol(this.state.moveType, this.state.previousPlayer);
-        this.board.movePieceToCell(move[0], move[1], currentSymbol);
+        this.board.movePieceToCell(move[0], move[1], this.state.previousPlayer);
 
         if(this.state.moveTypemoveType == 'zom'){
             switch(this.state.currentPlayer){

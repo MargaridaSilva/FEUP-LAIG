@@ -3,6 +3,7 @@ class Virus extends CGFobject {
         super(scene);
         this.virus = new CGFOBJModel(scene, 'game/modelling/models/virus.obj');
         this.scaleFactor = 0.015;
+        
     }
     display(){
         this.scene.pushMatrix();

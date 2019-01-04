@@ -20,12 +20,13 @@ class Board extends CGFobject {
         let middle = Math.floor(this.dim / 2);
 
         this.piecesHolder = {
-            bAliv: new MovingPiece(this.scene, this.dim + 2, middle, 'bAliv'),
-            bDead: new MovingPiece(this.scene, this.dim + 2, middle + 2, 'bDead'),
-
-            rAliv: new MovingPiece(this.scene, -1, middle, 'rAliv'),
-            rDead: new MovingPiece(this.scene, -1, middle + 2, 'rDead')
+            0: new MovingPiece(this.scene, this.dim + 2, middle+1, 'bAliv'),
+            1: new MovingPiece(this.scene, -1, middle+1, 'rAliv')
         };
+
+        /* shaders */
+        this.shader = new CGFshader(this.scene.gl, "shaders/virus_vert.glsl", "shaders/virus_frag.glsl");
+        this.shader.setUniformsValues({zombieLevel: 1});
     }
 
 
@@ -80,15 +81,15 @@ class Board extends CGFobject {
         this.scene.translate(0, 0.01, 0);
 
         // draw objects
+        this.scene.setActiveShader(this.shader);
         for (let row = 1; row <= this.dim; row++) {
             for (let col = 1; col <= this.dim; col++) {
-                this.cells[row][col].display();
+                this.cells[row][col].display(this.shader);
             }
         }
-        this.piecesHolder.rAliv.display();
-        this.piecesHolder.rDead.display();
-        this.piecesHolder.bAliv.display();
-        this.piecesHolder.bDead.display();
+        this.displayPiecesHolder();
+        this.scene.setActiveShader(this.scene.defaultShader);
+        
         this.scene.popMatrix();
 
 
@@ -106,7 +107,10 @@ class Board extends CGFobject {
         this.scene.popMatrix();
     }
 
-
+    displayPiecesHolder(){
+        this.piecesHolder[0].display();
+        this.piecesHolder[1].display();
+    }
     updateCoords(s, t) {}
 
     toString() {
@@ -132,8 +136,8 @@ class Board extends CGFobject {
         });
     }
 
-    movePieceToCell(row, col, symbol) {
-        this.piecesHolder[symbol].move(this.cells[row][col]);
+    movePieceToCell(row, col, player) {
+        this.piecesHolder[player].move(this.cells[row][col]);
     }
 
     revertStateAt(row, col) {
@@ -142,11 +146,15 @@ class Board extends CGFobject {
     }
 
     update(dt) {
-        this.piecesHolder.rAliv.update(dt);
-        this.piecesHolder.rDead.update(dt);
-        this.piecesHolder.bAliv.update(dt);
-        this.piecesHolder.bDead.update(dt);
+        this.piecesHolder[0].update(dt);
+        this.piecesHolder[1].update(dt);
 
-        this.movementOccuring = !(this.piecesHolder.rAliv.end && this.piecesHolder.rDead.end && this.piecesHolder.bAliv.end && this.piecesHolder.bDead.end);
+        for (let row = 1; row <= this.dim; row++) {
+            for (let col = 1; col <= this.dim; col++) {
+                this.cells[row][col].update();
+            }
+        }
+
+        this.movementOccuring = !(this.piecesHolder[0].end && this.piecesHolder[1].end);
     }
 }

@@ -16,9 +16,10 @@ class Cell extends CGFobject {
         return this.state;
     }
     
-    display(){        
+    display(shader){
+               
         this.piece = Piece.pieces[this.state];
-
+        
         let row = this.pos.row;
         let col = this.pos.col;
 
@@ -41,6 +42,8 @@ class Cell extends CGFobject {
 
         if(this.piece != undefined){
             this.piece.setId(this.id);
+            console.log(this.piece.state);
+            shader.setUniformsValues({zombieLevel: this.piece.state}); 
             this.piece.display();
         } 
         this.scene.popMatrix();
@@ -53,8 +56,20 @@ class Cell extends CGFobject {
     updateCoords(s, t){
     }
 
+    update(){
+        let piece = Piece.pieces[this.state];
+        if (piece != undefined){
+            let stop = piece.update();
+            if (stop)
+             this.changeState('');
+        }
+    }
     changeState(state){
-        this.state = state;
+        if (this.state == 'empty')
+            this.state = state;
+        else if (this.state == 'bAliv' || this.state == 'rAliv')
+            this.state = this.state[0] + 'DeadProg';
+        else this.state = this.state[0] + 'Dead';
     }
 
     revertState(){

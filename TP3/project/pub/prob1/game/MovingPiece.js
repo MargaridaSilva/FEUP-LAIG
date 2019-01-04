@@ -44,10 +44,19 @@ class MovingPiece extends CGFobject {
         else{
             this.span = 1100;
         }
+        
         this.cell = cell;
+
         let row = cell.pos.row;
         let col = cell.pos.col;
+
         let vec = [row - this.pos[0], col - this.pos[1]];
+        if (this.cell.state != 'empty'){
+            let normal = vec.slice();
+            normal = normal.normalize().mult(0.7);
+            vec = vec.minus(normal);
+        }
+
         this.v = vec.div(this.span);
         this.t = 0;
 
