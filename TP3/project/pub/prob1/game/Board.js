@@ -42,12 +42,11 @@ class Board extends CGFobject {
     }
 
     initTextures() {
-        this.boardTexture = new CGFtexture(this.scene, "scenes/images/board2.png");
+        this.boardTexture = new CGFtexture(this.scene, "scenes/images/board_wood.png");
         this.boardMaterial.setTexture(this.boardTexture);
 
-        this.coverTexture = new CGFtexture(this.scene, "scenes/images/stone3.jpg");
+        this.coverTexture = new CGFtexture(this.scene, "scenes/images/cover_wood.jpg");
         this.coverMaterial.setTexture(this.coverTexture);
-        this.coverMaterial.setTextureWrap('REPEAT', 'REPEAT');
     }
 
     initCells() {

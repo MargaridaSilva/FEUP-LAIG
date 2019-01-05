@@ -34,13 +34,6 @@ class XMLscene extends CGFscene {
         this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
         this.axis = new CGFaxis(this);
 
-        // this.enableTextures(true);
-        // this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
-        // this.gl.clearDepth(100.0);
-        // this.gl.enable(this.gl.DEPTH_TEST);
-        // this.gl.enable(this.gl.CULL_FACE);
-        // this.gl.depthFunc(this.gl.LEQUAL);
-
         this.enableTextures(true);
         this.gl.clearDepth(100.0);
         this.gl.enable(this.gl.DEPTH_TEST);
@@ -49,7 +42,6 @@ class XMLscene extends CGFscene {
         this.gl.enable(this.gl.BLEND);
         this.gl.blendEquation(this.gl.FUNC_ADD);
         this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
-    
 
         this.setPickEnabled(true);
 
@@ -294,6 +286,7 @@ class XMLscene extends CGFscene {
         this.applyViewMatrix();
 
         this.pushMatrix();
+        this.axis.display();
 
         if (this.sceneInited) {
             let position = this.cameraAnimation.getPostition();
@@ -316,29 +309,18 @@ class XMLscene extends CGFscene {
                 }
             }
             this.graph.displayScene();
-            this.game.display();
 
             this.pushMatrix();
-            this.translate(-5, 0, 0);
-            this.rotate(Math.PI/2, 0, 1, 0);
-            this.scale(0.4, 0.4, 0.4);
-            this.translate(0, 2, 0);
-            this.scoreboard.display();
+            this.scale(1.4, 1.4, 1.4);
+            this.game.display();
             this.popMatrix();
 
-
-            // this.pushMatrix();
-            // this.translate(0, -2, 0)
-            // this.rotate(-Math.PI/2, 1, 0, 0);
-            // this.scoreboard.display();
-            // this.popMatrix();
-
-
-            // this.pushMatrix();
-            // this.material.apply();
-            // this.rotate(-Math.PI/2, 1, 0, 0);
-            // this.quad.display();
-            // this.popMatrix();
+            this.pushMatrix();
+            this.translate(-9, 2.5, 0);
+            this.rotate(Math.PI/2, 0, 1, 0);
+            this.scale(1.5, 1.5, 0.5);
+            this.scoreboard.display();
+            this.popMatrix();
 
         }
         else {

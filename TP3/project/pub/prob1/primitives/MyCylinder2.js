@@ -23,8 +23,8 @@ class MyCylinder2 extends CGFobject{
         this.cylinderTop = this.createCylinderTop();
         this.cylindeBottom = this.createCylinderBottom();
         
-        this.baseCover = new MyCylinderBase(scene, slices, this.base);
-        this.topCover = new MyCylinderBase(scene, slices, this.top);
+        // this.baseCover = new MyCylinderBase(scene, slices, this.base);
+        // this.topCover = new MyCylinderBase(scene, slices, this.top);
     }
 
     /**
@@ -82,21 +82,21 @@ class MyCylinder2 extends CGFobject{
      */
     
     display(){
-        this.scene.pushMatrix();
-        this.scene.rotate(Math.PI/this.slices, 1, 0, 0);
-        this.scene.rotate(Math.PI/this.slices, 1, 0, 0);
-        this.baseCover.display();
-        this.scene.popMatrix();
+        // this.scene.pushMatrix();
+        // this.scene.rotate(Math.PI/this.slices, 1, 0, 0);
+        // this.scene.rotate(Math.PI/this.slices, 1, 0, 0);
+        // this.baseCover.display();
+        // this.scene.popMatrix();
 
 
         this.cylinderTop.display();
         this.cylindeBottom.display();
 
-        this.scene.pushMatrix();
-        this.scene.rotate(Math.PI/this.slices, 1, 0, 0);
-        this.scene.translate(0, 0, this.height);
-        this.topCover.display();
-        this.scene.popMatrix();
+        // this.scene.pushMatrix();
+        // this.scene.rotate(Math.PI/this.slices, 1, 0, 0);
+        // this.scene.translate(0, 0, this.height);
+        // this.topCover.display();
+        // this.scene.popMatrix();
     }
 
     updateCoords(){
