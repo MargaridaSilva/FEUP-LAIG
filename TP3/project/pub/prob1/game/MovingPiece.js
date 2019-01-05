@@ -15,23 +15,13 @@ class MovingPiece extends CGFobject {
         this.end = true;
     }
     
-    display(){        
-        this.piece = Piece.pieces[this.state];
-
+    display(){
         let row = this.pos[0];
         let col = this.pos[1];
 
-
-        this.scene.pushMatrix();
-        this.scene.translate(col, this.height, row);
-
-        if(this.piece != undefined){
-            this.piece.setId(this.id);
-            this.piece.display();
-        } 
-
-        this.scene.popMatrix();
-
+        let info = [[col, this.height, row], this.id];
+        
+        Piece.registerForDisplay(this.state, info);
     }
 
     updateCoords(s, t){
@@ -44,10 +34,20 @@ class MovingPiece extends CGFobject {
         else{
             this.span = 1100;
         }
+        
         this.cell = cell;
+
         let row = cell.pos.row;
         let col = cell.pos.col;
+
         let vec = [row - this.pos[0], col - this.pos[1]];
+        
+        if (this.cell.state != 'empty'){
+            let normal = vec.slice();
+            normal = normal.normalize().mult(0.7);
+            vec = vec.minus(normal);
+        }
+
         this.v = vec.div(this.span);
         this.t = 0;
 
