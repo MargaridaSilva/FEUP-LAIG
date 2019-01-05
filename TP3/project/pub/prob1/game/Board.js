@@ -73,11 +73,11 @@ class Board extends CGFobject {
     display() {
 
         this.scene.pushMatrix();
-        /*
+        
         this.scene.translate(-this.dim / 2, 0, -this.dim / 2);
         this.scene.translate(-0.5, 0, -0.5);
         this.scene.translate(0, 0.01, 0);
-*/
+
         // draw Pieces
         Piece.cleanRegisteredPiecesForDisplay();
         

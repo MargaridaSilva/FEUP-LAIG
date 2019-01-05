@@ -53,7 +53,7 @@ class Piece extends CGFobject {
                     let zombieLevel = Piece.pieces[state].state;
                     if (zombieLevel != Piece.shader.uniforms.zombieLevel)
                         Piece.shader.setUniformsValues({zombieLevel: zombieLevel});
-                    console.log(zombieLevel, state);
+                    //console.log(zombieLevel, state);
                     
                     for (let j = 0; j < Piece.piecesToDisplay[state].length; j++){
                         let piece = Piece.pieces[state];
@@ -73,7 +73,7 @@ class Piece extends CGFobject {
         this.material.apply();
         this.scene.pushMatrix();
 
-        this.scene.translate(0,0,0);
+        this.scene.translate(pos[0], pos[1], pos[2]);
         this.scene.translate(0, 0.3, 0);
         this.scene.registerForPick(id, this.object);
         this.object.display();
