@@ -107,6 +107,7 @@ class Game extends CGFobject {
             1: {mov: 'rAliv', zom: 'rDead'},
         };
 
+        console.log(symbol[player]);
         return symbol[player][moveType];
     }
 
@@ -147,7 +148,7 @@ class Game extends CGFobject {
     watchMovie(){
         this.watchMovieMode = true;
         this.scene.fastMode = true;
-        this.watchStack = this.stateStack.slice();
+        this.watchStack = this.stateStack.slice(1);
         this.start(this.dim, this.firstPlayer, this.gameMode, this.AI);
     }
 

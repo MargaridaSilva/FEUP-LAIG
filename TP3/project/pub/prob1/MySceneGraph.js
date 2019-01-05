@@ -1558,16 +1558,16 @@ class MySceneGraph {
 
     update(dt) {
 
-        for (let key in this.components) {
-            let comp = this.components[key];
-            if (comp.animations != undefined && comp.animations.length > 0) {
-                let index = comp.activeAnimation;
-                let ret = comp.animations[index].update(dt);
-                if (ret == 0 && comp.activeAnimation < comp.animations.length - 1) {
-                    comp.activeAnimation++;
-                }
-            }
-        }
+        // for (let key in this.components) {
+        //     let comp = this.components[key];
+        //     if (comp.animations != undefined && comp.animations.length > 0) {
+        //         let index = comp.activeAnimation;
+        //         let ret = comp.animations[index].update(dt);
+        //         if (ret == 0 && comp.activeAnimation < comp.animations.length - 1) {
+        //             comp.activeAnimation++;
+        //         }
+        //     }
+        // }
     }
 
 }
