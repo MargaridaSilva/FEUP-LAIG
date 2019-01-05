@@ -91,8 +91,7 @@ class Game extends CGFobject {
 
     updateMovement(){
         let move = this.state.move;
-        let currentSymbol = this.getSymbol(this.state.moveType, this.state.previousPlayer);
-        this.board.movePieceToCell(move[0], move[1], currentSymbol);
+        this.board.movePieceToCell(move[0], move[1], this.state.previousPlayer);
 
         if(this.state.moveTypemoveType == 'zom'){
             switch(this.state.currentPlayer){
@@ -112,11 +111,12 @@ class Game extends CGFobject {
     }
 
     handlePicking(pickedElements){
-
+        
         let picked = pickedElements[0][1];
         let playerType = this.playersType[this.state.currentPlayer];
 
         if(picked != undefined && playerType == 'user' && !this.isMoving()){
+            
             let move = this.convertCellNumToRowAndCol(pickedElements[0][1]);
             this.logic.moveUser(move, this.getPrologBoard(), this.state.turn, this.state.currentPlayer, this);
         }
@@ -222,6 +222,7 @@ class Game extends CGFobject {
         if (num%this.dim != 0) 
             row++;
         else col = this.dim;
+        console.log(num, row, col);
         return [row, col];
     }
 

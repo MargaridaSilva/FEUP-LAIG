@@ -247,7 +247,6 @@ class XMLscene extends CGFscene {
 
 
     changeCamera(){
-        console.log(this.cameras);
         let global = Array.prototype.slice.call(this.cameras['global'].position, 0, -1);
         let player1 = Array.prototype.slice.call(this.cameras['Player1'].position, 0, -1);
         let player2 = Array.prototype.slice.call(this.cameras['Player2'].position, 0, -1);
@@ -273,7 +272,7 @@ class XMLscene extends CGFscene {
         let pickedElements = this.pickedElementsFunc();
 
         if(pickedElements){
-            console.log("Pick")
+            //console.log("Pick")
             this.game.handlePicking(pickedElements);
         }
         this.pickResults.splice(0,this.pickResults.length);
