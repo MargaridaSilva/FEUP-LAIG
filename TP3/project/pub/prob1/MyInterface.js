@@ -75,7 +75,6 @@ class MyInterface extends CGFinterface {
             'Home': 1
         }).name('Scenario').onChange(function (v) {
             self.scene.changeGraph(v);
-            self.scene.onGraphLoaded();
         });
 
         /*options.add(this.scene.interfaceValues, 'graphIndex', obj).name('Scenario').onChange(function (v) {

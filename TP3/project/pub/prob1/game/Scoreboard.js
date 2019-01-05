@@ -26,7 +26,7 @@ class Scoreboard extends CGFobject {
         this.material = new CGFappearance(this.scene);
         this.material.setAmbient(0.1, 0.1, 0.1, 1);
         this.material.setDiffuse(0.5, 0.5, 0.5, 1);
-        this.material.setSpecular(0.5, 0.5, 0.5, 1);
+        this.material.setSpecular(0.2, 0.2, 0.2, 1);
     }
 
     initTextures(){
@@ -37,7 +37,7 @@ class Scoreboard extends CGFobject {
         }
         this.textures[':'] = new CGFtexture(this.scene, `scenes/images/numbers/tile010.png`);
 
-        this.materialTexture = new CGFtexture(this.scene, `scenes/images/environments/glass.png`);
+        this.materialTexture = new CGFtexture(this.scene, `scenes/images/environments/glass2.png`);
 
         this.material.setTexture(this.materialTexture);
     }
