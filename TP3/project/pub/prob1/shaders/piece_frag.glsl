@@ -13,6 +13,4 @@ void main() {
 	gl_FragColor = vFinalColor;
 	
 	gl_FragColor.rgb = gl_FragColor.rgb / zombieLevel;
-
-	
 }

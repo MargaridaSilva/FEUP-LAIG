@@ -40,6 +40,8 @@ uniform materialProperties uFrontMaterial;
 uniform materialProperties uBackMaterial;
 uniform vec4 uGlobalAmbient;
 
+uniform float zombieLevel;
+
 vec4 lighting(vec4 vertex, vec3 E, vec3 N) {
 
     vec4 result = vec4(0.0, 0.0, 0.0, 0.0);
@@ -113,7 +115,10 @@ void main() {
 	vFinalColor = lighting(vertex, E, N);
 
 	gl_Position = uPMatrix * vertex;
-    
+    //gl_Position.xyz = gl_Position.xyz / 2.0;
+
+    //gl_Position.xyz = gl_Position.xyz + vec3(-10, 0.02, -10);
+
 	vTextureCoord = aTextureCoord;
 	vVertexPosition = aVertexPosition;
 }

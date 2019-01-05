@@ -23,10 +23,6 @@ class Board extends CGFobject {
             0: new MovingPiece(this.scene, this.dim + 2, middle+1, 'bAliv'),
             1: new MovingPiece(this.scene, -1, middle+1, 'rAliv')
         };
-
-        /* shaders */
-        this.shader = new CGFshader(this.scene.gl, "shaders/virus_vert.glsl", "shaders/virus_frag.glsl");
-        this.shader.setUniformsValues({zombieLevel: 1});
     }
 
 
@@ -75,20 +71,23 @@ class Board extends CGFobject {
     }
 
     display() {
+
         this.scene.pushMatrix();
+        /*
         this.scene.translate(-this.dim / 2, 0, -this.dim / 2);
         this.scene.translate(-0.5, 0, -0.5);
         this.scene.translate(0, 0.01, 0);
-
-        // draw objects
-        this.scene.setActiveShader(this.shader);
+*/
+        // draw Pieces
+        Piece.cleanRegisteredPiecesForDisplay();
+        
         for (let row = 1; row <= this.dim; row++) {
             for (let col = 1; col <= this.dim; col++) {
-                this.cells[row][col].display(this.shader);
+                this.cells[row][col].display();
             }
         }
         this.displayPiecesHolder();
-        this.scene.setActiveShader(this.scene.defaultShader);
+        Piece.displayRegisteredPieces();
         
         this.scene.popMatrix();
 
@@ -141,7 +140,6 @@ class Board extends CGFobject {
     }
 
     revertStateAt(row, col) {
-        console.log(parseInt(row) - 1);
         return this.cells[parseInt(row)][parseInt(col)].revertState();
     }
 

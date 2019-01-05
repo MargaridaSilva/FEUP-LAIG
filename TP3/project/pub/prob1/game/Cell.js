@@ -16,7 +16,7 @@ class Cell extends CGFobject {
         return this.state;
     }
     
-    display(shader){
+    display(){
                
         this.piece = Piece.pieces[this.state];
         
@@ -31,6 +31,7 @@ class Cell extends CGFobject {
             this.scene.graph.materials.black.apply();
         }
 
+        /* Display board cell */
         this.scene.pushMatrix();
 
         this.scene.translate(col, 0, row);
@@ -39,14 +40,16 @@ class Cell extends CGFobject {
         if(this.scene.pickMode == true){
             this.object.display();
         }
-
-        if(this.piece != undefined){
-            this.piece.setId(this.id);
-            console.log(this.piece.state);
-            shader.setUniformsValues({zombieLevel: this.piece.state}); 
-            this.piece.display();
-        } 
         this.scene.popMatrix();
+
+        /* Display board piece */
+        
+        let info = [[col, 0, row], this.id];
+
+        if(this.state != 'empty'){
+            Piece.registerForDisplay(this.state, info);
+        } 
+        
     }
 
     toString(){

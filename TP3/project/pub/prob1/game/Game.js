@@ -111,11 +111,12 @@ class Game extends CGFobject {
     }
 
     handlePicking(pickedElements){
-
+        
         let picked = pickedElements[0][1];
         let playerType = this.playersType[this.state.currentPlayer];
 
         if(picked != undefined && playerType == 'user' && !this.isMoving()){
+            
             let move = this.convertCellNumToRowAndCol(pickedElements[0][1]);
             this.logic.moveUser(move, this.getPrologBoard(), this.state.turn, this.state.currentPlayer, this);
         }
@@ -221,6 +222,7 @@ class Game extends CGFobject {
         if (num%this.dim != 0) 
             row++;
         else col = this.dim;
+        console.log(num, row, col);
         return [row, col];
     }
 
