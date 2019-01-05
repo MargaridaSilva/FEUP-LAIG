@@ -120,9 +120,8 @@ getNewSymbol(Player, CurrentSymbol, NewSymbol):-
 
 choose_move(Board, Player-_, 1, Move) :-
 	valid_moves(Board, Player, ListOfMoves),
-	write(ListOfMoves),
     length(ListOfMoves, Len),
-    random(0, Len, Random),
+	random(0, Len, Random),
     nth0(Random, ListOfMoves, Move).
 
 choose_move(Board, Player-Turn, 2, Move):-

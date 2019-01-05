@@ -80,7 +80,7 @@ moveUser(Move, Board, Turn, Player, "invalid", -1, Turn, Player, NewSymbol) :-
 	getSymbol(Board, Move, NewSymbol).
 
 moveComputer(Board, Turn, Player, AI, MoveType, Pos, NewTurn, NewPlayer, NewSymbol) :-
-	ai(Board, Player-Turn, AI, Pos),
+	choose_move(Board, Player-Turn, AI, Pos),
 	getSymbol(Board, Pos, Symbol), 
 	getMoveType(Symbol, MoveType),
 	makeMove(Board, Player, Pos, NewBoard),
