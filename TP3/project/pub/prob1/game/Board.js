@@ -8,20 +8,15 @@ class Board extends CGFobject {
         this.cells = [];
         this.pieces = [];
 
+        this.initCells();
         this.initMaterials();
 
-        this.initCells();
         Piece.initPieces(this.scene);
 
         this.quad = new MyPlane(this.scene, 50, 50);
         this.cube = new MyCube(this.scene, 50);
 
-        let middle = Math.floor(this.dim / 2);
-
-        this.piecesHolder = {
-            0: new MovingPiece(this.scene, this.dim + 2, middle+1, 'bAliv'),
-            1: new MovingPiece(this.scene, -1, middle+1, 'rAliv')
-        };
+        this.initPiecesHolder();
     }
 
 
@@ -40,6 +35,7 @@ class Board extends CGFobject {
     }
 
     initCells() {
+        this.cells = [];
         for (let row = 1; row <= this.dim; row++) {
             this.cells[row] = [];
             for (let col = 1; col <= this.dim; col++) {
@@ -48,24 +44,44 @@ class Board extends CGFobject {
         }
     }
 
+    initPiecesHolder(){
+        let middle = Math.floor(this.dim / 2);
+        this.piecesHolder = {
+            0: new MovingPiece(this.scene, 11-(9-this.dim)/2, middle+1, 'bAliv'),
+            1: new MovingPiece(this.scene, -1-(9-this.dim)/2, middle+1, 'rAliv')
+        };
+    }
+
+    changeDim(newDim){
+        this.dim = newDim;
+        this.initCells();
+        this.initPiecesHolder();
+    }
 
     initCellsState(board) {
+        //console.log(this.cells);
+
         let noSpaceBoard = board.replace(/ +?/g, '');
         let reg = /cell\((\d),(\d),(\w+)\)/g;
         let match;
+
+        //console.log(board);
 
         while (match = reg.exec(noSpaceBoard)) {
             let row = parseInt(match[1]);
             let col = parseInt(match[2]);
             let state = match[3];
             this.cells[row][col].setState(state);
+            //console.log(row, col);
         }
+
+        //console.log(this.cells);
+
     }
 
     display() {
 
         this.scene.pushMatrix();
-        
         this.scene.translate(-this.dim / 2, 0, -this.dim / 2);
         this.scene.translate(-0.5, 0, -0.5);
         this.scene.translate(0, 0.01, 0);
@@ -87,7 +103,7 @@ class Board extends CGFobject {
         this.scene.pushMatrix();
         this.boardMaterial.apply();
         this.scene.scale(this.dim, 1, this.dim);
-        this.quad.display();
+        //this.quad.display();
         this.scene.popMatrix();
 
         this.scene.pushMatrix();
