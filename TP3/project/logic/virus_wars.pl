@@ -154,7 +154,8 @@ checkMoveChain(Player, [Row, Col], Board) :-
 	asserta(visited([Row, Col])),
 
 	playerValue(Player, Symbol),
-	playerValueZ(Player, SymbolZ),
+	opponent(Player, Opponent),
+	playerValueZ(Opponent, SymbolZ),
 
 	between(-1, 1, ROffset), between(-1, 1, COffset),
 	not((ROffset = 0, COffset = 0)),

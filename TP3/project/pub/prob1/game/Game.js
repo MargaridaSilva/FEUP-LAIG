@@ -118,9 +118,8 @@ class Game extends CGFobject {
     updateMovement(){
         let move = this.state.move;
         this.board.movePieceToCell(move[0], move[1], this.state.previousPlayer);
-
-        if(this.state.moveTypemoveType == 'zom'){
-            switch(this.state.currentPlayer){
+        if(this.state.moveType == 'zom'){
+            switch(this.state.previousPlayer){
                 case 0: this.scoreboard.incrementScorePlayer1(); break;
                 case 1: this.scoreboard.incrementScorePlayer2(); break;
             }            
@@ -140,7 +139,7 @@ class Game extends CGFobject {
         let picked = pickedElements[0][1];
         let playerType = this.playersType[this.state.currentPlayer];
 
-        if(picked != undefined && playerType == 'user' && !this.isMoving()){
+        if(!this.state.isOver && picked != undefined && playerType == 'user' && !this.isMoving()){
             
             let move = this.convertCellNumToRowAndCol(pickedElements[0][1]);
             this.logic.moveUser(move, this.getPrologBoard(), this.state.turn, this.state.currentPlayer, this);
@@ -150,7 +149,8 @@ class Game extends CGFobject {
 
 
     dispatchComputerMoves(){
-        if (this.playersType[this.state.currentPlayer] == 'computer' && !this.isMoving()){
+        console.log(this.state.isOver);
+        if (!this.state.isOver && this.playersType[this.state.currentPlayer] == 'computer' && !this.isMoving()){
             this.logic.moveComputer(this.getPrologBoard(), this.state.turn, this.state.currentPlayer, this.AI + 1, this);
         }
     }

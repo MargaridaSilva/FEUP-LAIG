@@ -28,6 +28,8 @@ class MovingPiece extends CGFobject {
     }
 
     move(cell){
+        this.height = 0;
+        
         if(this.scene.fastMode){
             this.span = 500;
         }
