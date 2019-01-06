@@ -75,7 +75,7 @@ class XMLscene extends CGFscene {
 
 
         this.camera = this.cameras[this.graph.views_default];
-        this.interface.setActiveCamera(this.camera);
+        //this.interface.setActiveCamera(this.camera);
         this.cameraAnimation = new CameraAnimation(this, this.camera);
     }
 
@@ -172,7 +172,7 @@ class XMLscene extends CGFscene {
         this.initLights();  
         
         this.scoreboard = new Scoreboard(this);
-        this.game = new Game(this, 9, 1);
+        this.game = new Game(this, 7, 1);
         let game = this.game;
 
         this.interfaceValues = {
@@ -181,7 +181,7 @@ class XMLscene extends CGFscene {
             graphIndex: this.graphIndex,
             camera: 0,
             automaticCamera: true,
-            turnTime: 10,
+            turnTime: 30,
             gameMode: 0,
             difficulty: 0,
             player: 0,
@@ -276,7 +276,6 @@ class XMLscene extends CGFscene {
         this.applyViewMatrix();
 
         this.pushMatrix();
-        this.axis.display();
 
         if (this.sceneInited) {
             let position = this.cameraAnimation.getPostition();
