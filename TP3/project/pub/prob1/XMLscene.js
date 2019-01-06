@@ -251,11 +251,9 @@ class XMLscene extends CGFscene {
      * Displays the scene.
      */
     display() {
-        // this.logPicking();
         let pickedElements = this.pickedElementsFunc();
 
         if(pickedElements){
-            //console.log("Pick")
             this.game.handlePicking(pickedElements);
         }
         this.pickResults.splice(0,this.pickResults.length);

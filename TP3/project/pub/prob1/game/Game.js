@@ -267,7 +267,6 @@ class Game extends CGFobject {
         if (num%this.dim != 0) 
             row++;
         else col = this.dim;
-        console.log(row, col);
         return [row, col];
     }
 
