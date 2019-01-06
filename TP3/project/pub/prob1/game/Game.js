@@ -19,20 +19,21 @@ class Game extends CGFobject {
         this.state = [];
         this.stateStack = [];
         this.gameStart = false;
+
+        this.board = new Board(this.scene, this.dim, this.div);
     }
     start(dim, currentPlayer, gameMode, AI){
         /* Game Properties */
         this.dim = dim;
         this.firstPlayer = currentPlayer;
         this.gameMode = gameMode;
-        this.AI = parseInt(AI) + 1;
-        this.board = new Board(this.scene, this.dim, this.div);
+        this.AI = parseInt(AI);
         this.playersType = this.playersTypes[gameMode];
 
         /* Game State */
         this.gameStart = true;
         this.updateState(currentPlayer, this.numTurns, null, null, false, null);
-        this.printGameState();
+        // this.printGameState();
 
         /* Game Logic */
         this.logic.start(this.dim, this.dim, this);
@@ -127,7 +128,7 @@ class Game extends CGFobject {
 
     dispatchComputerMoves(){
         if (this.playersType[this.state.currentPlayer] == 'computer' && !this.isMoving()){
-            this.logic.moveComputer(this.getPrologBoard(), this.state.turn, this.state.currentPlayer, this.AI, this);
+            this.logic.moveComputer(this.getPrologBoard(), this.state.turn, this.state.currentPlayer, this.AI + 1, this);
         }
     }
 
@@ -161,7 +162,7 @@ class Game extends CGFobject {
             if(this.watchMovieMode && !this.isMoving()){
                 if(this.watchStack.length == 0){
                     this.watchMovieMode = false;
-                    this.scene.fastMode = false;
+                    this.scene.fastMode = true;
                 }
                 else{
                     let state = this.watchStack.shift();
@@ -223,7 +224,6 @@ class Game extends CGFobject {
         if (num%this.dim != 0) 
             row++;
         else col = this.dim;
-        console.log(num, row, col);
         return [row, col];
     }
 
@@ -233,7 +233,7 @@ class Game extends CGFobject {
         console.log("Turn: "+ this.state.turn);
         console.log("Is Over?: "+ this.state.isOver);
         console.log("Board: "+ this.state.boardPL);
-        console.log("AI: "+ this.AI);
+        console.log("AI: "+ this.AI + 1);
         console.log("Players Type: " + this.playersType);
 
     }

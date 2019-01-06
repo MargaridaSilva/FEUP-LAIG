@@ -9,7 +9,6 @@ class Board extends CGFobject {
         this.pieces = [];
 
         this.initMaterials();
-        this.initTextures();
 
         this.initCells();
         Piece.initPieces(this.scene);
@@ -31,19 +30,13 @@ class Board extends CGFobject {
         this.boardMaterial.setSpecular(1, 1, 1, 1);
         this.boardMaterial.setAmbient(0.1, 0.1, 0.1, 1);
         this.boardMaterial.setDiffuse(0.6, 0.6, 0.6, 1);
+        this.boardMaterial.setTexture(this.scene.graph.textures['board']);
 
         this.coverMaterial = new CGFappearance(this.scene);
         this.coverMaterial.setSpecular(1, 1, 1, 1);
         this.coverMaterial.setAmbient(0.1, 0.1, 0.1, 1);
         this.coverMaterial.setDiffuse(0.6, 0.6, 0.6, 1);
-    }
-
-    initTextures() {
-        this.boardTexture = new CGFtexture(this.scene, "scenes/images/board_wood.png");
-        this.boardMaterial.setTexture(this.boardTexture);
-
-        this.coverTexture = new CGFtexture(this.scene, "scenes/images/cover_wood.jpg");
-        this.coverMaterial.setTexture(this.coverTexture);
+        this.coverMaterial.setTexture(this.scene.graph.textures['cover_wood']);
     }
 
     initCells() {
@@ -65,7 +58,7 @@ class Board extends CGFobject {
             let row = parseInt(match[1]);
             let col = parseInt(match[2]);
             let state = match[3];
-            this.cells[row][col].changeState(state);
+            this.cells[row][col].setState(state);
         }
     }
 

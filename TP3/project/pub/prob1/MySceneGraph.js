@@ -92,6 +92,17 @@ class MySceneGraph {
             return;
         }
 
+        //Load default textures
+        this.textures["warning"] = new CGFtexture(this.scene, "scenes/images/warning.jpg");
+
+        for(let i = 0; i < 10; i++){
+            this.textures[i] = new CGFtexture(this.scene, `scenes/images/numbers/tile00${i}.png`);
+        }
+        this.textures[':'] = new CGFtexture(this.scene, `scenes/images/numbers/tile010.png`);
+        this.textures['glass'] = new CGFtexture(this.scene, `scenes/images/environments/glass2.png`);
+
+
+        
         this.loadedOk = true;
 
         // As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
@@ -549,8 +560,6 @@ class MySceneGraph {
         this.textures = [];
         this.textureIds = [];
         let error;
-
-        this.textures["warning"] = new CGFtexture(this.scene, "scenes/images/warning.jpg");
 
         for (let i = 0; i < children.length; i++) {
             if (children[i].nodeName == "texture") {

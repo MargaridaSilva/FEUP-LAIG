@@ -44,16 +44,6 @@ class XMLscene extends CGFscene {
         this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
 
         this.setPickEnabled(true);
-
-        this.scoreboard = new Scoreboard(this);
-        this.quad = new MyQuad(this, -1, -1, 1, 1);
-        this.material = new CGFappearance(this);
-        this.material.setSpecular(1, 1, 1, 1);
-        this.material.setAmbient(1, 1, 1, 1);
-        this.material.setDiffuse(0, 0, 0, 1);
-        this.texture = new CGFtexture(this, "scenes/images/board3.png"); 
-        this.material.setTexture(this.texture);
-
     }
 
     /**
@@ -162,9 +152,6 @@ class XMLscene extends CGFscene {
     onGraphLoaded() {
         this.changeGraph(this.graphIndex);
 
-        this.game = new Game(this, 9, 1);
-
-        this.setUpdatePeriod(60);
         this.time = 0;
 
         this.axis = new CGFaxis(this, this.graph.values.scene.axis_length);
@@ -175,6 +162,16 @@ class XMLscene extends CGFscene {
         var ambient = this.graph.ambient.ambient;
         this.setGlobalAmbientLight(ambient.r, ambient.g, ambient.b, ambient.a);
 
+        
+
+        this.initCameras();
+
+        this.lights = [];
+
+        this.initLights();  
+        
+        this.scoreboard = new Scoreboard(this);
+        this.game = new Game(this, 9, 1);
         let game = this.game;
 
         this.interfaceValues = {
@@ -193,20 +190,13 @@ class XMLscene extends CGFscene {
             watchMovie: function(){game.watchMovie()}
         }
 
-        this.initCameras();
-
-        this.lights = [];
-
-        this.initLights();
-
-        // Adds lights group.
-        
-        
         if (!this.sceneInited){
             this.interface.addGameButtons();
             this.interface.addLightsGroup(Array.prototype.merge(this.graph.omniLights, this.graph.spotLights));
         }
-        
+
+        this.setUpdatePeriod(60);
+
         this.sceneInited = true;
     }
 

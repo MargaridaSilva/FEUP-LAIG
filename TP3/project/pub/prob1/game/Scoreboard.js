@@ -13,7 +13,7 @@ class Scoreboard extends CGFobject {
         this.scoreboard = new MyQuad(scene, -1, -1, 1, 1);
 
         this.initMaterial();
-        this.initTextures();
+        this.textures = this.scene.graph.textures;
 
         this.enable = false;
     }
@@ -29,21 +29,8 @@ class Scoreboard extends CGFobject {
         this.material.setSpecular(0.2, 0.2, 0.2, 1);
     }
 
-    initTextures(){
-        this.textures = [];
-
-        for(let i = 0; i < 10; i++){
-            this.textures[i] = new CGFtexture(this.scene, `scenes/images/numbers/tile00${i}.png`);
-        }
-        this.textures[':'] = new CGFtexture(this.scene, `scenes/images/numbers/tile010.png`);
-
-        this.materialTexture = new CGFtexture(this.scene, `scenes/images/environments/glass2.png`);
-
-        this.material.setTexture(this.materialTexture);
-    }
-
     display(){
-        this.material.setTexture(this.materialTexture);
+        this.material.setTexture(this.textures.glass);
         this.material.apply();
 
         this.scene.pushMatrix();
