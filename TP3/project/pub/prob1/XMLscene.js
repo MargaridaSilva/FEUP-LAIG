@@ -186,7 +186,7 @@ class XMLscene extends CGFscene {
             difficulty: 0,
             player: 0,
             boardDim: 7,
-            startGame: function(){game.start(this.boardDim, this.player, this.gameMode, this.difficulty)},
+            startGame: function(){game.start(this.boardDim, this.player, this.gameMode, this.difficulty, this.turnTime)},
             undoMove: function(){game.backToPreviousState()},
             watchMovie: function(){game.watchMovie()}
         }
