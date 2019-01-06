@@ -115,7 +115,7 @@ class MyInterface extends CGFinterface {
         optionsGroup.add(this.scene.interfaceValues, 'player', {
             'Player 1': 0,
             'Player 2': 1
-        }).name('Player');
+        }).name('First Player');
 
         let gameActionsGroup = this.gui.addFolder('Game Actions');
         gameActionsGroup.open();
