@@ -133,8 +133,8 @@ getPlayerSymbol(Player, Symbol) :-
 %       Translate player and status and its state to string     
 playerValue(0, 'bAliv').
 playerValue(1, 'rAliv').
-playerValueZ(0, 'rDead').
-playerValueZ(1, 'bDead').
+playerValueZ(0, 'bDead').
+playerValueZ(1, 'rDead').
 
 % symbol(+String, -Symbol)
 %   Translate internal representation to a symbol
