@@ -2,6 +2,7 @@ class GameInterface{
 
 	start(Row, Col, game){
 		let requestString="[play, ["+Row+","+Col+"]]";
+		//console.log(requestString);
 		let request = new XMLHttpRequest();
 		request.open('POST', '../../game', true);
 		request.onload = function(data) {

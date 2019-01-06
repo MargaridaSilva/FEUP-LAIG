@@ -98,7 +98,7 @@ class MyInterface extends CGFinterface {
         let optionsGroup = this.gui.addFolder("Game Properties");
         optionsGroup.open();
 
-        optionsGroup.add(this.scene.interfaceValues, 'boardDim', 5, 20).name('Board Dimension').step(1);
+        optionsGroup.add(this.scene.interfaceValues, 'boardDim', 5, 10).name('Board Dimension').step(1);
         optionsGroup.add(this.scene.interfaceValues, 'turnTime', 30, 300).name('Turn Timeout');
         optionsGroup.add(this.scene.interfaceValues, 'gameMode', {
             'Single Player': 0,

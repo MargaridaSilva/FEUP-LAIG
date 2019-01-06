@@ -6,6 +6,12 @@ class Cell extends CGFobject {
         this.state = 'empty';
         this.object = new MyPlane(scene, div, div);
         this.id = id;
+
+        Cell.boardMaterial = new CGFappearance(this.scene);
+        Cell.boardMaterial.setSpecular(1, 1, 1, 1);
+        Cell.boardMaterial.setAmbient(0.1, 0.1, 0.1, 1);
+        Cell.boardMaterial.setDiffuse(0.6, 0.6, 0.6, 1);
+        Cell.boardMaterial.setTexture(this.scene.graph.textures['cell']);
     }
 
     setState(newState){
@@ -16,8 +22,8 @@ class Cell extends CGFobject {
         return this.state;
     }
     
-    display(){
-               
+    display(dim){
+        
         this.piece = Piece.pieces[this.state];
         
         let row = this.pos.row;
@@ -37,9 +43,10 @@ class Cell extends CGFobject {
         this.scene.translate(col, 0, row);
         this.scene.registerForPick(this.id, this.object);
 
-        if(this.scene.pickMode == true){
+        //if(this.scene.pickMode == true){
+            Cell.boardMaterial.apply();
             this.object.display();
-        }
+        //}
         this.scene.popMatrix();
 
         /* Display board piece */
@@ -88,3 +95,4 @@ class Cell extends CGFobject {
             this.state = 'rAliv';
     }
 }
+

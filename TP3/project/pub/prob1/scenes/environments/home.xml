@@ -65,6 +65,7 @@
 		<texture id="floor" file="scenes/images/environments/homeFloor.jpg" />
 		<texture id="wall" file="scenes/images/environments/homeWall.jpg" />
 		<texture id="fur" file="scenes/images/environments/fur.jpg" />
+		<texture id="cell" file="scenes/images/cell.jpg" />
 	</textures>
 
 	<!-- ________________ MATERIALS __________________ -->
