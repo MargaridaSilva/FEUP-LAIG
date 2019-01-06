@@ -117,6 +117,13 @@
 	<animations>
 	</animations>
 
+	<!-- ___________________ GAME _____________________ -->
+	
+	<game>
+		<board baseTexture="cover_wood" cellTexture="cell"/>
+		<pieces model="virus" player1Material="blue" player2Material="red"/>
+	</game>
+
 	<!-- ________________ PRIMITIVES __________________ -->
 
 	<primitives>
@@ -574,7 +581,7 @@
 			</materials>
 			<texture id="inherit" length_s="1.0" length_t="1.0" />
 			<children>
-				<rectangleref id="rec" />
+				<componentref id="rec" />
 			</children>
 		</component>
 

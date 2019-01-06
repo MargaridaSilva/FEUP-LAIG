@@ -21,17 +21,11 @@ class Board extends CGFobject {
 
 
     initMaterials() {
-        this.boardMaterial = new CGFappearance(this.scene);
-        this.boardMaterial.setSpecular(1, 1, 1, 1);
-        this.boardMaterial.setAmbient(0.1, 0.1, 0.1, 1);
-        this.boardMaterial.setDiffuse(0.6, 0.6, 0.6, 1);
-        this.boardMaterial.setTexture(this.scene.graph.textures['board']);
-
         this.coverMaterial = new CGFappearance(this.scene);
         this.coverMaterial.setSpecular(1, 1, 1, 1);
         this.coverMaterial.setAmbient(0.1, 0.1, 0.1, 1);
         this.coverMaterial.setDiffuse(0.6, 0.6, 0.6, 1);
-        this.coverMaterial.setTexture(this.scene.graph.textures['cover_wood']);
+        this.coverMaterial.setTexture(this.scene.graph.game.board.base);
     }
 
     initCells() {
@@ -59,23 +53,16 @@ class Board extends CGFobject {
     }
 
     initCellsState(board) {
-        //console.log(this.cells);
-
         let noSpaceBoard = board.replace(/ +?/g, '');
         let reg = /cell\((\d),(\d),(\w+)\)/g;
         let match;
-
-        //console.log(board);
 
         while (match = reg.exec(noSpaceBoard)) {
             let row = parseInt(match[1]);
             let col = parseInt(match[2]);
             let state = match[3];
             this.cells[row][col].setState(state);
-            //console.log(row, col);
         }
-
-        //console.log(this.cells);
 
     }
 
@@ -97,13 +84,6 @@ class Board extends CGFobject {
         this.displayPiecesHolder();
         Piece.displayRegisteredPieces();
         
-        this.scene.popMatrix();
-
-
-        this.scene.pushMatrix();
-        this.boardMaterial.apply();
-        this.scene.scale(this.dim, 1, this.dim);
-        //this.quad.display();
         this.scene.popMatrix();
 
         this.scene.pushMatrix();

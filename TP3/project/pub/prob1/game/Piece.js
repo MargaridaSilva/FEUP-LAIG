@@ -4,7 +4,7 @@ class Piece extends CGFobject {
         super(scene);
         Piece.scene = scene;
         this.object = object;
-        this.material = this.scene.graph.materials[player];
+        this.material = this.scene.graph.game.pieces.players[player];
         this.type = type;
         this.state = type;
         if (this.state == 3)
@@ -17,12 +17,12 @@ class Piece extends CGFobject {
 
     static initPieces(scene){
         let virus = new Virus(scene);
-        Piece.pieces['bAliv'] =  new Piece(scene, virus, 'blue', 1);
-        Piece.pieces['bDead'] =  new Piece(scene, virus, 'blue', 2);
-        Piece.pieces['bDeadProg'] =  new Piece(scene, virus, 'blue', 3);
-        Piece.pieces['rAliv'] =  new Piece(scene, virus, 'red', 1);
-        Piece.pieces['rDead'] =  new Piece(scene, virus, 'red', 2);
-        Piece.pieces['rDeadProg'] =  new Piece(scene, virus, 'red', 3);
+        Piece.pieces['bAliv'] =  new Piece(scene, virus, 0, 1);
+        Piece.pieces['bDead'] =  new Piece(scene, virus, 0, 2);
+        Piece.pieces['bDeadProg'] =  new Piece(scene, virus, 0, 3);
+        Piece.pieces['rAliv'] =  new Piece(scene, virus, 1, 1);
+        Piece.pieces['rDead'] =  new Piece(scene, virus, 1, 2);
+        Piece.pieces['rDeadProg'] =  new Piece(scene, virus, 1, 3);
 
     }
 

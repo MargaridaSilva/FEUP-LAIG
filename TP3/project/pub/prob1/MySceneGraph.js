@@ -49,8 +49,8 @@ class MySceneGraph {
         Não espera que o ficheiro seja carregado
         */
 
-        this.tagNames = ["scene", "views", "ambient", "lights", "textures", "materials", "transformations", "animations", "primitives", "components"];
-        this.functionVect = [this.parseScene, this.parseViews, this.parseAmbient, this.parseLights, this.parseTextures, this.parseMaterials, this.parseTransformations, this.parseAnimations, this.parsePrimitives, this.parseComponents];
+        this.tagNames = ["scene", "views", "ambient", "lights", "textures", "materials", "transformations", "animations", "game", "primitives", "components"];
+        this.functionVect = [this.parseScene, this.parseViews, this.parseAmbient, this.parseLights, this.parseTextures, this.parseMaterials, this.parseTransformations, this.parseAnimations, this.parseGame, this.parsePrimitives, this.parseComponents];
 
         this.primitiveParse = {
             "rectangle": this.parseRectangle,
@@ -143,6 +143,7 @@ class MySceneGraph {
     processNode(tagIndex, nodeNames, nodes) {
         let error;
         let index;
+
         if ((index = nodeNames.indexOf(this.tagNames[tagIndex])) == -1)
             return "tag <" + this.tagNames[tagIndex] + "> missing";
         else {
@@ -823,6 +824,72 @@ class MySceneGraph {
             else this.onXMLMinorError("inappropriate tag <" + children[i].nodeName + "> in animations node was ignored");
         }
         this.log("Parsed Animations");
+    }
+
+    parseGame(gameNode){
+
+        /* ------------------- Board ------------------ */
+
+        let children = gameNode.children;
+        if (children[0].nodeName != 'board')
+            return 'Game <board> tag missing';
+
+        /* Base Texture */
+        let baseTexture = this.reader.getString(children[0], 'baseTexture');
+        if (!this.textures.hasOwnProperty(baseTexture))
+            return "texture not found for baseTexture of game";
+        else baseTexture = this.textures[baseTexture];
+
+        /* Cell Texture */
+
+        let cellTexture = this.reader.getString(children[0],'cellTexture');
+        if (!this.textures.hasOwnProperty(cellTexture))
+            return "texture not found for baseTexture of game";
+        else cellTexture = this.textures[cellTexture];
+        
+
+        /* ------------------- Pieces ------------------ */
+
+
+        /* Model */
+
+        if (children[1].nodeName != 'pieces')
+            return 'Game <pieces> tag missing';
+
+        let model = this.reader.getString(children[1], 'model');
+
+        try{
+            model = new CGFOBJModel(this.scene, 'scenes/models/' + model + '.obj');
+        } catch(e){
+            return "model not found for game";
+        }
+
+        /* Players */
+
+            /* Player 1 */
+        let player1 = this.reader.getString(children[1], 'player1Material');
+
+        if (!this.materials.hasOwnProperty(player1))
+            return "material not found for player1Material of game";
+        else player1 = this.materials[player1];
+
+            /* Player 2 */
+        let player2 = this.reader.getString(children[1], 'player2Material');
+
+        if (!this.materials.hasOwnProperty(player2))
+            return "material not found for player2Material of game";
+        else player2 = this.materials[player2];
+
+        this.game = {
+            "board": {
+                'base' : baseTexture,
+                'cell' : cellTexture
+            },
+            "pieces": {
+                "model": model,
+                "players":[player1, player2]
+            }
+        }
     }
 
     parsePrimitives(primitivesNode) {

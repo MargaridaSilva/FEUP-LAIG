@@ -65,6 +65,7 @@
 		<texture id="floor" file="scenes/images/environments/homeFloor.jpg" />
 		<texture id="wall" file="scenes/images/environments/homeWall.jpg" />
 		<texture id="fur" file="scenes/images/environments/fur.jpg" />
+		<texture id="cover_wood" file="scenes/images/cover_wood.jpg" />
 		<texture id="cell" file="scenes/images/cell.jpg" />
 	</textures>
 
@@ -120,6 +121,13 @@
 	<!-- ________________ ANIMATIONS __________________ -->
 	<animations>
 	</animations>
+
+	<!-- ___________________ GAME _____________________ -->
+	
+	<game>
+		<board baseTexture="cover_wood" cellTexture="cell"/>
+		<pieces model="virus" player1Material="blue" player2Material="red"/>
+	</game>
 
 	<!-- ________________ PRIMITIVES __________________ -->
 

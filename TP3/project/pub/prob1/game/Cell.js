@@ -11,7 +11,7 @@ class Cell extends CGFobject {
         Cell.boardMaterial.setSpecular(1, 1, 1, 1);
         Cell.boardMaterial.setAmbient(0.1, 0.1, 0.1, 1);
         Cell.boardMaterial.setDiffuse(0.6, 0.6, 0.6, 1);
-        Cell.boardMaterial.setTexture(this.scene.graph.textures['cell']);
+        Cell.boardMaterial.setTexture(this.scene.graph.game.board.cell);
     }
 
     setState(newState){
@@ -29,24 +29,15 @@ class Cell extends CGFobject {
         let row = this.pos.row;
         let col = this.pos.col;
 
-
-        if((row + col) % 2){
-            this.scene.graph.materials.white.apply();
-        }
-        else{
-            this.scene.graph.materials.black.apply();
-        }
-
         /* Display board cell */
         this.scene.pushMatrix();
 
         this.scene.translate(col, 0, row);
         this.scene.registerForPick(this.id, this.object);
 
-        //if(this.scene.pickMode == true){
-            Cell.boardMaterial.apply();
-            this.object.display();
-        //}
+        Cell.boardMaterial.apply();
+        this.object.display();
+
         this.scene.popMatrix();
 
         /* Display board piece */

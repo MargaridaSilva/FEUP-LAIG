@@ -1,7 +1,7 @@
 class Virus extends CGFobject {
     constructor(scene) {
         super(scene);
-        this.virus = new CGFOBJModel(scene, 'game/modelling/models/virus.obj');
+        this.virus = this.scene.graph.game.pieces.model;
         this.scaleFactor = 0.015;
         
     }
