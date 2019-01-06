@@ -45,7 +45,7 @@ class Board extends CGFobject {
     }
 
     initPiecesHolder(){
-        let middle = Math.floor(this.dim / 2);
+        let middle = this.dim / 2 - 0.5;
         this.piecesHolder = {
             0: new MovingPiece(this.scene, 11-(9-this.dim)/2, middle+1, 'bAliv'),
             1: new MovingPiece(this.scene, -1-(9-this.dim)/2, middle+1, 'rAliv')
