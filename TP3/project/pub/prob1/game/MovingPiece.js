@@ -68,6 +68,7 @@ class MovingPiece extends CGFobject {
                 this.height += 0.01*(0.5 - this.t/this.span)*dt*this.easeInOutCubic(this.t/this.span);
             }
             else{
+                this.scene.eventEmitter.emit('pieceAnimationEnd');
                 this.end = true;
                 this.cell.changeState(this.state);
                 this.pos = this.originalpos;

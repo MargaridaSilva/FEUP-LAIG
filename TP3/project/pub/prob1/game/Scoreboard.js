@@ -16,6 +16,7 @@ class Scoreboard extends CGFobject {
         this.textures = this.scene.graph.textures;
 
         this.enable = false;
+        this.countdownEnable = false;
     }
 
     start(){
@@ -33,6 +34,15 @@ class Scoreboard extends CGFobject {
     stop(){
         this.enable = false;
     }
+
+    stopCountdown(){
+        this.countdownEnable = false;
+    }
+
+    startCountdown(){
+        this.countdownEnable = true;
+    }
+
     initMaterial(){
         this.material = new CGFappearance(this.scene);
         this.material.setAmbient(0.1, 0.1, 0.1, 1);
@@ -140,14 +150,16 @@ class Scoreboard extends CGFobject {
 
         if(this.enable){
             this.timeMs += dt;
-        
-            if(this.countdownTimeMs > 0){
-                this.countdownTimeMs -= dt;
-            }
-            if(this.countdownTimeMs < 0){
-                this.countdownTimeMs = 0;
-                this.scene.eventEmitter.emit('zeroCountDown');
-            }
+
+            if(this.countdownEnable){
+                if(this.countdownTimeMs > 0){
+                    this.countdownTimeMs -= dt;
+                }
+                if(this.countdownTimeMs < 0){
+                    this.countdownTimeMs = 0;
+                    this.scene.eventEmitter.emit('zeroCountDown');
+                }
+            }           
         }
     }
 }

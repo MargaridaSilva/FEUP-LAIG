@@ -35,13 +35,14 @@ class Game extends CGFobject {
         this.gameStart = true;
         if(!this.watchMovieMode)
             this.updateState(currentPlayer, this.numTurns, null, null, false, null);
-        // this.printGameState();
 
         /* Game Logic */
         this.logic.start(this.dim, this.dim, this);
 
         this.scoreboard.reset();
         this.scoreboard.start();
+
+        this.updateCamera();
 
         this.scene.eventEmitter.removeAll();
 
@@ -56,9 +57,16 @@ class Game extends CGFobject {
         );
 
         this.scene.eventEmitter.on('cameraAnimationEnd', () => {
+            this.resetCountdown();
             if(this.playerChanged){
                 this.playerChanged = false;
-                this.resetCountdown();
+                this.scoreboard.startCountdown();
+            }
+        });
+
+        this.scene.eventEmitter.on('pieceAnimationEnd', () => {
+            if(this.playerChanged){
+                this.updateCamera();
             }
         });
     }
@@ -83,8 +91,7 @@ class Game extends CGFobject {
             this.stateStack.push(this.state);
         }
         if(this.state.previousPlayer != this.state.currentPlayer){
-            console.log("Emit playerChanged");
-            this.updateCamera();
+            this.scoreboard.stopCountdown();
             this.playerChanged = true;
         }        
     }
@@ -149,7 +156,6 @@ class Game extends CGFobject {
 
 
     dispatchComputerMoves(){
-        console.log(this.state.isOver);
         if (!this.state.isOver && this.playersType[this.state.currentPlayer] == 'computer' && !this.isMoving()){
             this.logic.moveComputer(this.getPrologBoard(), this.state.turn, this.state.currentPlayer, this.AI + 1, this);
         }
@@ -175,6 +181,9 @@ class Game extends CGFobject {
     }
 
     watchMovie(){
+        if(this.watchMovieMode) return;
+
+        this.scoreboard.stop();
         this.watchMovieMode = true;
         this.scene.fastMode = true;
         this.watchStack = this.stateStack.slice(1);
@@ -185,7 +194,8 @@ class Game extends CGFobject {
         if(!this.isMoving()){
             if(this.watchStack.length == 0){
                 this.watchMovieMode = false;
-                this.scene.fastMode = true;
+                this.scene.fastMode = false;
+                this.scoreboard.start();
             }
             else{
                 let state = this.watchStack.shift();
@@ -199,7 +209,6 @@ class Game extends CGFobject {
         this.board.update(dt);
 
         if(this.gameStart && !this.isMoving()){
-            // this.updateCamera();
 
             if(this.watchMovieMode){
                 this.updateWatchMovie();
@@ -211,15 +220,10 @@ class Game extends CGFobject {
     }
 
     updateCamera(){
-        if(!this.isMoving() && this.scene.interfaceValues.automaticCamera){
-            console.log(this.state.currentPlayer);
+        if(this.scene.interfaceValues.automaticCamera){
             this.scene.interface.changeCamera(this.state.currentPlayer + 1);
         }
     }
-    //Jogada começa movimento camera para e o jogador troca
-    //Jogador troca => event jogador trocou => state waiting for camera moviment to end;
-    //Camera moviment end => event => check if state is waing if so change state and emit event new play
-    //On new play => start counter 
 
     isMoving(){
         return !this.scene.cameraAnimation.end || this.board.movementOccuring;
