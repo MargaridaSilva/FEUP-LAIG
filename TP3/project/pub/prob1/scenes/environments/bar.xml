@@ -121,7 +121,7 @@
 	
 	<game>
 		<board baseTexture="cover_wood" cellTexture="cell"/>
-		<pieces model="virus" player1Material="blue" player2Material="red"/>
+		<pieces model="scenes/models/virus.obj" player1Material="blue" player2Material="red"/>
 	</game>
 
 	<!-- ________________ PRIMITIVES __________________ -->

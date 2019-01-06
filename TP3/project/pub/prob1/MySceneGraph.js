@@ -859,7 +859,7 @@ class MySceneGraph {
         let model = this.reader.getString(children[1], 'model');
 
         try{
-            model = new CGFOBJModel(this.scene, 'scenes/models/' + model + '.obj');
+            model = new CGFOBJModel(this.scene, model);
         } catch(e){
             return "model not found for game";
         }
