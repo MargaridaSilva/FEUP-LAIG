@@ -53,6 +53,7 @@ class CameraAnimation {
             }
             else{
                 this.end = true;
+                this.scene.eventEmitter.emit('cameraAnimationEnd');
             }
         }
     }

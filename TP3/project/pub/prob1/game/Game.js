@@ -22,31 +22,52 @@ class Game extends CGFobject {
 
         this.board = new Board(this.scene, this.dim, this.div);
     }
-    start(dim, currentPlayer, gameMode, AI){
+    start(dim, currentPlayer, gameMode, AI, turnTime){
         /* Game Properties */
         this.dim = dim;
         this.firstPlayer = currentPlayer;
         this.gameMode = gameMode;
         this.AI = parseInt(AI);
         this.playersType = this.playersTypes[gameMode];
+        this.turnTime = turnTime;
 
         /* Game State */
         this.gameStart = true;
-        this.updateState(currentPlayer, this.numTurns, null, null, false, null);
+        if(!this.watchMovieMode)
+            this.updateState(currentPlayer, this.numTurns, null, null, false, null);
         // this.printGameState();
 
         /* Game Logic */
         this.logic.start(this.dim, this.dim, this);
 
+        this.scoreboard.reset();
         this.scoreboard.start();
+
+        this.scene.eventEmitter.removeAll();
+
+        this.scene.eventEmitter.on('zeroCountDown', () =>{
+            this.state.currentPlayer = (this.state.currentPlayer + 1) % 2;
+            this.state.turn = 3;
+            this.updateCamera();
+        });
+
+        this.scene.eventEmitter.on('automaticCamera', () =>
+            this.updateCamera()
+        );
+
+        this.scene.eventEmitter.on('cameraAnimationEnd', () => {
+            if(this.playerChanged){
+                this.playerChanged = false;
+                this.resetCountdown();
+            }
+        });
     }
 
-    updateState(currentPlayer, turn, move, moveType, end, winner){      
-        //Need fix
-        if(currentPlayer != this.state.currentPlayer && !this.isMoving()){
-            this.scoreboard.setCountdownTime(15000);  
-        }
-        
+    resetCountdown(){
+        this.scoreboard.setCountdownTime((this.turnTime + 0.9) * 1000);
+    }
+
+    updateState(currentPlayer, turn, move, moveType, end, winner){        
         if (moveType != "invalid"){
             let previousPlayer = this.state.currentPlayer;
             let moveParsed = JSON.parse(move);
@@ -61,7 +82,11 @@ class Game extends CGFobject {
             }
             this.stateStack.push(this.state);
         }
-        
+        if(this.state.previousPlayer != this.state.currentPlayer){
+            console.log("Emit playerChanged");
+            this.updateCamera();
+            this.playerChanged = true;
+        }        
     }
 
     /*Update functions */
@@ -107,8 +132,6 @@ class Game extends CGFobject {
             0: {mov: 'bAliv', zom: 'bDead'},
             1: {mov: 'rAliv', zom: 'rDead'},
         };
-
-        console.log(symbol[player]);
         return symbol[player][moveType];
     }
 
@@ -134,15 +157,20 @@ class Game extends CGFobject {
 
 
     backToPreviousState(){
-        if (this.stateStack.length > 0){
-            let playerType;
-            do {
-                let move = this.state.move;
-                this.board.revertStateAt(move[0], move[1]);
-                this.stateStack.pop();
-                this.state = this.stateStack.peek();
-                playerType = this.playersType[this.state.currentPlayer];
-            } while(playerType == "computer");
+
+        if(this.playersType[this.state.currentPlayer] == 'user'){
+
+            if (this.stateStack.length > 1){
+                this.resetCountdown();
+                let playerType;
+                do {
+                    let move = this.state.move;
+                    this.board.revertStateAt(move[0], move[1]);
+                    this.stateStack.pop();
+                    this.state = this.stateStack.peek();
+                    playerType = this.playersType[this.state.currentPlayer];
+                } while(playerType == "computer");
+            }
         }
     }
 
@@ -150,25 +178,31 @@ class Game extends CGFobject {
         this.watchMovieMode = true;
         this.scene.fastMode = true;
         this.watchStack = this.stateStack.slice(1);
-        this.start(this.dim, this.firstPlayer, this.gameMode, this.AI);
+        this.start(this.dim, this.firstPlayer, this.gameMode, this.AI, this.turnTime);
+    }
+
+    updateWatchMovie(){
+        if(!this.isMoving()){
+            if(this.watchStack.length == 0){
+                this.watchMovieMode = false;
+                this.scene.fastMode = true;
+            }
+            else{
+                let state = this.watchStack.shift();
+                this.state = state;
+                this.updateMovement();
+            }
+        }
     }
 
     update(dt){
         this.board.update(dt);
 
-        if(this.gameStart){
-            this.updateCamera();
+        if(this.gameStart && !this.isMoving()){
+            // this.updateCamera();
 
-            if(this.watchMovieMode && !this.isMoving()){
-                if(this.watchStack.length == 0){
-                    this.watchMovieMode = false;
-                    this.scene.fastMode = true;
-                }
-                else{
-                    let state = this.watchStack.shift();
-                    this.state = state;
-                    this.updateMovement();
-                }
+            if(this.watchMovieMode){
+                this.updateWatchMovie();
             }
             else{
                 this.dispatchComputerMoves();
@@ -177,12 +211,15 @@ class Game extends CGFobject {
     }
 
     updateCamera(){
-        if((this.state.currentPlayer + 1 != this.scene.interfaceValues.camera) && !this.isMoving() && this.scene.interfaceValues.automaticCamera){
+        if(!this.isMoving() && this.scene.interfaceValues.automaticCamera){
+            console.log(this.state.currentPlayer);
             this.scene.interface.changeCamera(this.state.currentPlayer + 1);
         }
-
-
     }
+    //Jogada começa movimento camera para e o jogador troca
+    //Jogador troca => event jogador trocou => state waiting for camera moviment to end;
+    //Camera moviment end => event => check if state is waing if so change state and emit event new play
+    //On new play => start counter 
 
     isMoving(){
         return !this.scene.cameraAnimation.end || this.board.movementOccuring;

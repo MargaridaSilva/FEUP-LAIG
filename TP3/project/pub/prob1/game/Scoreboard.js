@@ -21,7 +21,18 @@ class Scoreboard extends CGFobject {
     start(){
         this.enable = true;
     }
-    
+
+    reset(){
+        this.timeMs = 0;
+        this.countdownTimeMs = 0;
+
+        this.score1 = 0;
+        this.score2 = 0;
+    }
+
+    stop(){
+        this.enable = false;
+    }
     initMaterial(){
         this.material = new CGFappearance(this.scene);
         this.material.setAmbient(0.1, 0.1, 0.1, 1);
@@ -135,6 +146,7 @@ class Scoreboard extends CGFobject {
             }
             if(this.countdownTimeMs < 0){
                 this.countdownTimeMs = 0;
+                this.scene.eventEmitter.emit('zeroCountDown');
             }
         }
     }

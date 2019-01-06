@@ -93,7 +93,9 @@ class MyInterface extends CGFinterface {
             self.scene.changeCamera();
         });
 
-        cameraGroup.add(this.scene.interfaceValues, 'automaticCamera').name('Adjust camera to player');
+        cameraGroup.add(this.scene.interfaceValues, 'automaticCamera').name('Adjust camera to player').onChange(function (v){
+            self.scene.eventEmitter.emit('automaticCamera');
+        });
 
         let optionsGroup = this.gui.addFolder("Game Properties");
         optionsGroup.open();

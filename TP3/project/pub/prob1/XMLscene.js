@@ -151,6 +151,7 @@ class XMLscene extends CGFscene {
      */
     onGraphLoaded() {
         this.changeGraph(this.graphIndex);
+        this.eventEmitter =  new EventEmitter(); 
 
         this.time = 0;
 
@@ -180,12 +181,12 @@ class XMLscene extends CGFscene {
             graphIndex: this.graphIndex,
             camera: 0,
             automaticCamera: true,
-            turnTime: 0,
+            turnTime: 10,
             gameMode: 0,
             difficulty: 0,
             player: 0,
             boardDim: 9,
-            startGame: function(){game.start(this.boardDim, this.player, this.gameMode, this.difficulty)},
+            startGame: function(){game.start(this.boardDim, this.player, this.gameMode, this.difficulty, this.turnTime)},
             undoMove: function(){game.backToPreviousState()},
             watchMovie: function(){game.watchMovie()}
         }

@@ -50,6 +50,8 @@ serialInclude([ '../lib/CGF.js',
                 'game/modelling/CGFResourceReader.js',
                 'game/modelling/CGFOBJModel.js',
 
+                'EventEmiter.js',
+
 main=function()
 {
 	// Standard application, scene and interface setup
