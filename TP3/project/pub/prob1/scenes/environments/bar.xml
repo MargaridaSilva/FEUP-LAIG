@@ -67,7 +67,7 @@
 		<texture id="brickWall" file="scenes/images/environments/wall.png" />
 		<texture id="background" file="scenes/images/environments/background.jpg" />
 		<texture id="cover_wood" file="scenes/images/cover_wood.jpg" />
-		<texture id="board" file="scenes/images/board_wood.png" />
+		<texture id="cell" file="scenes/images/cell.jpg" />
 	</textures>
 
 	<!-- ________________ MATERIALS __________________ -->

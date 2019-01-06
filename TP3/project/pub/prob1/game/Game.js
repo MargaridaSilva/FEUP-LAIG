@@ -25,6 +25,7 @@ class Game extends CGFobject {
     start(dim, currentPlayer, gameMode, AI, turnTime){
         /* Game Properties */
         this.dim = dim;
+        this.board.changeDim(this.dim);
         this.firstPlayer = currentPlayer;
         this.gameMode = gameMode;
         this.AI = parseInt(AI);
@@ -142,7 +143,8 @@ class Game extends CGFobject {
     }
 
     handlePicking(pickedElements){
-        
+    
+
         let picked = pickedElements[0][1];
         let playerType = this.playersType[this.state.currentPlayer];
 
@@ -265,6 +267,7 @@ class Game extends CGFobject {
         if (num%this.dim != 0) 
             row++;
         else col = this.dim;
+        console.log(row, col);
         return [row, col];
     }
 
